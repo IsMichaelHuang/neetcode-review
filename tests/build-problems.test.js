@@ -1,0 +1,81 @@
+import { test } from "node:test"
+import assert from "node:assert/strict"
+import { buildProblems } from "../scripts/build-lib.mjs"
+
+const item = {
+  problem: "Contains Duplicate",
+  link: "contains-duplicate/",
+  pattern: "Arrays & Hashing",
+  difficulty: "Easy",
+}
+const map = { "duplicate-integer": "contains-duplicate" }
+
+test("maps an id through the name map", () => {
+  const r = buildProblems(["duplicate-integer"], [item], map, [])
+  assert.deepEqual(r.problems, [
+    {
+      id: "duplicate-integer",
+      title: "Contains Duplicate",
+      topic: "Arrays & Hashing",
+      difficulty: "Easy",
+    },
+  ])
+})
+
+test("uses the id as slug when the map has no entry", () => {
+  const r = buildProblems(["contains-duplicate"], [item], {}, [])
+  assert.deepEqual(r.missing, [])
+})
+
+test("reports an unknown id as missing", () => {
+  assert.deepEqual(buildProblems(["nope"], [item], {}, []).missing, [
+    "nope",
+  ])
+})
+
+test("reports a mapped slug that is not in the list", () => {
+  const r = buildProblems(["a"], [item], { a: "not-in-list" }, [])
+  assert.deepEqual(r.missing, ["a"])
+})
+
+test("a manual entry wins over the list", () => {
+  const manual = {
+    id: "contains-duplicate",
+    title: "Mine",
+    topic: "SQL",
+    difficulty: "Unknown",
+  }
+  const r = buildProblems(["contains-duplicate"], [item], {}, [manual])
+  assert.deepEqual(r.problems[0], manual)
+  assert.deepEqual(r.missing, [])
+})
+
+test("an invalid difficulty becomes Unknown", () => {
+  const bad = { ...item, difficulty: "Insane" }
+  const r = buildProblems(["contains-duplicate"], [bad], {}, [])
+  assert.equal(r.problems[0].difficulty, "Unknown")
+})
+
+test("a non-string title sends the id to missing", () => {
+  const bad = { ...item, problem: 5 }
+  const r = buildProblems(["contains-duplicate"], [bad], {}, [])
+  assert.deepEqual(r.missing, ["contains-duplicate"])
+  assert.deepEqual(r.problems, [])
+})
+
+test("an inherited key is not a map entry", () => {
+  const r = buildProblems(["constructor"], [item], {}, [])
+  assert.deepEqual(r.missing, ["constructor"])
+})
+
+test("problems are sorted by id", () => {
+  const list = [
+    { ...item, link: "a/" },
+    { ...item, link: "b/" },
+  ]
+  const r = buildProblems(["b", "a"], list, {}, [])
+  assert.deepEqual(
+    r.problems.map((p) => p.id),
+    ["a", "b"],
+  )
+})

@@ -26,23 +26,6 @@ returns a plain view object. `render.js` maps that view to the DOM.
 `2026-11-20-neetcode-review-dashboard-design.md`. Acceptance criteria
 AC1 to AC12 are the numbered list in that document.
 
-**Spec corrections:**
-- 56 folder names need the name map, not 57. `find-the-town-judge`
-  is not in the NeetCode list. It gets a manual entry: title "Find
-  the Town Judge", topic "Graphs", difficulty "Easy". The counts are
-  then Medium 76, Easy 27, Hard 5, Unknown 2 (SQL).
-- Import makes sure that the file is valid before it asks to replace
-  the ratings. A rating that he makes today removes entries with a
-  later date (a clock that moved back).
-
-## What Michael approves
-
-- The local folder `~/projects/personal/neetcode-review`, `git init`,
-  and local commits on four stacked branches.
-- The build as the tasks describe it, by Sonnet dev agents.
-- Not included: the public GitHub repository, the push, the PRs, and
-  GitHub Pages. Those wait for a separate go-ahead after hand-off.
-
 ## Global Constraints
 
 - Every file: 400 lines maximum, 80 characters for each line. Exempt:
@@ -59,8 +42,8 @@ AC1 to AC12 are the numbered list in that document.
   went or names his weak problems. `.gitignore` lists
   `neetcode-review-ratings*.json` and `.DS_Store`.
 - Docs, commits, and comments use Simple English.
-- Dev agents run on the `sonnet` model. Each gets the brief template
-  from `~/.claude/PLANNING.md` section 8.
+- Dev agents run on the `sonnet` model. Each gets a complete brief:
+  the task, its files, its tests, and these constraints.
 - No CI exists before the GitHub repository does. The main agent runs
   `npm test` on each branch tip.
 
@@ -135,10 +118,21 @@ Folder  = { id, folder, files: { path, n }[] }
 Problem = Known & { folder: string|null, latestPath: string|null }
 ```
 
-## Tasks
+## Tasks and branches
 
 Tasks 0 to 5 are in `neetcode-review-dashboard-tasks-1.md`.
 Tasks 6 and 7 are in `neetcode-review-dashboard-tasks-2.md`.
+
+Five branches hold the work. Each one starts from the branch before
+it, and each becomes one PR.
+
+| Branch | Content |
+|--------|---------|
+| `feature/problem-catalog` | Tasks 0 to 2 |
+| `feature/rating-schedule` | Tasks 3 to 5 |
+| `feature/review-controller` | Task 6 |
+| `feature/review-page` | Task 7 |
+| `fix/final-review` | fixes from the review of the whole project |
 
 ## Test Plan
 
@@ -241,3 +235,85 @@ Rejected from that round:
   `Date.UTC` only, so the zone cannot change them.
 - No link for `find-the-town-judge`. The folder comes from NeetCode,
   so the problem page exists there.
+
+## Final review
+
+One reviewer read the whole project after Task 7. It found no
+critical item, 2 important items, and 11 minor items. One dev agent
+fixed them on `fix/final-review`, tests first. A second reviewer
+confirmed each fix.
+
+- The first paint used an empty state. The page now starts the load,
+  paints, and paints again after the file list arrives.
+- The page said that it kept a copy of damaged data even if the copy
+  failed. A failed copy now counts as a failed read, so the page
+  never writes over the damaged data.
+- An empty daily target set the target to 1. It now keeps the old
+  target.
+- A browser pass by the main agent found one more defect. After a
+  change of the daily target, keyboard focus went to the page start.
+  The page now paints after the focus move ends.
+
+Two rules stay as designed, and the README states both. A rating
+removes later-dated entries of the same problem. An export holds what
+is on screen, also while a notice says that the page cannot save.
+
+## The four questions
+
+### 1. What regressions does this introduce?
+
+None found. The project is new, so no earlier behavior and no outside
+caller exists. Inside the project, tests cover each call between
+modules, and the final review compared each call with its target. The
+project reads the submissions repository and never writes to it.
+
+The page depends on two outside formats: the folder layout of the
+NeetCode sync and the file list answer of the GitHub API. If one of
+them changes, the page lists `data/problems.json` and shows a notice.
+A test covers that path.
+
+### 2. What security flaws does this introduce?
+
+None found that need a code change.
+
+- The inputs are the GitHub file list, the solution text, the data
+  file, an imported file, and the browser storage. All text reaches
+  the screen as plain text. Problem ids must match one fixed pattern.
+  Fixed functions build each URL. A content security policy limits
+  scripts, styles, and requests.
+- The page holds no token, no secret, and no account.
+- Other pages on the same `github.io` address can read and change the
+  saved ratings. The page makes sure that saved data is valid on each
+  read. The README states this limit.
+- Another site can show this page in a frame, because a policy in a
+  meta tag cannot forbid that. The only action on the page is a
+  rating, and the owner can change a rating.
+
+Action for the owner before the first push: the commits carry the
+email address of the git settings. A public repository shows it.
+
+### 3. How could we do this more efficiently?
+
+None found that is worth a change now.
+
+- The page sends one API request for each 10 minutes at most.
+- Each action redraws about 110 table rows. The browser pass showed
+  no delay.
+- The page loads 10 small script files, because the project has no
+  build step.
+- A page with a fixed list and no API request is smaller. It does not
+  show new solved problems without a rebuild, so the request stays.
+
+### 4. What more test cases before the release?
+
+None are open in the automated suite. The final review added tests
+for each gap that it found.
+
+Three cases need a person, because they need a file download or a
+file dialog in a real browser. Actions for the owner after the first
+release:
+
+1. Click Export, and make sure that the file downloads.
+2. Import that file in a private window, and make sure that the
+   ratings return.
+3. Open the page one time in Safari or Firefox, and on a phone.

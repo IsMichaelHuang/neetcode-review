@@ -12,6 +12,7 @@ const ids = parseTree(read("../tests/fixtures/tree.json")).map((f) => f.id)
 const res = await fetch(URL_LIST)
 if (!res.ok) throw new Error(`Download failed: HTTP ${res.status}`)
 const list = await res.json()
+if (!Array.isArray(list)) throw new Error("The downloaded list is not a list.")
 const { problems, missing } = buildProblems(
   ids,
   list,

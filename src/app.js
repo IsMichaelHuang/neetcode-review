@@ -37,6 +37,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
     if (unsaved && !readFailed) return
     const r = loadState(storage)
     readFailed = r.notice === NOTICES.cannotSave
+    if (r.notice === NOTICES.damaged) loadNotice = r.notice
     if (r.notice !== null) return
     state = r.state
     loadNotice = null

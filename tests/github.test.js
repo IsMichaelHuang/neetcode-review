@@ -156,4 +156,5 @@ test("a failed cache write does not throw", async () => {
     tree,
     stale: false,
   })
+  assert.equal(storage.getItem(TREE_CACHE_KEY), null)
 })

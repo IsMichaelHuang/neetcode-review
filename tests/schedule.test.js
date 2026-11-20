@@ -125,3 +125,8 @@ test("isWeak is false when the last rating is clean", () => {
   const hist = [entry(d, "failed"), entry("2026-11-21", "clean")]
   assert.equal(isWeak(hist), false)
 })
+
+test("replay of an unsorted history gives the same result as sorted", () => {
+  const unsorted = [entry("2026-11-21", "clean"), entry("2026-11-20", "failed")]
+  assert.deepEqual(replay(unsorted), { step: 2, due: "2026-11-28" })
+})

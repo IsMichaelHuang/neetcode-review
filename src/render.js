@@ -147,7 +147,9 @@ const topBar = (doc, view, on) => {
     max: 10,
     value: String(view.target),
   })
-  target.addEventListener("change", (e) => on.onTarget(Number(e.target.value)))
+  target.addEventListener("change", (e) =>
+    on.onTarget(e.target.value === "" ? NaN : Number(e.target.value)),
+  )
   const exp = h(doc, "button", { type: "button", id: "export", text: "Export" })
   exp.addEventListener("click", () => on.onExport())
   const imp = h(doc, "input", {
@@ -157,7 +159,14 @@ const topBar = (doc, view, on) => {
   })
   imp.addEventListener("change", async (e) => {
     const file = e.target.files?.[0]
-    if (file) on.onImport(await file.text())
+    if (!file) return
+    let text = ""
+    try {
+      text = await file.text()
+    } catch {
+      // An unreadable file goes on as empty text, which is not valid JSON.
+    }
+    on.onImport(text)
   })
   return h(doc, "header", {}, [
     h(doc, "h1", { text: "NeetCode Review" }),
@@ -170,7 +179,9 @@ const topBar = (doc, view, on) => {
 }
 
 const todaySection = (doc, view, on) => {
-  const notes = view.notices.map((t) => h(doc, "p", { cls: "notice", text: t }))
+  const notes = view.notices.map((t) =>
+    h(doc, "p", { cls: "notice", role: "status", text: t }),
+  )
   if (view.importError !== null) {
     notes.push(
       h(doc, "p", { cls: "error", role: "alert", text: view.importError }),
@@ -179,7 +190,14 @@ const todaySection = (doc, view, on) => {
   const list =
     view.queue.length === 0
       ? [h(doc, "p", { text: "Nothing to review today." })]
-      : [h(doc, "ol", {}, view.queue.map((r, i) => queueRow(doc, r, on, i)))]
+      : [
+          h(
+            doc,
+            "ol",
+            { role: "list" },
+            view.queue.map((r, i) => queueRow(doc, r, on, i)),
+          ),
+        ]
   const more =
     view.waiting > 0
       ? [h(doc, "p", { text: `${view.waiting} more due on later days.` })]

@@ -4,6 +4,7 @@ import { start } from "../src/main.js"
 import { treeUrl } from "../src/github.js"
 import { fakeDocument, find, text, fire } from "./dom.js"
 import { fakeFetch, fakeStorage, loadJson } from "./helpers.js"
+import { saveState } from "../src/store.js"
 import { createApp } from "../src/app.js"
 
 const known = loadJson("data/problems.json")
@@ -43,4 +44,34 @@ test("a visibilitychange event shows ratings from another app", async () => {
 
   fire(doc, "visibilitychange")
   assert.ok(text(doc.app).includes("1 of 4 done"))
+})
+
+test("the first paint shows saved ratings while the tree loads", async () => {
+  const doc = fakeDocument()
+  const storage = fakeStorage()
+  const ratings = {
+    "two-integer-sum": [{ date: "2026-11-20", rating: "clean" }],
+  }
+  saveState(storage, { version: 1, target: 4, ratings })
+  const base = fakeFetch(routes()).fetchFn
+  const fetchFn = (url) =>
+    url === treeUrl() ? new Promise(() => {}) : base(url)
+  start({ document: doc, fetchFn, storage, now, confirmFn: () => true })
+  await new Promise((r) => setTimeout(r, 0))
+  assert.ok(text(doc.app).includes("1 of 4 done"))
+})
+
+test("a problems file that is not a list is ignored", async () => {
+  const doc = fakeDocument()
+  const r = { ...routes(), "data/problems.json": { status: 200, body: {} } }
+  const { fetchFn } = fakeFetch(r)
+  await start({
+    document: doc,
+    fetchFn,
+    storage: fakeStorage(),
+    now,
+    confirmFn: () => true,
+  })
+  const rows = find(doc.app, (n) => n.tag === "tr")
+  assert.equal(rows.length, 111)
 })

@@ -79,3 +79,16 @@ test("problems are sorted by id", () => {
     ["a", "b"],
   )
 })
+
+test("a manual entry with an id outside the list is returned", () => {
+  const manual = { id: "mine", title: "M", topic: "SQL", difficulty: "Easy" }
+  const r = buildProblems(["mine"], [item], {}, [manual])
+  assert.deepEqual(r.problems, [manual])
+  assert.deepEqual(r.missing, [])
+})
+
+test("a mixed run returns one problem and one missing id", () => {
+  const r = buildProblems(["contains-duplicate", "nope"], [item], {}, [])
+  assert.equal(r.problems.length, 1)
+  assert.deepEqual(r.missing, ["nope"])
+})

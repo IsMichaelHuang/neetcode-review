@@ -165,7 +165,7 @@ test("loadState does not throw when the bad copy cannot be saved", () => {
   st.failWrites = true
   assert.deepEqual(loadState(st), {
     state: emptyState(),
-    notice: NOTICES.damaged,
+    notice: NOTICES.cannotSave,
   })
 })
 
@@ -195,4 +195,18 @@ test("saveState refuses an invalid state and keeps the old text", () => {
   const before = st.getItem(STORAGE_KEY)
   assert.equal(saveState(st, { ...s, target: NaN }), false)
   assert.equal(st.getItem(STORAGE_KEY), before)
+})
+
+test("a history with null as an entry is rejected", () => {
+  const r = validate(withRatings({ a: [null] }))
+  assert.equal(r.ok, false)
+})
+
+test("validate shares no object with its input", () => {
+  const input = good()
+  const r = validate(input)
+  r.state.target = 9
+  r.state.ratings["two-sum"][0].rating = "failed"
+  r.state.ratings["two-sum"].push(entry("2026-12-01", "clean"))
+  assert.deepEqual(input, good())
 })

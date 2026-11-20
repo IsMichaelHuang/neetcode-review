@@ -1,0 +1,9 @@
+{
+  "name": "neetcode-review",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "TZ=America/New_York node --test",
+    "limits": "sh scripts/check-limits.sh"
+  }
+}

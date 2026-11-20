@@ -1,0 +1,20 @@
+[
+  {
+    "id": "find-the-town-judge",
+    "title": "Find the Town Judge",
+    "topic": "Graphs",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sql-customers-with-positive-revenue",
+    "title": "Customers With Positive Revenue",
+    "topic": "SQL",
+    "difficulty": "Unknown"
+  },
+  {
+    "id": "sql-customers-without-orders",
+    "title": "Customers Without Orders",
+    "topic": "SQL",
+    "difficulty": "Unknown"
+  }
+]

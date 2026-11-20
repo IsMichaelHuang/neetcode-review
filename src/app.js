@@ -21,6 +21,8 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
   let loadNotice = null
   let treeNotice = null
   let unsaved = false
+  // While the last read failed, the saved copy is unknown. Never write.
+  let readFailed = false
   let importError = null
   let problems = mergeCatalog(null, known)
   let filters = { topic: "all", status: "all" }
@@ -30,16 +32,19 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
   const historyOf = (id) =>
     Object.hasOwn(state.ratings, id) ? state.ratings[id] : []
 
+  // A failed read is always retried, even when a save failed before.
   const refresh = () => {
-    if (unsaved) return
+    if (unsaved && !readFailed) return
     const r = loadState(storage)
-    if (r.notice === null) state = r.state
+    readFailed = r.notice === NOTICES.cannotSave
+    if (r.notice !== null) return
+    state = r.state
+    loadNotice = null
+    unsaved = false
   }
 
   const save = () => {
-    unsaved = !saveState(storage, state)
-    // A good save also clears an unreadable-storage notice from init.
-    if (!unsaved && loadNotice === NOTICES.cannotSave) loadNotice = null
+    if (!readFailed) unsaved = !saveState(storage, state)
   }
 
   const change = (next) => {
@@ -112,6 +117,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
     const loaded = loadState(storage)
     state = loaded.state
     loadNotice = loaded.notice
+    readFailed = loaded.notice === NOTICES.cannotSave
     const { tree, stale } = await loadTree(fetchFn, storage, now().getTime())
     const folders = tree === null ? null : parseTree(tree)
     problems = mergeCatalog(folders?.length ? folders : null, known)

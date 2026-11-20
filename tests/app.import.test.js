@@ -93,3 +93,28 @@ test("ratings for an id that is gone stay in the export", async () => {
   assert.equal(v.queue.some((r) => r.id === "gone-id"), false)
   assert.equal(v.table.some((r) => r.id === "gone-id"), false)
 })
+
+test("a failed read never lets an import overwrite saved data", async () => {
+  const storage = fakeStorage()
+  saveState(storage, {
+    version: 1,
+    target: 4,
+    ratings: { [P1]: [entry("2026-11-18", "failed")] },
+  })
+  const before = storage.getItem(STORAGE_KEY)
+  storage.failReads = true
+  const { fetchFn } = fakeFetch(routes)
+  const app = createApp({
+    fetchFn,
+    storage,
+    known,
+    now: () => new Date(2026, 10, 20, 12),
+  })
+  await app.init()
+  assert.deepEqual(app.importText(imported, () => true), { ok: true })
+  storage.failReads = false
+  assert.equal(storage.getItem(STORAGE_KEY), before)
+  const v = app.view()
+  assert.equal(find(v.table, P2).lastRating, "clean")
+  assert.equal(v.target, 6)
+})

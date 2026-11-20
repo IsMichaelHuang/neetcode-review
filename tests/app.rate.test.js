@@ -1,6 +1,6 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { NOTICES } from "../src/config.js"
+import { NOTICES, STORAGE_KEY } from "../src/config.js"
 import { createApp } from "../src/app.js"
 import { treeUrl } from "../src/github.js"
 import { loadState, saveState } from "../src/store.js"
@@ -157,4 +157,53 @@ test("an unknown id changes nothing and an unknown rating throws", async () => {
   app.rate("nope", "clean")
   assert.equal(storage.getItem("neetcode-review:state"), null)
   assert.throws(() => app.rate(P1, "great"), RangeError)
+})
+
+const seedTwo = () => {
+  const storage = fakeStorage()
+  seed(storage, {
+    [P1]: [entry("2026-11-18", "clean")],
+    "duplicate-integer": [entry("2026-11-19", "clean")],
+  })
+  return storage
+}
+const stored = (storage) => {
+  const was = storage.failReads
+  storage.failReads = false
+  const text = storage.getItem(STORAGE_KEY)
+  storage.failReads = was
+  return text
+}
+
+test("a failed read never lets a rating overwrite saved data", async () => {
+  const storage = seedTwo()
+  const before = stored(storage)
+  storage.failReads = true
+  const { app, make } = await setup(storage)
+  assert.deepEqual(app.view().notices, [NOTICES.cannotSave])
+  app.rate("course-schedule", "clean")
+  assert.equal(stored(storage), before)
+  const v = app.view()
+  assert.equal(find(v.queue, "course-schedule").kind, "done")
+  assert.ok(v.notices.includes(NOTICES.cannotSave))
+  storage.failReads = false
+  app.rate(P2, "failed")
+  assert.equal(app.view().notices.includes(NOTICES.cannotSave), false)
+  const again = make()
+  await again.init()
+  const w = again.view()
+  assert.equal(w.notices.includes(NOTICES.cannotSave), false)
+  assert.equal(find(w.table, P1).lastRating, "clean")
+  assert.equal(find(w.table, "duplicate-integer").lastRating, "clean")
+  assert.equal(find(w.table, P2).lastRating, "failed")
+})
+
+test("a failed read never lets setTarget overwrite saved data", async () => {
+  const storage = seedTwo()
+  const before = stored(storage)
+  storage.failReads = true
+  const { app } = await setup(storage)
+  app.setTarget(2)
+  assert.equal(stored(storage), before)
+  assert.equal(app.view().target, 2)
 })

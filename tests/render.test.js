@@ -173,6 +173,45 @@ test("a change of the target field calls onTarget with a number", () => {
   assert.deepEqual(log, [["onTarget", 6]])
 })
 
+test("an empty target field calls onTarget with NaN", () => {
+  const log = []
+  const doc = draw(view(), log)
+  const field = byId(doc, "target")
+  field.value = ""
+  fire(field, "change")
+  assert.equal(log.length, 1)
+  assert.ok(Number.isNaN(log[0][1]))
+})
+
+test("a file that cannot be read passes an empty text", async () => {
+  const log = []
+  const doc = draw(view(), log)
+  const files = [{ text: async () => Promise.reject(new Error("no")) }]
+  await fire(byId(doc, "import"), "change", { target: { files } })
+  await new Promise((r) => setImmediate(r))
+  assert.deepEqual(log, [["onImport", ""]])
+})
+
+test("no chosen file calls nothing", async () => {
+  const log = []
+  const doc = draw(view(), log)
+  await fire(byId(doc, "import"), "change", { target: { files: [] } })
+  await new Promise((r) => setImmediate(r))
+  assert.deepEqual(log, [])
+})
+
+test("each notice has the status role", () => {
+  const doc = draw(view({ notices: ["One.", "Two."] }))
+  const notes = find(doc.app, (n) => n.className === "notice")
+  assert.equal(notes.length, 2)
+  assert.ok(notes.every((n) => n.attrs.role === "status"))
+})
+
+test("the queue list has the list role", () => {
+  const doc = draw(view())
+  assert.equal(find(doc.app, (n) => n.tag === "ol")[0].attrs.role, "list")
+})
+
 test("a change of a filter calls onFilter with topic and status", () => {
   const log = []
   const doc = draw(view(), log)

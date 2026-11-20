@@ -89,7 +89,8 @@ export const loadState = (storage) => {
   try {
     storage.setItem(BAD_KEY, text)
   } catch {
-    // The copy is a bonus. The notice still tells the user.
+    // No safe copy exists, so never say that one was kept.
+    return { state: emptyState(), notice: NOTICES.cannotSave }
   }
   return { state: emptyState(), notice: NOTICES.damaged }
 }

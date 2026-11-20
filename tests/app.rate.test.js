@@ -1,6 +1,6 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { NOTICES, STORAGE_KEY } from "../src/config.js"
+import { NOTICES, STORAGE_KEY, BAD_KEY } from "../src/config.js"
 import { createApp } from "../src/app.js"
 import { treeUrl } from "../src/github.js"
 import { loadState, saveState } from "../src/store.js"
@@ -143,6 +143,9 @@ test("setTarget rounds, clamps, and ignores bad values", async () => {
   assert.equal(set(2.5), 3)
   assert.equal(set(NaN), 3)
   assert.equal(set(""), 3)
+  for (const bad of [null, undefined, "3", Infinity]) {
+    assert.equal(set(bad), 3)
+  }
   const again = make()
   await again.init()
   assert.equal(again.view().target, 3)
@@ -238,7 +241,7 @@ test("damaged text after a failed read clears the notice on save", async () => {
   storage.failReads = false
   storage.setItem(STORAGE_KEY, "{oops")
   app.rate(P1, "clean")
-  assert.equal(app.view().notices.includes(NOTICES.cannotSave), false)
+  assert.deepEqual(app.view().notices, [NOTICES.damaged])
 })
 
 test("reads that never recover show one notice only", async () => {
@@ -248,4 +251,27 @@ test("reads that never recover show one notice only", async () => {
   app.rate(P1, "clean")
   app.rate(P2, "clean")
   assert.deepEqual(app.view().notices, [NOTICES.cannotSave])
+})
+
+test("damaged text that cannot be copied is never overwritten", async () => {
+  const storage = fakeStorage()
+  storage.setItem(STORAGE_KEY, "{oops")
+  storage.failWrites = true
+  const { app } = await setup(storage)
+  assert.deepEqual(app.view().notices, [NOTICES.cannotSave])
+  storage.failWrites = false
+  app.rate(P1, "clean")
+  assert.equal(storage.getItem(BAD_KEY), "{oops")
+  assert.equal(find(app.view().queue, P1).kind, "done")
+})
+
+test("a refresh that reads damaged text shows a notice", async () => {
+  const storage = fakeStorage()
+  seed(storage, { [P1]: [entry("2026-11-18", "clean")] })
+  const { app } = await setup(storage)
+  storage.setItem(STORAGE_KEY, "{oops")
+  app.refresh()
+  const v = app.view()
+  assert.deepEqual(v.notices, [NOTICES.damaged])
+  assert.equal(find(v.table, P1).lastRating, "clean")
 })

@@ -7,7 +7,8 @@ const EXPORT_NAME = "neetcode-review-ratings.json"
 const loadKnown = async (fetchFn) => {
   try {
     const res = await fetchFn("data/problems.json")
-    return res.ok ? await res.json() : []
+    const list = res.ok ? await res.json() : []
+    return Array.isArray(list) ? list : []
   } catch {
     return []
   }
@@ -39,7 +40,8 @@ export const start = async ({ document, fetchFn, storage, now, confirmFn }) => {
   const handlers = {
     onRate: (id, rating) => (app.rate(id, rating), paint()),
     onReveal: async (id) => (await app.reveal(id), paint()),
-    onTarget: (n) => (app.setTarget(n), paint()),
+    // Paint after the focus move ends, so focus lands on the new node.
+    onTarget: (n) => (app.setTarget(n), setTimeout(paint, 0)),
     onFilter: (f) => (app.setFilter(f), paint()),
     onExport: () => download(document, app.exportText()),
     onImport: (text) => (app.importText(text, confirmFn), paint()),
@@ -48,8 +50,10 @@ export const start = async ({ document, fetchFn, storage, now, confirmFn }) => {
     app.refresh()
     paint()
   })
+  // Start the load first, so the first paint shows the saved ratings.
+  const ready = app.init()
   paint()
-  await app.init()
+  await ready
   paint()
   return app
 }

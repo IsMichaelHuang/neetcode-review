@@ -2,3 +2,4 @@
 .superpowers/
 node_modules/
 neetcode-review-ratings*.json
+.impeccable/

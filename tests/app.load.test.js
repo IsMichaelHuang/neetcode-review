@@ -162,3 +162,12 @@ test("topic options are sorted and topics match the summary", async () => {
   const problems = mergeCatalog(parseTree(tree), known)
   assert.deepEqual(v.topics, topicSummary(problems, {}))
 })
+
+test("an empty tree and no cache show the known list", async () => {
+  const routes = { [treeUrl()]: { status: 200, body: { tree: [] } } }
+  const { app } = await setup({ routes })
+  const v = app.view()
+  assert.equal(v.table.length, 110)
+  assert.ok(v.table.every((r) => r.canReveal === false))
+  assert.deepEqual(v.notices, [NOTICES.noTree])
+})

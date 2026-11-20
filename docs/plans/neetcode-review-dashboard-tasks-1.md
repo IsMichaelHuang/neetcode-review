@@ -11,8 +11,8 @@ The shared sections are in `neetcode-review-dashboard.md`.
 - [ ] Add `package.json`: `"type": "module"`, `"private": true`,
       scripts `test` = `TZ=America/New_York node --test`, `limits` =
       `sh scripts/check-limits.sh`.
-- [ ] Add `scripts/check-limits.sh` from PLANNING.md section 7, with
-      the exempt paths from Global Constraints.
+- [ ] Add `scripts/check-limits.sh`, the file limit check, with the
+      exempt paths from Global Constraints.
 - [ ] Save this plan under `docs/plans/` as three files, each under
       400 lines: `neetcode-review-dashboard.md` (all but the tasks),
       `...-tasks-1.md` (Tasks 0 to 5), `...-tasks-2.md` (Tasks 6 and
@@ -99,17 +99,17 @@ Known[], missing: string[] }`. A manual entry wins. Otherwise the
 slug is the own property `nameMap[id]`, or the id. It must equal a
 list item `link` without the trailing slash. Title and topic come
 from `problem` and `pattern`, and both must be non-empty strings.
-Difficulty is `difficulty` if it is Easy, Medium, or Hard, otherwise
-"Unknown". An id with no valid match goes to `missing`. `problems`
-is sorted by id.
+If `difficulty` is Easy, Medium, or Hard, the difficulty is that
+value. Otherwise it is "Unknown". An id with no valid match goes to
+`missing`. `problems` is sorted by id.
 
-Tests import `build-lib.mjs` only. The command
-`node scripts/build-problems.mjs` reads ids from
-`tests/fixtures/tree.json`, downloads the list from
+Tests import `build-lib.mjs` only. The command is
+`node scripts/build-problems.mjs`. It reads ids from
+`tests/fixtures/tree.json`. It downloads the list from
 `https://raw.githubusercontent.com/neetcode-gh/leetcode/main/`
-`.problemSiteData.json`, and writes `data/problems.json` as one
-array with one entry on each line. If `missing` is not empty, it
-prints the ids, writes nothing, and exits with code 1.
+`.problemSiteData.json`. It writes `data/problems.json` as one array
+with one entry on each line. If `missing` is not empty, it prints the
+ids, writes nothing, and exits with code 1.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -242,8 +242,8 @@ isWeak([entry(d,"failed"), entry("2026-11-21","clean")]) === false
   `slots = max(0, target - done.length)`. Due problems (`due <=
   today`, not in `done`) sort by `due`, then id. `open` takes due
   problems first. Then it takes problems with no history, in the
-  order of `startOrder` over all problems. `waiting = max(0,
-  dueCount - slots)`.
+  order of `startOrder` over all problems. `waiting` is the due
+  count minus `slots`, and at least 0.
 - `topicSummary(problems, ratings) -> { topic, total, reviewed,
   weak }[]`, sorted by topic. `reviewed` counts problems with a
   history. `weak` counts problems where `isWeak` is true.
@@ -285,17 +285,23 @@ ids(startOrder([problem("e","A","Easy"), problem("h","A","Hard"),
 ### Task 5: Store
 
 **Files:** Create `src/store.js`, `tests/store.test.js`. Extend
-`tests/helpers.js` with `fakeStorage({ failWrites = false,
-failReads = false } = {})`. It has `getItem`, `setItem`,
-`removeItem`, and the two switches as properties that a test can
-change later.
+`tests/helpers.js` with `fakeStorage(options)`. The options are
+`failWrites` and `failReads`, and both are `false` by default. The
+result has `getItem`, `setItem`, and `removeItem`. It also has the
+two switches as properties that a test can change later.
 
 **Consumes:** `isRealDate`, constants.
 
 **Produces:**
 - `emptyState() -> State` (target 4).
-- `validate(value: unknown) -> { ok: true, state: State } |
-  { ok: false, error: string }`. Rules: `version === 1`. `target` is
+- The shape test, with this signature:
+
+  ```
+  validate(value: unknown) ->
+    { ok: true, state: State } | { ok: false, error: string }
+  ```
+
+  Rules: `version === 1`. `target` is
   a number, an integer, from 1 to 10. `ratings` is a plain object.
   Each own key matches `ID_PATTERN`. Each history is a non-empty
   array of objects. Each entry has a date where `isRealDate` is true

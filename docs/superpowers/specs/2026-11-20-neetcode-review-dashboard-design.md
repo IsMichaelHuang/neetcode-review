@@ -60,8 +60,8 @@ later. The result is that he can solve them from memory.
 - The GitHub API allows 60 requests each hour without a login.
 - Every file: 400 lines maximum, 80 characters for each line. Data
   fixtures are exempt.
-- All development follows `~/.claude/PLANNING.md`: plan mode, tests
-  first, plan review, Sonnet dev agents.
+- All development follows the procedure of the owner: a plan first,
+  tests first, a plan review, and a review of each task.
 
 ## Approaches
 
@@ -93,7 +93,7 @@ All other items in this document are proposals from Claude.
 ```
 NeetCode Review                 Daily target [4]   Export   Import
 
-Today, Fri Nov 20                               1 of 4 done
+Today, Fri, Nov 20                              1 of 4 done
  1. Course Schedule      Graphs        Medium    2 days overdue
     [Open on NeetCode]   [Show my old solution]
     How did it go?   [Clean]  [Struggled]  [Failed]

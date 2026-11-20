@@ -36,3 +36,22 @@ export const fakeStorage = ({ failWrites = false, failReads = false } = {}) => {
     },
   }
 }
+
+// routes maps a URL to { status, body } or to an Error to throw.
+export const fakeFetch = (routes) => {
+  const calls = []
+  const fetchFn = async (url) => {
+    calls.push(url)
+    const route = routes[url] ?? { status: 404, body: "" }
+    if (route instanceof Error) throw route
+    const { status, body } = route
+    return {
+      ok: status >= 200 && status < 300,
+      status,
+      json: async () => body,
+      text: async () =>
+        typeof body === "string" ? body : JSON.stringify(body),
+    }
+  }
+  return { fetchFn, calls }
+}

@@ -40,7 +40,8 @@ export const start = async ({ document, fetchFn, storage, now, confirmFn }) => {
   const handlers = {
     onRate: (id, rating) => (app.rate(id, rating), paint()),
     onReveal: async (id) => (await app.reveal(id), paint()),
-    onTarget: (n) => (app.setTarget(n), paint()),
+    // Paint after the focus move ends, so focus lands on the new node.
+    onTarget: (n) => (app.setTarget(n), setTimeout(paint, 0)),
     onFilter: (f) => (app.setFilter(f), paint()),
     onExport: () => download(document, app.exportText()),
     onImport: (text) => (app.importText(text, confirmFn), paint()),

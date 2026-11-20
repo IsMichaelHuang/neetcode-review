@@ -8,6 +8,12 @@ const makeElement = (doc, tag) => ({
   className: "",
   value: "",
   textContent: "",
+  get id() {
+    return this.attrs.id
+  },
+  focus() {
+    this.ownerDocument.activeElement = this
+  },
   append(...nodes) {
     this.children.push(...nodes)
   },
@@ -33,6 +39,7 @@ const walk = (node, visit) => {
 export const fakeDocument = () => {
   const doc = {
     listeners: {},
+    activeElement: null,
     createElement: (tag) => makeElement(doc, tag),
     addEventListener(type, fn) {
       ;(this.listeners[type] ??= []).push(fn)

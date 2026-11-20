@@ -75,3 +75,27 @@ test("a problems file that is not a list is ignored", async () => {
   const rows = find(doc.app, (n) => n.tag === "tr")
   assert.equal(rows.length, 111)
 })
+
+test("focus moves to the next control after a target change", async () => {
+  const doc = fakeDocument()
+  const { fetchFn } = fakeFetch(routes())
+  await start({
+    document: doc,
+    fetchFn,
+    storage: fakeStorage(),
+    now,
+    confirmFn: () => true,
+  })
+  const byId = (id) => find(doc.app, (n) => n.attrs.id === id)[0]
+  const input = byId("target")
+  const oldExport = byId("export")
+  doc.activeElement = input
+  input.value = "3"
+  fire(input, "change")
+  doc.activeElement = oldExport
+  await new Promise((r) => setTimeout(r, 0))
+  const newExport = byId("export")
+  assert.equal(doc.activeElement, newExport)
+  assert.notEqual(newExport, oldExport)
+  assert.ok(text(doc.app).includes("0 of 3 done"))
+})

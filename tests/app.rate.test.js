@@ -207,3 +207,45 @@ test("a failed read never lets setTarget overwrite saved data", async () => {
   assert.equal(stored(storage), before)
   assert.equal(app.view().target, 2)
 })
+
+test("a read that fails after init shows a notice, then recovers", async () => {
+  const storage = fakeStorage()
+  seed(storage, { [P1]: [entry("2026-11-18", "clean")] })
+  const { app, make } = await setup(storage)
+  assert.deepEqual(app.view().notices, [])
+  const before = stored(storage)
+  storage.failReads = true
+  app.rate(P2, "failed")
+  assert.deepEqual(app.view().notices, [NOTICES.cannotSave])
+  assert.equal(find(app.view().queue, P2).kind, "done")
+  assert.equal(stored(storage), before)
+  storage.failReads = false
+  app.rate("coin-change", "clean")
+  assert.deepEqual(app.view().notices, [])
+  const t = (await (async () => {
+    const again = make()
+    await again.init()
+    return again.view().table
+  })())
+  assert.equal(find(t, P1).lastRating, "clean")
+  assert.equal(find(t, "coin-change").lastRating, "clean")
+})
+
+test("damaged text after a failed read clears the notice on save", async () => {
+  const storage = fakeStorage()
+  storage.failReads = true
+  const { app } = await setup(storage)
+  storage.failReads = false
+  storage.setItem(STORAGE_KEY, "{oops")
+  app.rate(P1, "clean")
+  assert.equal(app.view().notices.includes(NOTICES.cannotSave), false)
+})
+
+test("reads that never recover show one notice only", async () => {
+  const storage = fakeStorage()
+  storage.failReads = true
+  const { app } = await setup(storage)
+  app.rate(P1, "clean")
+  app.rate(P2, "clean")
+  assert.deepEqual(app.view().notices, [NOTICES.cannotSave])
+})

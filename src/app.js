@@ -96,7 +96,8 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
       (a, b) => cmp(a.title, b.title) || cmp(a.id, b.id),
     )
     const rows = all.map((p) => [rowFor(p, today), p])
-    const notices = [treeNotice, loadNotice, unsaved && NOTICES.cannotSave]
+    const lost = (readFailed || unsaved) && NOTICES.cannotSave
+    const notices = [treeNotice, loadNotice, lost]
     return {
       today,
       todayLabel: formatDay(today),
@@ -116,8 +117,8 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
   const init = async () => {
     const loaded = loadState(storage)
     state = loaded.state
-    loadNotice = loaded.notice
     readFailed = loaded.notice === NOTICES.cannotSave
+    loadNotice = readFailed ? null : loaded.notice
     const { tree, stale } = await loadTree(fetchFn, storage, now().getTime())
     const folders = tree === null ? null : parseTree(tree)
     problems = mergeCatalog(folders?.length ? folders : null, known)

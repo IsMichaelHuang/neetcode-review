@@ -17,3 +17,22 @@ export const problem = (id, topic, difficulty = "Medium") => ({
 })
 
 export const ids = (list) => list.map((x) => x.id)
+
+export const fakeStorage = ({ failWrites = false, failReads = false } = {}) => {
+  const data = new Map()
+  return {
+    failWrites,
+    failReads,
+    getItem(key) {
+      if (this.failReads) throw new Error("read failed")
+      return data.has(key) ? data.get(key) : null
+    },
+    setItem(key, text) {
+      if (this.failWrites) throw new Error("write failed")
+      data.set(key, String(text))
+    },
+    removeItem(key) {
+      data.delete(key)
+    },
+  }
+}

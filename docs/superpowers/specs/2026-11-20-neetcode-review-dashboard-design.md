@@ -75,7 +75,7 @@ Michael picked approach 1. It is the smallest build and it opens from
 a bookmark. A later move to approach 2 changes only the save step.
 
 Two ideas were dropped. A page in the portfolio mixes a study tool
-into a public showcase. A page in the submissions repository risks a
+into a public portfolio. A page in the submissions repository risks a
 conflict with the NeetCode sync.
 
 ## What Michael decided
@@ -192,6 +192,12 @@ time. A changed rating on the same day then needs no undo logic.
 The storage key starts with `neetcode-review:`. Other pages on the
 same `github.io` address then cannot overwrite it. The page supports
 current desktop and phone browsers only.
+
+If the browser cannot read the saved ratings, the page does not
+write them. An empty state then cannot replace the saved history.
+The page tries the read again before each change. If a read or a
+write fails, the page shows a notice, and the change stays on screen
+until the next successful read.
 
 Export downloads that object as a file. Import reads such a file and
 makes sure that the shape is valid. If the shape is valid, import

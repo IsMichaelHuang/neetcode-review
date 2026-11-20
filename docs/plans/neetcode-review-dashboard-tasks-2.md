@@ -64,12 +64,18 @@ refresh()      reloads the state from storage
 Save rules:
 - `rate`, `setTarget`, and `importText` call `refresh()`, apply the
   change in memory, then call `saveState`.
-- A save that returns `false` sets an `unsaved` flag and adds
-  `NOTICES.cannotSave`. The change stays in memory. The next save
-  that returns `true` clears the flag and the notice.
-- `refresh()` does nothing while `unsaved` is set. Otherwise it calls
-  `loadState` and replaces the state only for a `null` notice.
-- `init` adds the notice of `loadState` to the notices.
+- A save that returns `false` sets an `unsaved` flag. The change
+  stays in memory. The next save that returns `true` clears the flag.
+- `refresh()` does nothing while `unsaved` is set, with one exception
+  for a failed read (see below). Otherwise it calls `loadState` and
+  replaces the state only for a `null` notice.
+- A read that throws sets a `readFailed` flag. While the flag is set,
+  the app never writes the state, so an empty state cannot replace
+  the saved history. Each change and each `refresh()` tries the read
+  again first. A read that works clears the flag.
+- If `unsaved` or `readFailed` is set, `view().notices` holds
+  `NOTICES.cannotSave`. Otherwise it does not.
+- `init` adds the `damaged` notice of `loadState` to the notices.
 - The error texts of `validate` are fixed strings. They hold no part
   of the file.
 
@@ -201,11 +207,11 @@ stub.
   tables, never from data.
 - `start({ document, fetchFn, storage, now, confirmFn }) ->
   Promise<App>` in `main.js`. It requests the exact URL
-  `"data/problems.json"`, creates the app, renders into `#app` after
-  `init` and after each action, and on `visibilitychange` it calls
-  `refresh()` and renders. The file calls `start` with the real
-  objects only if `window` exists. This is the one allowed side
-  effect at import time.
+  `"data/problems.json"` and creates the app. It renders into `#app`
+  after `init` and after each action. On `visibilitychange` it calls
+  `refresh()` and renders. If `window` exists, the file calls `start`
+  with the real objects. This is the one allowed side effect at
+  import time.
 - `tests/dom.js`: `fakeDocument()` with exactly the members above,
   plus `getElementById`, `find(root, test)`, `text(root)`, and
   `fire(node, type, event)`.
@@ -229,11 +235,16 @@ Requirements:
 - Accessibility: semantic elements, a label for each control,
   visible focus, text contrast of 4.5 to 1 or more, no meaning by
   color alone, usable at a width of 375 pixels.
-- README (present tense, neutral): purpose, local run with
-  `python3 -m http.server 8000`, tests, where ratings live, that
-  other pages on the same `github.io` address can read them, backup
-  by export, how to rebuild `problems.json` (refresh
-  `tests/fixtures/tree.json` first), how Pages serves the site.
+- README, in the present tense and neutral. It covers these topics:
+  - the purpose, and the local run with
+    `python3 -m http.server 8000`
+  - the tests
+  - where ratings live, and that other pages on the same `github.io`
+    address can read them
+  - backup by export
+  - how to rebuild `problems.json` (refresh
+    `tests/fixtures/tree.json` first)
+  - how Pages serves the site
 
 - [ ] **Step 1: Write the failing tests**
 

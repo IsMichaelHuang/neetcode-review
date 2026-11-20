@@ -94,10 +94,39 @@ test("a row with canReveal false has no reveal button", () => {
 test("a done row shows its rating and three rating buttons", () => {
   const done = row({ kind: "done", lastRating: "struggled" })
   const doc = draw(view({ queue: [done], doneCount: 1 }))
-  assert.ok(text(doc.app).includes("Struggled"))
+  const li = find(doc.app, (n) => n.tag === "ol")[0].children[0]
+  assert.ok(text(li).includes("done: Struggled"))
+  const pressed = {}
   for (const label of ["Clean", "Struggled", "Failed"]) {
     assert.equal(buttons(doc, label).length, 1)
+    pressed[label] = buttons(doc, label)[0].attrs["aria-pressed"]
   }
+  assert.deepEqual(pressed, {
+    Clean: "false",
+    Struggled: "true",
+    Failed: "false",
+  })
+})
+
+test("queue controls carry the problem title in their labels", () => {
+  const a = row({ id: "a", title: "Alpha" })
+  const b = row({ id: "b", title: "Beta" })
+  const doc = draw(view({ queue: [a, b] }))
+  const [c1, c2] = buttons(doc, "Clean")
+  assert.equal(c1.attrs["aria-label"], "Clean: Alpha")
+  assert.equal(c2.attrs["aria-label"], "Clean: Beta")
+  const [r1] = buttons(doc, "Show my old solution")
+  assert.equal(r1.attrs["aria-label"], "Show my old solution: Alpha")
+  const open = find(
+    doc.app,
+    (n) => n.attrs["aria-label"] === "Open on NeetCode: Beta",
+  )
+  assert.equal(open.length, 1)
+  const groups = find(doc.app, (n) => n.attrs.role === "group")
+  assert.deepEqual(
+    groups.map((g) => g.attrs["aria-label"]),
+    ["How did it go: Alpha", "How did it go: Beta"],
+  )
 })
 
 test("a click on Failed calls onRate with failed once", () => {

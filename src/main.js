@@ -19,8 +19,11 @@ const download = (document, text) => {
   const a = document.createElement("a")
   a.setAttribute("href", url)
   a.setAttribute("download", EXPORT_NAME)
+  document.body.append(a)
   a.click()
-  URL.revokeObjectURL(url)
+  a.remove()
+  // A short wait, so Firefox and Safari can start the download first.
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 export const start = async ({ document, fetchFn, storage, now, confirmFn }) => {

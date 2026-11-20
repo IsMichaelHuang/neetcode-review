@@ -69,14 +69,15 @@ button[aria-pressed="true"] { border-width: 3px; font-weight: 700; }
 .count { font-weight: 700; }
 .notice {
   background: var(--panel);
-  border-left: 4px solid var(--line);
+  border: 1px solid var(--line);
+  border-radius: 6px;
   padding: 6px 10px;
 }
 .error { color: var(--failed); font-weight: 700; }
 
-ol { padding: 0; margin: 0; list-style-position: inside; }
+ol { padding: 0; margin: 0; list-style: none; }
 ol > li { border-top: 1px solid var(--line); padding: 12px 0; }
-.row-head { display: inline-flex; flex-wrap: wrap; gap: 4px 12px; }
+.row-head { display: flex; flex-wrap: wrap; gap: 4px 12px; }
 .row-head span { color: var(--muted); }
 .actions {
   display: flex;
@@ -86,8 +87,10 @@ ol > li { border-top: 1px solid var(--line); padding: 12px 0; }
   margin-top: 8px;
 }
 
-.kind-done { color: var(--clean) !important; font-weight: 700; }
-.kind-due { color: var(--struggled) !important; font-weight: 700; }
+.row-head .done-clean { color: var(--clean); font-weight: 700; }
+.row-head .done-struggled { color: var(--struggled); font-weight: 700; }
+.row-head .done-failed { color: var(--failed); font-weight: 700; }
+.row-head .kind-due { color: var(--struggled); font-weight: 700; }
 .rate-clean { border-color: var(--clean); }
 .rate-struggled { border-color: var(--struggled); }
 .rate-failed { border-color: var(--failed); }

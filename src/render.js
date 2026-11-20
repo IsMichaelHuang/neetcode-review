@@ -3,7 +3,6 @@ import { formatDay } from "./dates.js"
 
 // Class names come from these tables, never from data.
 const KIND_CLASS = {
-  done: "kind-done",
   due: "kind-due",
   new: "kind-new",
   later: "kind-later",
@@ -17,6 +16,11 @@ const RATING_LABEL = {
   clean: "Clean",
   struggled: "Struggled",
   failed: "Failed",
+}
+const DONE_CLASS = {
+  clean: "done-clean",
+  struggled: "done-struggled",
+  failed: "done-failed",
 }
 const RATINGS = ["clean", "struggled", "failed"]
 const STATUS_OPTIONS = [
@@ -40,8 +44,9 @@ const h = (doc, tag, attrs = {}, kids = []) => {
   return el
 }
 
-const outside = (doc, href, label) =>
+const outside = (doc, href, label, name = null) =>
   h(doc, "a", {
+    "aria-label": name,
     href,
     target: "_blank",
     rel: "noopener noreferrer",
@@ -71,23 +76,35 @@ const solutionBlock = (doc, row) => {
   return [h(doc, "div", { cls: "solution" }, kids)]
 }
 
-const queueRow = (doc, row, on) => {
-  const actions = [outside(doc, row.problemUrl, "Open on NeetCode")]
+const statusClass = (row) =>
+  row.kind === "done" ? DONE_CLASS[row.lastRating] : KIND_CLASS[row.kind]
+
+const queueRow = (doc, row, on, index) => {
+  const actions = [
+    outside(
+      doc,
+      row.problemUrl,
+      "Open on NeetCode",
+      `Open on NeetCode: ${row.title}`,
+    ),
+  ]
   if (row.canReveal) {
     const reveal = h(doc, "button", {
       type: "button",
       id: `reveal-${row.id}`,
+      "aria-label": `Show my old solution: ${row.title}`,
       text: "Show my old solution",
     })
     reveal.addEventListener("click", () => on.onReveal(row.id))
     actions.push(reveal)
   }
-  const rate = [h(doc, "span", { text: "How did it go?" })]
+  const rate = []
   for (const rating of RATINGS) {
     const b = h(doc, "button", {
       type: "button",
       id: `rate-${row.id}-${rating}`,
       cls: RATING_CLASS[rating],
+      "aria-label": `${RATING_LABEL[rating]}: ${row.title}`,
       "aria-pressed": String(row.lastRating === rating && row.kind === "done"),
       text: RATING_LABEL[rating],
     })
@@ -95,15 +112,23 @@ const queueRow = (doc, row, on) => {
     rate.push(b)
   }
   const head = h(doc, "div", { cls: "row-head" }, [
+    h(doc, "span", { text: `${index + 1}.` }),
     h(doc, "strong", { text: row.title }),
     h(doc, "span", { text: row.topic }),
     h(doc, "span", { text: row.difficulty }),
-    h(doc, "span", { cls: KIND_CLASS[row.kind], text: statusText(row) }),
+    h(doc, "span", { cls: statusClass(row), text: statusText(row) }),
   ])
   return h(doc, "li", {}, [
     head,
     h(doc, "div", { cls: "actions" }, actions),
-    h(doc, "div", { cls: "actions" }, rate),
+    h(doc, "div", { cls: "actions" }, [
+      h(doc, "span", { text: "How did it go?" }),
+      h(doc, "div", {
+        cls: "actions",
+        role: "group",
+        "aria-label": `How did it go: ${row.title}`,
+      }, rate),
+    ]),
     ...solutionBlock(doc, row),
   ])
 }
@@ -154,7 +179,7 @@ const todaySection = (doc, view, on) => {
   const list =
     view.queue.length === 0
       ? [h(doc, "p", { text: "Nothing to review today." })]
-      : [h(doc, "ol", {}, view.queue.map((r) => queueRow(doc, r, on)))]
+      : [h(doc, "ol", {}, view.queue.map((r, i) => queueRow(doc, r, on, i)))]
   const more =
     view.waiting > 0
       ? [h(doc, "p", { text: `${view.waiting} more due on later days.` })]

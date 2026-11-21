@@ -67,3 +67,60 @@ test("index.html loads src/main.js as a module", () => {
 test("styles.css has no data URL", () => {
   assert.ok(!read("styles.css").includes("url(data:"))
 })
+
+const css = () => read("styles.css").replace(/\/\*[\s\S]*?\*\//g, "")
+
+test("styles.css has no rounded corner", () => {
+  assert.ok(!/border-radius:(?!\s*0\s*[;}])/.test(css()))
+})
+
+for (const [name, re] of [
+  ["box-shadow", /box-shadow/],
+  ["a gradient", /gradient\(/],
+  ["@import", /@import/],
+  ["url()", /url\(/],
+  ["@font-face", /@font-face/],
+  ["@keyframes", /@keyframes/],
+  ["!important", /!\s*important/i],
+]) {
+  test(`styles.css has no ${name}`, () => {
+    assert.ok(!re.test(css()))
+  })
+}
+
+test("styles.css uses only the sizes of the type scale", () => {
+  const ok = ["0.75rem", "0.875rem", "1rem", "1.1875rem", "1.5rem",
+    "1.875rem", "inherit"]
+  const sizes = [...css().matchAll(/font-size:\s*([^;}]+)/g)]
+  assert.ok(sizes.length > 0)
+  for (const m of sizes) {
+    assert.ok(ok.includes(m[1].trim()), `font-size ${m[1]}`)
+  }
+})
+
+test("styles.css uses the font shorthand only as font: inherit", () => {
+  for (const m of css().matchAll(/(?<![\w-])font:\s*([^;}]+)/g)) {
+    assert.equal(m[1].trim(), "inherit")
+  }
+})
+
+test("styles.css has a transition and turns it off for reduced motion", () => {
+  const c = css()
+  assert.match(c, /transition:/)
+  const block = c.match(
+    /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\}\s*\}/,
+  )
+  assert.ok(block, "no reduced-motion block")
+  assert.match(block[0], /transition:\s*none/)
+})
+
+test("styles.css keeps its scheme and focus guards", () => {
+  const c = css()
+  assert.match(c, /color-scheme:\s*light dark/)
+  assert.match(c, /prefers-color-scheme:\s*dark/)
+  assert.match(c, /:focus-visible/)
+})
+
+test("styles.css has a forced-colors rule", () => {
+  assert.match(css(), /forced-colors:\s*active/)
+})

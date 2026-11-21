@@ -174,3 +174,13 @@ test("the page bottom space is on main, not on sections", () => {
   assert.ok(!/margin-bottom:\s*3rem/.test(c))
   assert.match(c, /\nmain\s*\{[^}]*padding-bottom:\s*3rem/)
 })
+
+test("at 1200 pixels a shown solution spans all tracks", () => {
+  const block = mediaBlock(css(), "min-width: 1200px")
+  const hit = [...block.matchAll(/([^{}]+)\{([^}]*)\}/g)].some(
+    (m) =>
+      /\.solution(?![\w-])/.test(m[1]) &&
+      /grid-column:\s*1 \/ -1/.test(m[2]),
+  )
+  assert.ok(hit, "no rule gives .solution grid-column: 1 / -1")
+})

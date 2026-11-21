@@ -145,3 +145,32 @@ test("at 1200 pixels each entry spans all tracks of the subgrid", () => {
   )
   assert.ok(hit, "no rule gives .entry grid-column: 1 / -1")
 })
+
+test("a zero weak count is hidden with opacity", () => {
+  assert.match(css(), /\.weak\.nil\s*\{\s*opacity:\s*0;\s*\}/)
+})
+
+test("styles.css has a media query for 720 to 1199.98 pixels", () => {
+  const q = "(min-width: 720px) and (max-width: 1199.98px)"
+  assert.ok(css().includes(`@media ${q} {`))
+})
+
+test("the band aligns with the page through --wide", () => {
+  const c = css()
+  assert.match(c, /\.cover\s*\{[^}]*padding:[^;]*var\(--wide\)/)
+  assert.match(mediaBlock(c, "min-width: 1440px"), /--wide:\s*96rem/)
+})
+
+test("at 480 pixels a rating symbol is a flush block", () => {
+  const block = mediaBlock(css(), "min-width: 480px")
+  const hit = [...block.matchAll(/([^{}]+)\{([^}]*)\}/g)].some(
+    (m) => /\.rate \.sym/.test(m[1]) && /width:\s*1\.875rem/.test(m[2]),
+  )
+  assert.ok(hit, "no .rate .sym rule with width 1.875rem")
+})
+
+test("the page bottom space is on main, not on sections", () => {
+  const c = css()
+  assert.ok(!/margin-bottom:\s*3rem/.test(c))
+  assert.match(c, /\nmain\s*\{[^}]*padding-bottom:\s*3rem/)
+})

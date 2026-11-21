@@ -119,7 +119,8 @@ label, .cols, th {
   justify-content: space-between;
   gap: 0.5rem 1.5rem;
   min-height: 64px;
-  padding: 0.75rem var(--pad);
+  --wide: 76rem;
+  padding: 0.75rem max(var(--pad), calc((100% - var(--wide)) / 2));
   background: var(--cover);
   color: var(--on-cover);
 }
@@ -136,7 +137,11 @@ label, .cols, th {
 .cover button:active {
   background: color-mix(in srgb, var(--c) 20%, var(--g));
 }
-.cover input[type="file"] { font: inherit; font-size: 0.875rem; }
+.cover input[type="file"] {
+  font: inherit;
+  font-size: 0.875rem;
+  width: 13.5rem;
+}
 input[type="file"]::file-selector-button {
   font: inherit;
   font-size: 0.875rem;
@@ -159,6 +164,7 @@ input[type="file"]::file-selector-button:active {
 /* Sections */
 main {
   display: grid;
+  padding-bottom: 3rem;
   align-content: start;
   grid-template-columns:
     minmax(var(--pad), 1fr) minmax(0, 76rem) 0 0 minmax(var(--pad), 1fr);
@@ -166,7 +172,6 @@ main {
 main > * { grid-column: 2; min-width: 0; }
 main > .cover { grid-column: 1 / -1; }
 section { margin-top: 2.5rem; }
-.all, .topics { margin-bottom: 3rem; }
 .head {
   display: flex;
   flex-wrap: wrap;
@@ -187,14 +192,14 @@ section { margin-top: 2.5rem; }
 .notice, .error { margin-top: 0.75rem; }
 .notice { border: 1px solid var(--ink); padding: 0.5rem 0.75rem; }
 .error, .weak { color: var(--failed); font-weight: 700; }
-.weak.nil { color: var(--ink-2); font-weight: 400; }
+.weak.nil { opacity: 0; }
 
 /* Entries: stacked is the base. */
 .cols { display: none; }
 .entry {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   gap: 0.375rem 0.75rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--ink);
@@ -284,8 +289,8 @@ pre {
 .index { columns: 17rem; column-gap: 2rem; }
 .index li {
   display: grid;
-  grid-template-columns: 1.375rem minmax(0, 1fr) auto 4.5rem;
-  gap: 0.5rem;
+  grid-template-columns: 1.375rem minmax(0, 1fr) auto 1.375rem;
+  gap: 0.375rem;
   align-items: center;
   padding: 0.25rem 0;
   border-bottom: 1px solid var(--rule);
@@ -319,23 +324,28 @@ th, td:not(.title), td .name { white-space: nowrap; }
   .rate button { flex-direction: column; gap: 0.25rem; }
 }
 
+@media (min-width: 480px) {
+  .rate button { padding: 0 0.5rem 0 0; justify-content: flex-start; }
+  .rate .sym { width: 1.875rem; height: 1.875rem; font-size: 1rem; }
+}
+
 /* Two lines */
 @media (min-width: 720px) {
   :root { --pad: 2rem; }
+  .rate { display: flex; gap: 0.375rem; }
+}
+@media (min-width: 720px) and (max-width: 1199.98px) {
   .entry {
     display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr) 10rem 4.5rem 9rem;
-    column-gap: 0.75rem;
-    row-gap: 0.5rem;
+    grid-template-columns:
+      1.5rem minmax(0, 1fr) max-content max-content 3.75rem 9rem;
+    gap: 0.5rem 0.75rem;
   }
-  .entry .title { flex: none; }
-  .rate, .solution { grid-column: 1 / -1; }
-  .sol { grid-column: 2 / -1; }
-  .sol, .rate { grid-row: 2; }
-  .solution { grid-row: 3; }
-  .sol { justify-self: start; }
-  .rate { display: flex; justify-self: end; gap: 0.375rem; }
-  .rate button { justify-content: flex-start; }
+  .entry .title { grid-column: 2 / 5; }
+  .topic { grid-area: 2 / 2; }
+  .sol { grid-area: 2 / 3; }
+  .rate { grid-area: 2 / 4 / auto / -1; }
+  .solution { grid-area: 3 / 1 / auto / -1; }
 }
 
 /* One row */
@@ -343,7 +353,7 @@ th, td:not(.title), td .name { white-space: nowrap; }
   .today {
     display: grid;
     grid-template-columns:
-      2rem minmax(12rem, 1fr) 10rem 4.5rem 9rem 5.5rem max-content;
+      1.5rem minmax(12rem, 1fr) 9rem 3.75rem 9rem 5rem max-content;
     column-gap: 0.75rem;
   }
   .today > *, .entries > .entry { grid-column: 1 / -1; }
@@ -353,17 +363,16 @@ th, td:not(.title), td .name { white-space: nowrap; }
   }
   .cols { padding: 0.5rem 0 0.375rem; border-bottom: 1px solid var(--ink); }
   .entry { padding: 0.625rem 0; }
-  .sol, .rate { grid-row: auto; grid-column: auto; }
-  .solution { grid-row: auto; }
 }
 
 /* Two columns */
 @media (min-width: 1440px) {
   main {
     grid-template-columns: minmax(var(--pad), 1fr) minmax(0, 76rem) 1.5rem
-      18rem minmax(var(--pad), 1fr);
+      18.5rem minmax(var(--pad), 1fr);
     grid-template-rows: auto auto 1fr;
   }
+  .cover { --wide: 96rem; }
   .today { grid-row: 2; }
   .all { grid-row: 3; }
   .topics { grid-column: 4; grid-row: 2 / 4; align-self: start; }

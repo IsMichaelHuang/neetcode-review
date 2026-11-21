@@ -55,11 +55,16 @@ Rules of the look:
 - A topic code is a square of 1.375rem in `--ink` with the letter in
   `--paper`, bold, 0.75rem.
 - A symbol (`.sym`) is a square of 1.375rem filled with its state
-  color, with the symbol in `--paper`, in the serif face, bold.
+  color, with the symbol in `--paper`, in the serif face, bold. In a
+  rating button at 480 pixels or more, it is a flush block of
+  1.875rem with a symbol of 1rem.
 - One rule sets the color of a rating: `.rate-clean, .sym-clean,
   .done-clean { --c: var(--clean) }`, and the same for the other two.
 - A rating button: a 2 pixel border in `--c`, then the symbol, then
-  the word in `--c`. Pressed: ground `--c`, word in `--paper`, and
+  the word in `--c`. At 480 pixels or more the symbol block touches
+  the border, and the word follows it with a padding of 0.5rem at
+  the right. Under 480 pixels the small symbol sits above the word.
+  Pressed: ground `--c`, word in `--paper`, and
   the symbol square turns to `--paper` with the symbol in `--c`.
 - Other controls on paper (the solution button, the selects): ground
   `--paper`, text `--ink`, a 1 pixel border in `--ink`. Selects and
@@ -100,7 +105,8 @@ selector in `styles.css`:
 - `.name`: wraps anywhere. `.word`: never wraps.
 - `.date`, `.level`, `.legend`, `.more`, `.empty`, `.nil`: `--ink-2`.
 - `.count`, `.num`: bold, tabular. `.weak`: `--failed`, bold, and
-  with `.nil` it is `--ink-2` and regular.
+  with `.nil` it is invisible (`opacity: 0`) but a screen reader
+  still reads it.
 - `.status`, `.code`, `.sym`, `.notice`, `.error`: as in the rules
   above.
 - `.sr`: hidden from the eye with a clip, and still read aloud.
@@ -149,7 +155,8 @@ section.topics [aria-labelledby=topics-h]
     li                    span.code + span.name
                           + span.num: span "3 of 11" + span.sr
                             "reviewed"
-                          + span.weak "1 weak" (class nil for 0)
+                          + span.weak (class "weak nil" for 0):
+                            span "1" + span.sr "weak"
 section.all [aria-labelledby=all-h]
   div.head
     h2#all-h              "All problems"
@@ -195,16 +202,21 @@ keeps the band and `render`.
 
 ## Layout (`styles.css`)
 
-`main#app` is a grid with no padding. Its columns: a gutter of
+`main#app` is a grid with a bottom padding of 3rem. No section has a
+bottom margin. Its columns: a gutter of
 `minmax(var(--pad), 1fr)`, the left column `minmax(0, 76rem)`, a gap,
 the right column, and a second gutter. `--pad` is 2rem, and 1rem
 under 720 pixels. The band spans all columns, has a minimum height of
-64 pixels, and wraps its controls.
+64 pixels, and wraps its controls. Its side padding is
+`max(var(--pad), calc((100% - var(--wide)) / 2))`, so the band
+content lines up with the page content. `--wide` is 76rem, and 96rem
+at 1440 pixels or more, where the page has two columns. The file
+input is 13.5rem wide.
 
 Four layouts by viewport width:
 
 - 1440 pixels or more: two columns. Today and All problems are at
-  the left. Topics is at the right, 18rem wide. The gap is 1.5rem.
+  the left. Topics is at the right, 18.5rem wide. The gap is 1.5rem.
   An entry is one row.
 - 1200 to 1439 pixels: one column in the order Today, Topics, All
   problems. An entry is one row.
@@ -214,19 +226,23 @@ Four layouts by viewport width:
 - Two columns: Topics is in the right column and spans the rows of
   Today and All, with `align-self: start`. The grid rows are
   `auto auto 1fr`, so Topics does not stretch the Today row.
-- One column: the topic index flows in columns of 17rem.
+- One column: the topic index flows in columns of 17rem. An index row
+  has the tracks `1.375rem minmax(0, 1fr) auto 1.375rem` and a gap of
+  0.375rem.
+- Entries align on the first baseline (`align-items: baseline`).
 - One row (1200 or more): `section.today` owns the tracks
-  `2rem minmax(12rem, 1fr) 10rem 4.5rem 9rem 5.5rem max-content`
+  `1.5rem minmax(12rem, 1fr) 9rem 3.75rem 9rem 5rem max-content`
   with a column gap of 0.75rem. Each child of the section spans all
   tracks. `div.cols`, `ol.entries`, and each `li.entry` use
   `subgrid` and have no side padding. `div.solution` spans all
   tracks in a row of its own.
 - Two lines (720 to 1199): `div.cols` is not displayed. The entry
   is a grid with the tracks
-  `2rem minmax(0, 1fr) 10rem 4.5rem 9rem`. Line 1: number,
-  title, topic, level, status. Line 2: `span.sol` starts at track 2,
-  so the solution button is under the title. `div.rate` is at the
-  right end.
+  `1.5rem minmax(0, 1fr) max-content max-content 3.75rem 9rem` and a
+  gap of 0.5rem 0.75rem. Line 1: the number, the title (tracks 2 to
+  4), the level, and the status. Line 2: the topic is under the
+  title, then the solution button, then the rating group at the
+  right end. `div.solution` has its own row and spans all tracks.
 - Stacked (under 720): `div.cols` is not displayed. Lines in DOM
   order: number and title. Topic, level, and status, which wrap. The
   solution button. The rating group with three buttons of
@@ -238,7 +254,11 @@ Four layouts by viewport width:
 - The table sits in a wrapper with `overflow-x: auto`. The page body
   never scrolls sideways.
 
-The browser pass measured these numbers. At 1440 pixels the left
-column is 1049 pixels wide and the title track is 194 pixels, so the
-one-row entry fits with no overflow. In the table, only the title
-cell wraps.
+The browser pass measured these numbers. At 1440 pixels the title
+track is 206 pixels, the rating group is 311 pixels, the index name
+track is 185 pixels, and the head "All problems" starts at 510
+pixels. At 1200 pixels the title track is 286 pixels. At 900 pixels
+it is 557 pixels, and at 720 pixels it is 392 pixels. The longest
+title has 57 characters. It takes 3 lines at 1440 pixels, 2 lines at
+1200 and at 720 pixels, and 1 line at 900 pixels. In the table, only
+the title cell wraps.

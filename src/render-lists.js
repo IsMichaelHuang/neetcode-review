@@ -44,10 +44,15 @@ export const topicsSection = (doc, view, codes) =>
             h(doc, "span", { text: `${t.reviewed} of ${t.total}` }),
             h(doc, "span", { cls: "sr", text: "reviewed" }),
           ]),
-          h(doc, "span", {
-            cls: t.weak === 0 ? "weak nil" : "weak",
-            text: `${t.weak} weak`,
-          }),
+          h(
+            doc,
+            "span",
+            { cls: t.weak === 0 ? "weak nil" : "weak" },
+            [
+              h(doc, "span", { text: String(t.weak) }),
+              h(doc, "span", { cls: "sr", text: "weak" }),
+            ],
+          ),
         ]),
       ),
     ),

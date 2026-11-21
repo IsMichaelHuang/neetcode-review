@@ -38,7 +38,10 @@ test("an index row shows code, name, count, and weak count", () => {
   assert.equal(num.children[0].textContent, "3 of 11")
   assert.equal(num.children[1].className, "sr")
   assert.equal(num.children[1].textContent, "reviewed")
-  assert.equal(weak.textContent, "1 weak")
+  assert.equal(weak.children.length, 2)
+  assert.equal(weak.children[0].textContent, "1")
+  assert.equal(weak.children[1].className, "sr")
+  assert.equal(weak.children[1].textContent, "weak")
   assert.ok(hasClass(weak, "weak"))
   assert.ok(!hasClass(weak, "nil"))
 })
@@ -47,7 +50,9 @@ test("an index row with weak 0 has the class nil", () => {
   const topics = [{ topic: "Trees", total: 4, reviewed: 4, weak: 0 }]
   const doc = draw(view({ topics }))
   const weak = one(doc.app, "weak")
-  assert.equal(weak.textContent, "0 weak")
+  assert.equal(weak.children[0].textContent, "0")
+  assert.equal(weak.children[1].className, "sr")
+  assert.equal(weak.children[1].textContent, "weak")
   assert.equal(weak.className, "weak nil")
 })
 

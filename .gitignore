@@ -5,3 +5,4 @@ neetcode-review-ratings*.json
 .impeccable/hook.cache.json
 .impeccable/hook.pending.json
 .impeccable/config.local.json
+.claude/

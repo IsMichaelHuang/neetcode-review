@@ -37,10 +37,11 @@ Faces, all system stacks:
 - `--mono`: `ui-monospace, "SF Mono", Menlo, Consolas, monospace`.
   Use: the old solution.
 
-Type scale in rem, fixed, and no other size: 0.75 (column heads and
-the caption: bold capitals, letter-spacing 0.06em), 0.875 (labels,
-buttons, index, table cells), 1 (body, table titles), 1.1875 (entry
-titles, the done count), 1.5 (the name), 1.875 (section heads).
+Type scale in rem, fixed, and no other size: 0.75 (column heads,
+field labels, and the caption: bold capitals, letter-spacing
+0.06em), 0.875 (buttons, index, table cells), 1 (body, table
+titles), 1.1875 (entry titles, the done count), 1.5 (the name),
+1.875 (section heads).
 Numbers use `tabular-nums`.
 
 Rules of the look:
@@ -215,17 +216,17 @@ Four layouts by viewport width:
   `auto auto 1fr`, so Topics does not stretch the Today row.
 - One column: the topic index flows in columns of 17rem.
 - One row (1200 or more): `section.today` owns the tracks
-  `2rem minmax(12rem, 1fr) 10.5rem 4.5rem 8.5rem 5.5rem max-content`
+  `2rem minmax(12rem, 1fr) 10rem 4.5rem 9rem 5.5rem max-content`
   with a column gap of 0.75rem. Each child of the section spans all
   tracks. `div.cols`, `ol.entries`, and each `li.entry` use
   `subgrid` and have no side padding. `div.solution` spans all
   tracks in a row of its own.
 - Two lines (720 to 1199): `div.cols` is not displayed. The entry
   is a grid with the tracks
-  `2rem minmax(0, 1fr) 10.5rem 4.5rem 8.5rem`. Line 1: number,
-  title, topic, level, status. Line 2: `span.sol` and `div.rate`
-  both span all tracks of row 2. The solution button is at the left,
-  under the title. The rating group is at the right end.
+  `2rem minmax(0, 1fr) 10rem 4.5rem 9rem`. Line 1: number,
+  title, topic, level, status. Line 2: `span.sol` starts at track 2,
+  so the solution button is under the title. `div.rate` is at the
+  right end.
 - Stacked (under 720): `div.cols` is not displayed. Lines in DOM
   order: number and title. Topic, level, and status, which wrap. The
   solution button. The rating group with three buttons of
@@ -237,7 +238,7 @@ Four layouts by viewport width:
 - The table sits in a wrapper with `overflow-x: auto`. The page body
   never scrolls sideways.
 
-The width numbers are estimates. The one-row entry needs about 1040
-pixels, and the left column at 1440 is 1064 pixels. Task 4 measures
-this in the browser. If an entry overflows at 1440, the two-column
-breakpoint goes up, and the plan records the change.
+The browser pass measured these numbers. At 1440 pixels the left
+column is 1049 pixels wide and the title track is 194 pixels, so the
+one-row entry fits with no overflow. In the table, only the title
+cell wraps.

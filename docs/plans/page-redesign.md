@@ -48,7 +48,14 @@ contract) and `PRODUCT.md`. The chosen sketch is
 - Import stays a file input with its label. Only its button gets the
   look of the band buttons.
 - Under 1200 pixels an entry takes two lines. The sketch shows the
-  1440 pixel screen only.
+  1440 pixel screen only. Line 1 holds the number, the title, the
+  level, and the status. Line 2 holds the topic, the solution
+  button, and the rating buttons.
+- The topic index at 1440 pixels is a rail of 18.5rem, about one
+  fifth of the screen. The direction contract says "the right
+  third". The narrower rail gives the entry title more width.
+- The weak count in the topic index is a bare red number. A count
+  of zero is not visible. A screen reader still reads "0 weak".
 
 ## Global Constraints
 
@@ -171,8 +178,85 @@ Rejected, with reasons:
 
 A fourth reviewer read the revised plan, because the first round
 found blockers. It found no blocker and 6 major items. All are fixed:
-the class test now matches whole names, each small class has a
-stated look, the test views are defined, the active tint is in the
-contrast test with a darker Failed red, the stacked rating buttons
-have a rule for 375 pixels, and the label tables ignore keys such as
-"constructor".
+
+- The class test now matches whole names.
+- Each small class has a stated look.
+- The test views are defined.
+- The active tint is in the contrast test, with a darker Failed red.
+- The stacked rating buttons have a rule for 375 pixels.
+- The label tables ignore keys such as "constructor".
+
+## Design review
+
+The impeccable finish reviewer read the built page two times. The
+first pass asked for 8 fixes. The second pass gave a verdict.
+
+Seven fixes are resolved:
+
+- the flush symbol block in each rating button
+- the topic names on one line
+- the wider title track
+- the band tools at the right margin
+- the band aligned with the page content
+- the equal space around Topics
+- the hidden zero weak count
+
+Two items remain:
+
+- Open: at 375 pixels the table of all problems scrolls sideways in
+  its wrapper, and the screen edge cuts a column. The main agent
+  declined this fix. Five columns do not fit 343 pixels, and the
+  owner works at a laptop. The owner decides.
+- Stated limit: at exactly 1440 pixels the title track is 206
+  pixels. The longest title has 57 characters and takes three lines
+  there. About four of the 110 titles are that long.
+
+The verdict covers the eight fixes at 1440, 900, and 375 pixels in
+both color schemes. It is not a new review of the whole page.
+
+The browser check of the fix batch found two more faults, and both
+are fixed. The longest topic name took two lines in the index
+between 1250 and 1439 pixels. A shown solution was one track wide at
+1200 pixels or more, and a guard test now covers it.
+
+## Four questions
+
+Regressions:
+
+- No logic file changed. The tests of the app, the store, the queue,
+  and the start code pass unchanged. The full run has 310 tests.
+- Each control keeps its id and its accessible name. The render
+  tests check this.
+- A script checked nine widths from 375 to 1700 pixels in the light
+  scheme: no sideways scroll, no overlap, no wrapped button word.
+- Not checked: Safari, Firefox, Windows, Linux, and a real phone.
+  The dark scheme has screenshots at three widths and no script run.
+- Not checked: the Export download and the Import file dialog in a
+  real browser. Unit tests cover both handlers.
+
+Security flaws:
+
+- `index.html` and its content security policy did not change.
+- The render code still writes text with `textContent` only. Each
+  class name comes from a fixed table, and a test feeds hostile data.
+- The change adds no network target, no storage key, and no
+  dependency.
+- The new files stay neutral. They do not say how an assessment went
+  and they name no weak problem.
+
+Efficiency:
+
+- The page still loads one style sheet of 389 lines, no font file,
+  and no image.
+- The page still redraws all sections after each action. The list
+  has 110 rows, so the cost stays small.
+- `subgrid` and `color-mix` need a browser from 2023 or later.
+
+Extra test cases to add later:
+
+- A layout test in a real browser. Today a person runs the width
+  script by hand, and both layout faults of this change came from
+  rules that a unit test cannot see.
+- A topic list with more than 26 topics. The code is then two
+  letters, and the code square was drawn for one letter.
+- A title that is one long word with no space.

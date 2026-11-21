@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-20T00:00:00Z",
+  "title": "Design System: NeetCode Review",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#ffffff", "dark": "#0f1320", "tonalRamp": ["#0f1320", "#3a4058", "#4a4744", "#7d7b77", "#c9c7c2", "#e4e3e0", "#f2f0ea", "#ffffff"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#14110f", "dark": "#f2f0ea", "tonalRamp": ["#14110f", "#2b2826", "#4a4744", "#6e6b67", "#97948f", "#c9c7c2", "#e4e3e0", "#f2f0ea"] },
+      "ink-2": { "role": "neutral", "displayName": "Quiet Ink", "canonical": "#4a4744", "dark": "#b9b6ae", "tonalRamp": ["#14110f", "#2b2826", "#4a4744", "#6e6b67", "#8f8c87", "#b9b6ae", "#d6d4cf", "#f2f0ea"] },
+      "rule": { "role": "neutral", "displayName": "Index Rule", "canonical": "#c9c7c2", "dark": "#3a4058", "tonalRamp": ["#14110f", "#3a4058", "#6e6b67", "#97948f", "#b0ada8", "#c9c7c2", "#e4e3e0", "#f2f0ea"] },
+      "cover": { "role": "primary", "displayName": "Cover Ultramarine", "canonical": "#1d3fbf", "dark": "#1d3fbf", "tonalRamp": ["#0b1a52", "#112575", "#1d3fbf", "#3f5fd6", "#6b86e3", "#9db4ff", "#c9d6ff", "#eaefff"] },
+      "on-cover": { "role": "neutral", "displayName": "On Cover White", "canonical": "#ffffff", "dark": "#ffffff", "tonalRamp": ["#14110f", "#4a4744", "#7d7b77", "#b9b6ae", "#d6d4cf", "#e4e3e0", "#f2f0ea", "#ffffff"] },
+      "clean": { "role": "secondary", "displayName": "Clean Green", "canonical": "#177043", "dark": "#5fd08f", "tonalRamp": ["#0a3a22", "#105230", "#177043", "#2f9a63", "#5fd08f", "#90e0b2", "#c4f0d6", "#e8f9ef"] },
+      "struggled": { "role": "secondary", "displayName": "Struggled Amber", "canonical": "#8a5200", "dark": "#f0b24a", "tonalRamp": ["#4a2b00", "#6a3f00", "#8a5200", "#b8770f", "#f0b24a", "#f6cd85", "#fae3b9", "#fdf3de"] },
+      "failed": { "role": "secondary", "displayName": "Failed Red", "canonical": "#b71c1c", "dark": "#ff8f85", "tonalRamp": ["#5c0e0e", "#8a1515", "#b71c1c", "#d94a42", "#ff8f85", "#ffb5ae", "#ffd6d2", "#ffefed"] },
+      "focus": { "role": "primary", "displayName": "Focus Blue", "canonical": "#1d3fbf", "dark": "#9db4ff", "tonalRamp": ["#0b1a52", "#112575", "#1d3fbf", "#3f5fd6", "#6b86e3", "#9db4ff", "#c9d6ff", "#eaefff"] }
+    },
+    "typographyMeta": {
+      "name": { "displayName": "Name", "purpose": "The page name in the band." },
+      "section-head": { "displayName": "Section Head", "purpose": "Today, Topics, All problems." },
+      "entry-title": { "displayName": "Entry Title", "purpose": "A problem title in Today." },
+      "body": { "displayName": "Body", "purpose": "Base text and table titles." },
+      "small": { "displayName": "Small", "purpose": "Buttons, topic names, level, status, index rows, table cells." },
+      "label": { "displayName": "Label", "purpose": "Column heads, field labels, table heads, topic code letter." },
+      "code": { "displayName": "Code", "purpose": "The old solution." }
+    },
+    "fontStacks": {
+      "serif": "Charter, \"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif",
+      "sans": "system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
+      "mono": "ui-monospace, \"SF Mono\", Menlo, Consolas, monospace"
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "tint-hover", "value": "background-color 150ms ease-out", "purpose": "Hover is a 10 percent tint of the control color. Active is 20 percent. Off under prefers-reduced-motion. No keyframes." }
+    ],
+    "breakpoints": [
+      { "name": "stacked-to-two-line", "value": "720px" },
+      { "name": "symbol-beside-word", "value": "480px" },
+      { "name": "one-row-entry", "value": "1200px" },
+      { "name": "two-columns", "value": "1440px" }
+    ],
+    "layoutMeasures": {
+      "railWidth": "18.5rem",
+      "contentMax": "76rem",
+      "contentMaxAt1440": "96rem",
+      "todayTracks": "1.5rem minmax(12rem, 1fr) 9rem 3.75rem 9rem 5rem max-content",
+      "titleTrackAt1440": "206px",
+      "longestTitle": "57 characters, three lines at 1440"
+    },
+    "openItems": [
+      "At 375 pixels the table of all problems scrolls sideways inside its wrapper and one column is cut at the screen edge. The owner decides."
+    ]
+  },
+  "components": [
+    {
+      "name": "Band Button",
+      "kind": "button",
+      "refersTo": "band-button",
+      "description": "A clear button with a 2 pixel white border on the ultramarine band.",
+      "html": "<div class=\"ds-band\"><button class=\"ds-band-btn\">Export</button></div>",
+      "css": ".ds-band { background: var(--cover, #1d3fbf); padding: 0.75rem 1rem; } .ds-band-btn { font: inherit; font-size: 0.875rem; color: #ffffff; background: transparent; border: 2px solid #ffffff; border-radius: 0; padding: 0.25rem 0.625rem; cursor: pointer; transition: background-color 150ms ease-out; } .ds-band-btn:hover { background: color-mix(in srgb, #ffffff 10%, #1d3fbf); } .ds-band-btn:active { background: color-mix(in srgb, #ffffff 20%, #1d3fbf); } .ds-band-btn:focus-visible { outline: 3px solid #ffffff; outline-offset: 2px; }"
+    },
+    {
+      "name": "Paper Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "The Solution button and other controls on paper.",
+      "html": "<button class=\"ds-btn\">Solution</button>",
+      "css": ".ds-btn { font: inherit; font-size: 0.875rem; color: var(--ink, #14110f); background: var(--paper, #ffffff); border: 1px solid var(--ink, #14110f); border-radius: 0; padding: 0.25rem 0.625rem; cursor: pointer; transition: background-color 150ms ease-out; } .ds-btn:hover { background: color-mix(in srgb, var(--ink, #14110f) 10%, var(--paper, #ffffff)); } .ds-btn:active { background: color-mix(in srgb, var(--ink, #14110f) 20%, var(--paper, #ffffff)); } .ds-btn:focus-visible { outline: 3px solid var(--focus, #1d3fbf); outline-offset: 2px; }"
+    },
+    {
+      "name": "Rating Buttons",
+      "kind": "custom",
+      "refersTo": "rating-button-clean",
+      "description": "Three buttons. Each has a symbol square and its word. The pressed one fills.",
+      "html": "<div class=\"ds-rate\"><button class=\"ds-r ds-clean\"><span class=\"ds-sym\">!</span><span>Clean</span></button><button class=\"ds-r ds-struggled\"><span class=\"ds-sym\">!?</span><span>Struggled</span></button><button class=\"ds-r ds-failed ds-on\"><span class=\"ds-sym\">?</span><span>Failed</span></button></div>",
+      "css": ".ds-rate { display: flex; gap: 0.375rem; } .ds-r { --c: #177043; display: inline-flex; align-items: center; gap: 0.5rem; font: inherit; font-size: 0.875rem; font-weight: 700; color: var(--c); background: var(--paper, #ffffff); border: 2px solid var(--c); border-radius: 0; padding: 0 0.5rem 0 0; cursor: pointer; transition: background-color 150ms ease-out; } .ds-struggled { --c: #8a5200; } .ds-failed { --c: #b71c1c; } .ds-sym { display: inline-flex; align-items: center; justify-content: center; width: 1.875rem; height: 1.875rem; font-family: Charter, Georgia, serif; font-size: 1rem; line-height: 1; background: var(--c); color: #ffffff; } .ds-r:hover { background: color-mix(in srgb, var(--c) 10%, #ffffff); } .ds-r:active { background: color-mix(in srgb, var(--c) 20%, #ffffff); } .ds-on, .ds-on:hover { background: var(--c); color: #ffffff; } .ds-on .ds-sym { background: #ffffff; color: var(--c); } .ds-r:focus-visible { outline: 3px solid #1d3fbf; outline-offset: 2px; }"
+    },
+    {
+      "name": "Topic Index Row",
+      "kind": "custom",
+      "refersTo": "topic-code",
+      "description": "A black code square, the topic name, the reviewed count, and the weak count.",
+      "html": "<div class=\"ds-idx\"><span class=\"ds-code\">A</span><span>Arrays</span><span class=\"ds-num\">3 of 9</span><span class=\"ds-weak\">1</span></div>",
+      "css": ".ds-idx { display: grid; grid-template-columns: 1.375rem minmax(0, 1fr) auto 1.375rem; gap: 0.375rem; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #c9c7c2; font-size: 0.875rem; } .ds-code { display: inline-flex; align-items: center; justify-content: center; width: 1.375rem; height: 1.375rem; background: #14110f; color: #ffffff; font-size: 0.75rem; font-weight: 700; } .ds-num { text-align: right; font-weight: 700; } .ds-weak { text-align: right; color: #b71c1c; font-weight: 700; }"
+    },
+    {
+      "name": "Entry",
+      "kind": "card",
+      "refersTo": "entry",
+      "description": "One ruled review row. Number, serif title, topic, level, status.",
+      "html": "<div class=\"ds-entry\"><span class=\"ds-no\">1</span><span class=\"ds-title\">Example problem title</span><span class=\"ds-lv\">Medium</span><span class=\"ds-st\">2 days overdue</span></div>",
+      "css": ".ds-entry { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.375rem 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid #14110f; } .ds-no { font-weight: 700; } .ds-title { font-family: Charter, Georgia, serif; font-size: 1.1875rem; font-weight: 700; flex: 1 1 auto; } .ds-lv { font-size: 0.875rem; color: #4a4744; } .ds-st { font-size: 0.875rem; font-weight: 700; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Informant Notation",
+    "overview": "The page is one Operate surface. It is a daily review list for one owner. He sits at a laptop with another site open beside it. The window is often 700 to 900 pixels wide. He reads what to solve, solves it elsewhere, comes back, and presses one rating. The look is a yearbook of his own games. An ultramarine band is the cover. Below it is ink on paper with hairline rules. Each review is one annotated entry. One filled square with a symbol says how it went. The page uses system fonts only.",
+    "keyCharacteristics": [
+      "One band, one ink, one paper. Color marks only the band and the ratings.",
+      "Rules do the work of structure. A 3 pixel rule ends a section head. A 1 pixel rule ends a row.",
+      "A rating symbol always has its word next to it.",
+      "Square corners everywhere. No shadow. No gradient.",
+      "Fixed sizes in rem from a short scale. No fluid type.",
+      "No authored motion. Hover is a tint in 150 milliseconds."
+    ],
+    "rules": [
+      { "name": "The Hex Home Rule", "body": "A hex color appears only in the two :root blocks. Every other rule uses var(...) or color-mix(...).", "section": "colors" },
+      { "name": "The Word First Rule", "body": "Color is a second signal. A state always has a word.", "section": "colors" },
+      { "name": "The Band Only Rule", "body": "The blue fills the band and nothing else on paper.", "section": "colors" },
+      { "name": "The Short Scale Rule", "body": "Only these sizes exist in rem: 0.75, 0.875, 1, 1.1875, 1.5, and 1.875.", "section": "typography" },
+      { "name": "The Native Weight Rule", "body": "Weights run 400, 600, 700, 800, and 900. A system face can show 800 and 900 as 700. The status text carries the meaning.", "section": "typography" },
+      { "name": "The Flat Paper Rule", "body": "Do not add box-shadow, a gradient, or a blur.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do show a rating as a symbol and a word. The words are Clean, Struggled, and Failed.",
+      "Do keep topic code letters in the alphabetical order of the topics.",
+      "Do put every color in the two :root blocks and use var(...) after that.",
+      "Do keep the sizes of the short scale.",
+      "Do keep hover as a 10 percent tint in 150 milliseconds and active as a 20 percent tint.",
+      "Do keep transition: none under prefers-reduced-motion: reduce.",
+      "Do give each new class a selector. A test in tests/styles.test.js checks it.",
+      "Do keep each control reachable by keyboard with the 3 pixel focus outline.",
+      "Do keep text contrast at 4.5 to 1 or more in both schemes."
+    ],
+    "donts": [
+      "Do not use a radius, a shadow, or a gradient.",
+      "Do not add @font-face, @keyframes, a font file, an image, or an inline style. The content security policy blocks them.",
+      "Do not add authored motion. The page redraws after each action, so nothing moves on load or on a press.",
+      "Do not use color as the only signal for a state.",
+      "Do not use the ultramarine for a fill on paper.",
+      "Do not add !important.",
+      "Do not turn the page into cards, rings, or a dashboard.",
+      "Do not use the look or the logo of NeetCode."
+    ]
+  }
+}

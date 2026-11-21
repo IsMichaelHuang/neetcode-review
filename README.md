@@ -27,6 +27,19 @@ npm run limits
 limits` checks that each file has at most 400 lines and 80 characters
 per line. Both need `git`, so they work only in a clone.
 
+## Design
+
+`PRODUCT.md` says who the page is for and what it must do.
+`DESIGN.md` records the look: the colors, the type, the layout for
+each window width, and the rules for controls.
+
+Each topic has a code letter. The letters follow the alphabetical
+order of the topics, so a new topic shifts the letters of the topics
+after it.
+
+Each rating has a symbol: `!` for Clean, `!?` for Struggled, and `?`
+for Failed. The page always shows the word next to the symbol.
+
 ## Where your ratings live
 
 The page keeps your ratings in the `localStorage` of your browser. It
@@ -54,8 +67,8 @@ To get your ratings back:
 
 ## If the page says changes could not be saved
 
-Your changes stay on screen only. They are lost when you close the
-page. If the notice stays after a reload, free browser storage for
+Your changes stay on screen only. If you close the page, you lose
+them. If the notice stays after a reload, free browser storage for
 the site. You can also remove the key `neetcode-review:state` by hand,
 after you copy its value. An export made while this notice shows
 holds only what is on screen.

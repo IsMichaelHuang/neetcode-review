@@ -226,7 +226,7 @@ Four layouts by viewport width:
 - Two columns: Topics is in the right column and spans the rows of
   Today and All, with `align-self: start`. The grid rows are
   `auto auto 1fr`, so Topics does not stretch the Today row.
-- One column: the topic index flows in columns of 17rem. An index row
+- One column: the topic index flows in columns of 18.5rem. An index row
   has the tracks `1.375rem minmax(0, 1fr) auto 1.375rem` and a gap of
   0.375rem.
 - Entries align on the first baseline (`align-items: baseline`).

@@ -70,8 +70,8 @@ test("styles.css has no data URL", () => {
 
 const css = () => read("styles.css").replace(/\/\*[\s\S]*?\*\//g, "")
 
-test("styles.css has no rounded corner", () => {
-  assert.ok(!/border-radius:(?!\s*0\s*[;}])/.test(css()))
+test("styles.css has no rounded corner, even as a longhand", () => {
+  assert.ok(!/radius\s*:(?!\s*0\s*[;}])/.test(css()))
 })
 
 for (const [name, re] of [
@@ -123,4 +123,25 @@ test("styles.css keeps its scheme and focus guards", () => {
 
 test("styles.css has a forced-colors rule", () => {
   assert.match(css(), /forced-colors:\s*active/)
+})
+
+// The text of an @media block, found by matching braces.
+const mediaBlock = (c, query) => {
+  const at = c.indexOf(`@media (${query}) {`)
+  assert.ok(at >= 0, `no media block for ${query}`)
+  let depth = 0
+  for (let i = c.indexOf("{", at); i < c.length; i++) {
+    if (c[i] === "{") depth++
+    if (c[i] === "}" && --depth === 0) return c.slice(at, i + 1)
+  }
+  return assert.fail("unclosed media block")
+}
+
+test("at 1200 pixels each entry spans all tracks of the subgrid", () => {
+  const block = mediaBlock(css(), "min-width: 1200px")
+  const rules = [...block.matchAll(/([^{}]+)\{([^}]*)\}/g)]
+  const hit = rules.some(
+    (m) => /\.entry\b/.test(m[1]) && /grid-column:\s*1 \/ -1/.test(m[2]),
+  )
+  assert.ok(hit, "no rule gives .entry grid-column: 1 / -1")
 })

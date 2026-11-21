@@ -115,3 +115,32 @@ test("no hex color or rgb() appears outside the two token blocks", () => {
   assert.ok(!/rgba?\(/i.test(rest), "an rgb() is outside")
   assert.ok(css.length > 0)
 })
+
+test("no hsl, hwb, lab, lch, oklab, oklch, or color() outside tokens", () => {
+  const rest = css.replace(/:root\s*\{[^}]*\}/g, "")
+  const re = /(?<![\w-])(hsla?|hwb|lab|lch|oklab|oklch|color)\(/i
+  assert.ok(!re.test(rest), "a banned color function is outside")
+  assert.ok(/color-mix\(/.test(rest), "color-mix must stay allowed")
+})
+
+test("the tokens have the values of the design file", () => {
+  const doc = readFileSync(
+    new URL("../docs/plans/page-redesign-design.md", import.meta.url),
+    "utf8",
+  )
+  const want = { light: {}, dark: {} }
+  const tick = "\\s*`#([0-9a-f]{6})`"
+  const head = "^\\|\\s*`--([\\w-]+)`\\s*\\|"
+  const re = new RegExp(head + tick + "\\s*\\|" + tick, "gim")
+  for (const m of doc.matchAll(re)) {
+    want.light[m[1]] = m[2].toLowerCase()
+    want.dark[m[1]] = m[3].toLowerCase()
+  }
+  assert.equal(Object.keys(want.light).length, 10)
+  const have = tokens()
+  for (const s of SCHEMES) {
+    for (const n of NAMES) {
+      assert.equal(have[s][n]?.toLowerCase(), want[s][n], `${s} --${n}`)
+    }
+  }
+})

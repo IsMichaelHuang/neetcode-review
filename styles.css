@@ -50,6 +50,7 @@ body {
 }
 
 ::selection { background: var(--cover); color: var(--on-cover); }
+.cover ::selection { background: var(--on-cover); color: var(--cover); }
 noscript { display: block; padding: var(--pad); }
 h1, h2, p, ul, ol { margin: 0; padding: 0; }
 ul, ol { list-style: none; }
@@ -205,7 +206,7 @@ section { margin-top: 2.5rem; }
 .topic { display: flex; align-items: center; }
 .topic, .level, .status, td, .index { font-size: 0.875rem; }
 .word { white-space: nowrap; }
-.status { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.status { display: inline-flex; align-items: center; gap: 0.5rem; }
 .sol, .solution { flex: 0 0 100%; }
 .rate {
   flex: 0 0 100%;
@@ -250,7 +251,6 @@ pre {
   font-size: 0.75rem;
 }
 .rate button {
-  --g: var(--paper);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -310,6 +310,7 @@ th { padding-bottom: 0.375rem; }
 td.title { font-size: 1rem; }
 tr.empty td { padding: 0.75rem 0; }
 td .word { margin-left: 0.5rem; }
+th, td:not(.title), td .name { white-space: nowrap; }
 
 @media (max-width: 719.98px) {
   .sol:empty { display: none; }
@@ -323,12 +324,13 @@ td .word { margin-left: 0.5rem; }
   :root { --pad: 2rem; }
   .entry {
     display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr) 10.5rem 4.5rem 8.5rem;
+    grid-template-columns: 2rem minmax(0, 1fr) 10rem 4.5rem 9rem;
     column-gap: 0.75rem;
     row-gap: 0.5rem;
   }
   .entry .title { flex: none; }
-  .sol, .rate, .solution { grid-column: 1 / -1; }
+  .rate, .solution { grid-column: 1 / -1; }
+  .sol { grid-column: 2 / -1; }
   .sol, .rate { grid-row: 2; }
   .solution { grid-row: 3; }
   .sol { justify-self: start; }
@@ -341,10 +343,10 @@ td .word { margin-left: 0.5rem; }
   .today {
     display: grid;
     grid-template-columns:
-      2rem minmax(12rem, 1fr) 10.5rem 4.5rem 8.5rem 5.5rem max-content;
+      2rem minmax(12rem, 1fr) 10rem 4.5rem 9rem 5.5rem max-content;
     column-gap: 0.75rem;
   }
-  .today > * { grid-column: 1 / -1; }
+  .today > *, .entries > .entry { grid-column: 1 / -1; }
   .cols, .entries, .entry {
     display: grid;
     grid-template-columns: subgrid;

@@ -126,3 +126,31 @@ Revert the merge commit. No saved data changes.
 - Browser: seed a done Medium, a due Hard, a due Easy, and new
   problems. The Today page shows Easy first and Hard last, and the
   row numbers run 1 to N from the top.
+
+## Four questions
+
+Regressions:
+
+- `buildToday` did not change, so the same problems are picked. A
+  test compares the set of ids before and after the sort.
+- The full run has 377 tests, and all pass.
+- In the browser, six rows showed Easy, then four Medium, then
+  Hard. A rating moved the row to the top of the Medium group after
+  the other done row, and the focus stayed on its button. At 375
+  pixels the page body does not scroll sideways.
+
+Security flaws:
+
+- None found. The sort reads a level from the problem list and uses
+  `indexOf` on a fixed list. A level such as "constructor" sorts
+  last, and a test covers it.
+
+Efficiency:
+
+- One sort of at most ten rows on each redraw. The change adds one
+  constant and six lines of code.
+
+Extra test cases:
+
+- None needed. The tests cover each level, an unknown level, a
+  missing level, a stable order, and the app order.

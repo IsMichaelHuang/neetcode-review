@@ -1,8 +1,9 @@
 #!/bin/sh
 # Prints each file that breaks the size limits: 400 lines for a file,
 # 80 characters for a line. Empty output means that all files pass.
-# Data fixtures are exempt.
+# Data fixtures and the files of the design tool are exempt.
 EXEMPT='^data/problems\.json$|^scripts/.*\.json$|^tests/fixtures/'
+EXEMPT="$EXEMPT|^\.impeccable/"
 FILES=$(git ls-files --cached --others --exclude-standard |
   grep -vE "$EXEMPT")
 for f in $FILES; do

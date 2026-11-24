@@ -1,4 +1,13 @@
 // A small fake DOM. It has only the members that render.js may use.
+// A real append takes a string too, but the render code must not.
+const checkNodes = (nodes) => {
+  for (const n of nodes) {
+    const ok = n !== null && typeof n === "object" && "tag" in n &&
+      "ownerDocument" in n
+    if (!ok) throw new TypeError("append takes elements only")
+  }
+}
+
 const makeElement = (doc, tag) => ({
   tag,
   ownerDocument: doc,
@@ -15,9 +24,11 @@ const makeElement = (doc, tag) => ({
     this.ownerDocument.activeElement = this
   },
   append(...nodes) {
+    checkNodes(nodes)
     this.children.push(...nodes)
   },
   replaceChildren(...nodes) {
+    checkNodes(nodes)
     this.children = [...nodes]
   },
   setAttribute(name, value) {
@@ -65,6 +76,12 @@ export const find = (root, test) => {
   return found
 }
 
+export const hasClass = (node, token) =>
+  String(node.className).split(" ").includes(token)
+
+export const byClass = (root, token) =>
+  find(root, (n) => n.className !== undefined && hasClass(n, token))
+
 export const text = (root) => {
   let out = ""
   walk(root, (n) => {
@@ -75,4 +92,23 @@ export const text = (root) => {
 
 export const fire = (node, type, event = { target: node }) => {
   for (const fn of node.listeners[type] ?? []) fn(event)
+}
+
+// A fake window: a hash, listeners, a way to fire events, scrollTo calls.
+export const fakeWindow = (hash = "") => {
+  const win = {
+    location: { hash },
+    listeners: {},
+    scrolls: [],
+    addEventListener(type, fn) {
+      ;(this.listeners[type] ??= []).push(fn)
+    },
+    fire(type) {
+      for (const fn of this.listeners[type] ?? []) fn({ type })
+    },
+    scrollTo(...args) {
+      this.scrolls.push(args)
+    },
+  }
+  return win
 }

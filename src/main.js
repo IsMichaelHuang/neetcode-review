@@ -1,6 +1,7 @@
 // Starts the page: joins the controller to the screen.
 import { createApp } from "./app.js"
 import { render } from "./render.js"
+import { pageOf, titleOf } from "./pages.js"
 
 const EXPORT_NAME = "neetcode-review-ratings.json"
 
@@ -27,14 +28,29 @@ const download = (document, text) => {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-export const start = async ({ document, fetchFn, storage, now, confirmFn }) => {
+export const start = async ({
+  document,
+  fetchFn,
+  storage,
+  now,
+  confirmFn,
+  win,
+}) => {
   const known = await loadKnown(fetchFn)
   const app = createApp({ fetchFn, storage, now, known })
   const root = document.getElementById("app")
-  // Keep the keyboard focus on the same control across a render.
+  const pageNow = () => pageOf(win?.location.hash ?? "")
+  let shown = null
+  // A render keeps the keyboard focus on the same control. A new page
+  // scrolls up and gets the focus on its heading.
   const paint = () => {
-    const id = document.activeElement?.id
-    render(root, app.view(), handlers)
+    const page = pageNow()
+    const moved = shown !== null && page !== shown
+    const id = moved ? `${page}-h` : document.activeElement?.id
+    shown = page
+    render(root, app.view(), handlers, page)
+    document.title = titleOf(page)
+    if (moved) win.scrollTo(0, 0)
     if (id) document.getElementById(id)?.focus?.()
   }
   const handlers = {
@@ -46,6 +62,9 @@ export const start = async ({ document, fetchFn, storage, now, confirmFn }) => {
     onExport: () => download(document, app.exportText()),
     onImport: (text) => (app.importText(text, confirmFn), paint()),
   }
+  win?.addEventListener("hashchange", () => {
+    if (pageNow() !== shown) paint()
+  })
   document.addEventListener("visibilitychange", () => {
     app.refresh()
     paint()
@@ -74,6 +93,7 @@ if (typeof window !== "undefined") {
     document: window.document,
     fetchFn: window.fetch.bind(window),
     storage: safeStorage(),
+    win: window,
     now: () => new Date(),
     confirmFn: () =>
       window.confirm(

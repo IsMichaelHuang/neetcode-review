@@ -50,12 +50,12 @@ body {
 }
 
 ::selection { background: var(--cover); color: var(--on-cover); }
-.cover ::selection { background: var(--on-cover); color: var(--cover); }
+.top ::selection { background: var(--on-cover); color: var(--cover); }
 noscript { display: block; padding: var(--pad); }
 h1, h2, p, ul, ol { margin: 0; padding: 0; }
 ul, ol { list-style: none; }
-h1, h2, .title, .sym { font-family: var(--serif); }
-h1, h2, .title, .no, .count, .num, .sym, .code { font-weight: 700; }
+h1, h2, .title { font-family: var(--serif); }
+h1, h2, .title, .no, .count, .num, .code { font-weight: 700; }
 
 a {
   color: var(--ink);
@@ -67,7 +67,7 @@ a:visited { color: var(--ink); }
 a:hover { text-decoration-thickness: 2px; }
 
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-.cover :focus-visible { outline-color: var(--on-cover); }
+.top :focus-visible { outline-color: var(--on-cover); }
 
 .sr {
   position: absolute;
@@ -110,7 +110,7 @@ label, .cols, th {
 .field { display: flex; flex-direction: column; gap: 0.125rem; }
 
 /* The band */
-.cover {
+.top {
   --c: var(--on-cover);
   --g: var(--cover);
   display: flex;
@@ -124,20 +124,20 @@ label, .cols, th {
   background: var(--cover);
   color: var(--on-cover);
 }
-.cover h1 { font-size: 1.5rem; line-height: 1.2; }
+.top h1 { font-size: 1.5rem; line-height: 1.2; }
 .tools { display: flex; flex-wrap: wrap; align-items: end; gap: 0.5rem 1rem; }
-.cover button, .cover input[type="number"] {
+.top button, .top input[type="number"] {
   border: 2px solid var(--on-cover);
 }
-.cover button { background: transparent; color: var(--on-cover); }
-.cover input[type="number"] { --c: var(--ink); --g: var(--paper); }
-.cover button:hover {
+.top button { background: transparent; color: var(--on-cover); }
+.top input[type="number"] { --c: var(--ink); --g: var(--paper); }
+.top button:hover {
   background: color-mix(in srgb, var(--c) 10%, var(--g));
 }
-.cover button:active {
+.top button:active {
   background: color-mix(in srgb, var(--c) 20%, var(--g));
 }
-.cover input[type="file"] {
+.top input[type="file"] {
   font: inherit;
   font-size: 0.875rem;
   width: 13.5rem;
@@ -170,7 +170,7 @@ main {
     minmax(var(--pad), 1fr) minmax(0, 76rem) 0 0 minmax(var(--pad), 1fr);
 }
 main > * { grid-column: 2; min-width: 0; }
-main > .cover { grid-column: 1 / -1; }
+main > .top { grid-column: 1 / -1; }
 section { margin-top: 2.5rem; }
 .head {
   display: flex;
@@ -232,11 +232,11 @@ pre {
 }
 .solution .error { margin: 0.25rem 0; }
 
-/* Symbols, codes, and ratings */
-.rate-clean, .sym-clean, .done-clean { --c: var(--clean); }
-.rate-struggled, .sym-struggled, .done-struggled { --c: var(--struggled); }
-.rate-failed, .sym-failed, .done-failed { --c: var(--failed); }
-.sym, .code {
+/* Dots, codes, and ratings */
+.rate-clean, .dot-clean, .done-clean { --c: var(--clean); }
+.rate-struggled, .dot-struggled, .done-struggled { --c: var(--struggled); }
+.rate-failed, .dot-failed, .done-failed { --c: var(--failed); }
+.code {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -247,7 +247,14 @@ pre {
   line-height: 1;
   vertical-align: middle;
 }
-.sym { background: var(--c); color: var(--paper); }
+.dot {
+  display: inline-block;
+  flex: none;
+  width: 0.625rem;
+  height: 0.625rem;
+  vertical-align: middle;
+  background: var(--c);
+}
 .code {
   margin-right: 0.5rem;
   background: var(--ink);
@@ -271,10 +278,7 @@ pre {
   background: var(--c);
   color: var(--paper);
 }
-.rate button[aria-pressed="true"] .sym {
-  background: var(--paper);
-  color: var(--c);
-}
+.rate button[aria-pressed="true"] .dot { background: var(--paper); }
 .kind-new { color: var(--ink-2); }
 .done-clean, .done-struggled, .done-failed {
   color: var(--c);
@@ -326,7 +330,6 @@ th, td:not(.title), td .name { white-space: nowrap; }
 
 @media (min-width: 480px) {
   .rate button { padding: 0 0.5rem 0 0; justify-content: flex-start; }
-  .rate .sym { width: 1.875rem; height: 1.875rem; font-size: 1rem; }
 }
 
 /* Two lines */
@@ -372,7 +375,7 @@ th, td:not(.title), td .name { white-space: nowrap; }
       18.5rem minmax(var(--pad), 1fr);
     grid-template-rows: auto auto 1fr;
   }
-  .cover { --wide: 96rem; }
+  .top { --wide: 96rem; }
   .today { grid-row: 2; }
   .all { grid-row: 3; }
   .topics { grid-column: 4; grid-row: 2 / 4; align-self: start; }

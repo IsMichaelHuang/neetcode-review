@@ -5,9 +5,8 @@ const table = (fn) =>
   Object.freeze(Object.fromEntries(RATING_KEYS.map((k, i) => [k, fn(k, i)])))
 
 export const RATING_LABEL = table((k) => k[0].toUpperCase() + k.slice(1))
-export const RATING_SYMBOL = table((_, i) => ["!", "!?", "?"][i])
 export const RATE_CLASS = table((k) => `rate-${k}`)
-export const SYM_CLASS = table((k) => `sym-${k}`)
+export const DOT_CLASS = table((k) => `dot-${k}`)
 export const DONE_CLASS = table((k) => `done-${k}`)
 export const DUE_CLASS = Object.freeze(["due-0", "due-1", "due-2", "due-3"])
 

@@ -1,5 +1,5 @@
 // The Today section: the queue of entries.
-import { h, outside, known, sym, rated, topicName } from "./h.js"
+import { h, outside, known, dot, rated, topicName } from "./h.js"
 import {
   RATING_KEYS,
   RATING_LABEL,
@@ -21,7 +21,7 @@ const COLS = [
 const statusCell = (doc, row) => {
   const kids = []
   if (row.kind === "done" && known(row.lastRating)) {
-    kids.push(sym(doc, row.lastRating))
+    kids.push(dot(doc, row.lastRating))
   }
   kids.push(h(doc, "span", { cls: "word", text: statusText(row) }))
   return h(doc, "span", { cls: `status ${statusClass(row)}` }, kids)

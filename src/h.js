@@ -1,5 +1,5 @@
 // Shared DOM helpers. All text goes in through textContent.
-import { RATING_LABEL, RATING_SYMBOL, SYM_CLASS } from "./labels.js"
+import { RATING_LABEL, DOT_CLASS } from "./labels.js"
 
 // Make an element. attrs: cls, text, value, or any other attribute.
 export const h = (doc, tag, attrs = {}, kids = []) => {
@@ -46,17 +46,13 @@ export const select = (doc, id, options, current) => {
 // True only for the three known ratings, so "constructor" is not one.
 export const known = (rating) => Object.hasOwn(RATING_LABEL, rating)
 
-// The symbol square of a rating. A word always sits next to it.
-export const sym = (doc, rating) =>
-  h(doc, "span", {
-    cls: `sym ${SYM_CLASS[rating]}`,
-    "aria-hidden": "true",
-    text: RATING_SYMBOL[rating],
-  })
+// The color dot of a rating. A word always sits next to it.
+export const dot = (doc, rating) =>
+  h(doc, "span", { cls: `dot ${DOT_CLASS[rating]}`, "aria-hidden": "true" })
 
-// A rating symbol and its word, for a status or a table cell.
+// A rating dot and its word, for a status or a table cell.
 export const rated = (doc, rating) => [
-  sym(doc, rating),
+  dot(doc, rating),
   h(doc, "span", { cls: "word", text: RATING_LABEL[rating] }),
 ]
 

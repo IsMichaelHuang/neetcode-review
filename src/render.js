@@ -33,7 +33,7 @@ const topBar = (doc, view, on) => {
     }
     on.onImport(text)
   })
-  return h(doc, "header", { cls: "cover" }, [
+  return h(doc, "header", { cls: "top" }, [
     h(doc, "h1", { text: "NeetCode Review" }),
     h(doc, "div", { cls: "tools" }, [
       labelled(doc, "target", "Daily target", target),

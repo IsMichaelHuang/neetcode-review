@@ -61,10 +61,12 @@ test("a done row shows its rating and three rating buttons", () => {
     struggled: "true",
     failed: "false",
   })
-  const sym = byClass(first(li, "status"), "sym")
-  assert.equal(sym.length, 1)
-  assert.equal(sym[0].textContent, "!?")
-  assert.ok(hasClass(sym[0], "sym-struggled"))
+  const dot = byClass(first(li, "status"), "dot")
+  assert.equal(dot.length, 1)
+  assert.equal(dot[0].className, "dot dot-struggled")
+  assert.equal(dot[0].textContent, "")
+  assert.equal(dot[0].children.length, 0)
+  assert.equal(dot[0].attrs["aria-hidden"], "true")
 })
 
 test("queue controls carry the problem title in their labels", () => {
@@ -168,36 +170,36 @@ test("the reveal button text is Solution", () => {
   assert.equal(byId(doc, "reveal-two-sum").textContent, "Solution")
 })
 
-test("each rating button has a symbol and a word", () => {
+test("each rating button has a dot and a word", () => {
   const doc = draw(view())
-  const want = { clean: "!", struggled: "!?", failed: "?" }
   const words = { clean: "Clean", struggled: "Struggled", failed: "Failed" }
   for (const r of RATINGS) {
     const b = byId(doc, `rate-two-sum-${r}`)
     assert.ok(hasClass(b, `rate-${r}`))
     assert.equal(b.children.length, 2)
-    const [sym, word] = b.children
-    assert.equal(sym.tag, "span")
-    assert.equal(sym.className, `sym sym-${r}`)
-    assert.equal(sym.textContent, want[r])
-    assert.equal(sym.attrs["aria-hidden"], "true")
+    const [dot, word] = b.children
+    assert.equal(dot.tag, "span")
+    assert.equal(dot.className, `dot dot-${r}`)
+    assert.equal(dot.textContent, "")
+    assert.equal(dot.children.length, 0)
+    assert.equal(dot.attrs["aria-hidden"], "true")
     assert.equal(word.className, "word")
     assert.equal(word.textContent, words[r])
   }
 })
 
-test("a new row has a status without a symbol and kind-new", () => {
+test("a new row has a status without a dot and kind-new", () => {
   const doc = draw(view())
   const st = first(entry(doc), "status")
-  assert.equal(byClass(st, "sym").length, 0)
+  assert.equal(byClass(st, "dot").length, 0)
   assert.ok(hasClass(st, "kind-new"))
   assert.equal(first(st, "word").textContent, "new")
 })
 
-test("a done row with lastRating null has no symbol and kind-new", () => {
+test("a done row with lastRating null has no dot and kind-new", () => {
   const doc = draw(view({ queue: [row({ kind: "done", lastRating: null })] }))
   const st = first(entry(doc), "status")
-  assert.equal(byClass(st, "sym").length, 0)
+  assert.equal(byClass(st, "dot").length, 0)
   assert.ok(hasClass(st, "kind-new"))
 })
 

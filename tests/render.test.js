@@ -103,9 +103,9 @@ test("a second render leaves one copy of each row", () => {
   assert.equal(find(doc.app, (n) => n.tag === "tbody")[0].children.length, 1)
 })
 
-test("header.cover holds the h1 and the target, export, import", () => {
+test("header.top holds the h1 and the target, export, import", () => {
   const doc = draw(view())
-  const cover = byClass(doc.app, "cover")
+  const cover = byClass(doc.app, "top")
   assert.equal(cover.length, 1, "no band")
   assert.equal(cover[0].tag, "header")
   const h1 = find(cover[0], (n) => n.tag === "h1")
@@ -154,11 +154,11 @@ test("every state has no id twice and no dangling reference", () => {
   }
 })
 
-test("every span.sym and span.code is hidden from the reader", () => {
+test("every span.dot and span.code is hidden from the reader", () => {
   const marks = everyState().flatMap((v) =>
     find(
       draw(v).app,
-      (n) => n.tag === "span" && (hasClass(n, "sym") || hasClass(n, "code")),
+      (n) => n.tag === "span" && (hasClass(n, "dot") || hasClass(n, "code")),
     ),
   )
   assert.ok(marks.length > 0)
@@ -183,5 +183,29 @@ test("hostile data never becomes a class or a style of text", () => {
     for (const x of ["<", "function", "undefined", "[object", "constructor"]) {
       assert.ok(!n.className.includes(x))
     }
+  }
+})
+
+test("no element has a text equal to a rating symbol", () => {
+  for (const v of everyState()) {
+    const hit = find(
+      draw(v).app,
+      (n) => ["!", "!?", "?"].includes(n.textContent),
+    )
+    assert.equal(hit.length, 0)
+  }
+})
+
+test("a constructor or __proto__ rating gives no dot", () => {
+  for (const lastRating of ["constructor", "__proto__"]) {
+    const doc = draw(view({
+      queue: [row({ kind: "done", lastRating })],
+      table: [row({ lastRating })],
+    }))
+    const own = [
+      ...byClass(doc.app, "status"),
+      ...find(doc.app, (n) => n.tag === "td"),
+    ]
+    assert.equal(own.flatMap((n) => byClass(n, "dot")).length, 0)
   }
 })

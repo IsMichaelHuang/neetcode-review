@@ -98,12 +98,14 @@ test("a table topic cell holds the code and then the name", () => {
   assert.equal(td.children[1].textContent, "Trees")
 })
 
-test("a failed last rating shows its symbol and word", () => {
+test("a failed last rating shows its dot and word", () => {
   const doc = draw(view({ table: [row({ lastRating: "failed" })] }))
   const td = cells(tableRows(doc)[0])[3]
   assert.equal(td.children.length, 2)
-  assert.equal(td.children[0].className, "sym sym-failed")
-  assert.equal(td.children[0].textContent, "?")
+  assert.equal(td.children[0].className, "dot dot-failed")
+  assert.equal(td.children[0].textContent, "")
+  assert.equal(td.children[0].children.length, 0)
+  assert.equal(td.children[0].attrs["aria-hidden"], "true")
   assert.equal(td.children[1].className, "word")
   assert.equal(td.children[1].textContent, "Failed")
 })

@@ -157,16 +157,8 @@ test("styles.css has a media query for 720 to 1199.98 pixels", () => {
 
 test("the band aligns with the page through --wide", () => {
   const c = css()
-  assert.match(c, /\.cover\s*\{[^}]*padding:[^;]*var\(--wide\)/)
+  assert.match(c, /\.top\s*\{[^}]*padding:[^;]*var\(--wide\)/)
   assert.match(mediaBlock(c, "min-width: 1440px"), /--wide:\s*96rem/)
-})
-
-test("at 480 pixels a rating symbol is a flush block", () => {
-  const block = mediaBlock(css(), "min-width: 480px")
-  const hit = [...block.matchAll(/([^{}]+)\{([^}]*)\}/g)].some(
-    (m) => /\.rate \.sym/.test(m[1]) && /width:\s*1\.875rem/.test(m[2]),
-  )
-  assert.ok(hit, "no .rate .sym rule with width 1.875rem")
 })
 
 test("the page bottom space is on main, not on sections", () => {

@@ -1,7 +1,7 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import {
-  RATING_KEYS, RATING_LABEL, RATING_SYMBOL, RATE_CLASS, SYM_CLASS,
+  RATING_KEYS, RATING_LABEL, RATE_CLASS, DOT_CLASS,
   DONE_CLASS, DUE_CLASS, topicCodes, statusText, urgency, statusClass,
 } from "../src/labels.js"
 
@@ -123,20 +123,24 @@ test("RATING_KEYS and RATING_LABEL hold the three ratings", () => {
     { clean: "Clean", struggled: "Struggled", failed: "Failed" })
 })
 
-test("RATING_SYMBOL holds the three symbols", () => {
-  assert.deepEqual(RATING_SYMBOL,
-    { clean: "!", struggled: "!?", failed: "?" })
+test("symbol tables are gone and DOT_CLASS holds three tokens", async () => {
+  const labels = await import("../src/labels.js")
+  assert.ok(!("RATING_SYMBOL" in labels))
+  assert.ok(!("SYM_CLASS" in labels))
+  assert.deepEqual(DOT_CLASS,
+    { clean: "dot-clean", struggled: "dot-struggled", failed: "dot-failed" })
+  assert.ok(Object.isFrozen(DOT_CLASS))
 })
 
 test("class tables hold one token for each rating", () => {
-  assert.equal(SYM_CLASS.clean, "sym-clean")
+  assert.equal(DOT_CLASS.clean, "dot-clean")
   assert.equal(RATE_CLASS.failed, "rate-failed")
   assert.equal(DONE_CLASS.struggled, "done-struggled")
   assert.deepEqual(DUE_CLASS, ["due-0", "due-1", "due-2", "due-3"])
 })
 
 test("each exported object and array is frozen", () => {
-  const all = [RATING_KEYS, RATING_LABEL, RATING_SYMBOL, RATE_CLASS,
-    SYM_CLASS, DONE_CLASS, DUE_CLASS]
+  const all = [RATING_KEYS, RATING_LABEL, RATE_CLASS,
+    DOT_CLASS, DONE_CLASS, DUE_CLASS]
   for (const x of all) assert.ok(Object.isFrozen(x))
 })

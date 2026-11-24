@@ -37,8 +37,8 @@ Each topic has a code letter. The letters follow the alphabetical
 order of the topics, so a new topic shifts the letters of the topics
 after it.
 
-Each rating has a symbol: `!` for Clean, `!?` for Struggled, and `?`
-for Failed. The page always shows the word next to the symbol.
+Each rating has a color dot and its word. The word is always there, so
+the color is never the only sign.
 
 ## Where your ratings live
 

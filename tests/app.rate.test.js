@@ -3,6 +3,7 @@ import assert from "node:assert/strict"
 import { NOTICES, STORAGE_KEY, BAD_KEY } from "../src/config.js"
 import { createApp } from "../src/app.js"
 import { treeUrl } from "../src/github.js"
+import { buildToday } from "../src/queue.js"
 import { loadState, saveState } from "../src/store.js"
 import { entry, fakeFetch, fakeStorage, loadJson } from "./helpers.js"
 
@@ -274,4 +275,33 @@ test("a refresh that reads damaged text shows a notice", async () => {
   const v = app.view()
   assert.deepEqual(v.notices, [NOTICES.damaged])
   assert.equal(find(v.table, P1).lastRating, "clean")
+})
+
+test("today shows Easy, Medium, Hard and picks the same problems", async () => {
+  const storage = fakeStorage()
+  const failed = [entry("2026-11-10", "failed")]
+  const ratings = {
+    "add-two-numbers": [entry("2026-11-20", "clean")],
+    "anagram-groups": failed,
+    "find-median-in-a-data-stream": failed,
+    "balanced-binary-tree": failed,
+  }
+  seed(storage, ratings, 5)
+  const { app } = await setup(storage)
+  const v = app.view()
+  assert.deepEqual(v.queue.map((r) => r.id), [
+    "balanced-binary-tree",
+    "add-two-numbers",
+    "anagram-groups",
+    "coin-change",
+    "find-median-in-a-data-stream",
+  ])
+  const { done, open } = buildToday({
+    problems: known,
+    ratings,
+    target: 5,
+    today: "2026-11-20",
+  })
+  const picked = [...done, ...open.map((o) => o.problem)].map((p) => p.id)
+  assert.deepEqual(v.queue.map((r) => r.id).sort(), picked.sort())
 })

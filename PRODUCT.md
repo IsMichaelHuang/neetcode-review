@@ -53,7 +53,8 @@ problems, to see where he is weak.
 
 Functions:
 
-- A list for today, with due problems first and new problems after.
+- A list for today. It picks due problems first and new problems after, and
+  shows them from Easy to Hard.
 - Three ratings: Clean, Struggled, and Failed.
 - A daily target from 1 to 10 problems.
 - A button that shows his old solution for one problem.

@@ -1,6 +1,11 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { buildToday, startOrder, topicSummary } from "../src/queue.js"
+import {
+  buildToday,
+  byLevel,
+  startOrder,
+  topicSummary,
+} from "../src/queue.js"
 import { mergeCatalog, parseTree } from "../src/catalog.js"
 import { entry, ids, loadJson, problem } from "./helpers.js"
 
@@ -190,4 +195,34 @@ test("topicSummary ignores a rating for an unknown id", () => {
   const list = [problem("a1", "A")]
   const r = topicSummary(list, { x: [entry(today, "failed")] })
   assert.deepEqual(r, [{ topic: "A", total: 1, reviewed: 0, weak: 0 }])
+})
+
+const lv = (id, difficulty) => ({ ...problem(id, "T"), difficulty })
+
+test("byLevel sorts Easy, Medium, Hard, then other levels", () => {
+  const list = [lv("h", "Hard"), lv("u", "Unknown"), lv("e", "Easy")]
+  list.push(lv("m", "Medium"))
+  assert.deepEqual(ids(byLevel(list)), ["e", "m", "h", "u"])
+})
+
+test("byLevel puts constructor and a missing level last, in order", () => {
+  const list = [lv("x", "constructor"), lv("e", "Easy"), lv("y", undefined)]
+  assert.deepEqual(ids(byLevel(list)), ["e", "x", "y"])
+})
+
+test("byLevel keeps the input order inside one level", () => {
+  const list = ["c", "a", "b"].map((id) => lv(id, "Medium"))
+  assert.deepEqual(ids(byLevel(list)), ["c", "a", "b"])
+})
+
+test("byLevel does not change its input", () => {
+  const list = [lv("h", "Hard"), lv("e", "Easy")]
+  const copy = [...list]
+  const out = byLevel(list)
+  assert.notEqual(out, list)
+  assert.deepEqual(list, copy)
+})
+
+test("byLevel of an empty list is an empty list", () => {
+  assert.deepEqual(byLevel([]), [])
 })

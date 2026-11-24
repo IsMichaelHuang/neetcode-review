@@ -70,8 +70,21 @@ test("styles.css has no data URL", () => {
 
 const css = () => read("styles.css").replace(/\/\*[\s\S]*?\*\//g, "")
 
-test("styles.css has no rounded corner, even as a longhand", () => {
-  assert.ok(!/radius\s*:(?!\s*0\s*[;}])/.test(css()))
+test("each border radius is one of the four allowed values", () => {
+  const ok = ["999px", "50%", "1.25rem", "0.75rem"]
+  const all = [...css().matchAll(/radius\s*:\s*([^;}]+)/g)]
+  assert.ok(all.length > 0)
+  for (const m of all) {
+    assert.ok(ok.includes(m[1].trim()), `radius ${m[1]}`)
+  }
+})
+
+test("the word serif appears only as part of sans-serif", () => {
+  assert.ok(!/(?<!sans-)serif/.test(css()))
+})
+
+test("styles.css turns off forced color adjust for the dot", () => {
+  assert.match(css(), /forced-color-adjust:\s*none/)
 })
 
 for (const [name, re] of [
@@ -89,8 +102,8 @@ for (const [name, re] of [
 }
 
 test("styles.css uses only the sizes of the type scale", () => {
-  const ok = ["0.75rem", "0.875rem", "1rem", "1.1875rem", "1.5rem",
-    "1.875rem", "inherit"]
+  const ok = ["0.75rem", "0.8125rem", "0.875rem", "1rem", "1.1875rem",
+    "1.375rem", "1.5rem", "inherit"]
   const sizes = [...css().matchAll(/font-size:\s*([^;}]+)/g)]
   assert.ok(sizes.length > 0)
   for (const m of sizes) {
@@ -155,10 +168,8 @@ test("styles.css has a media query for 720 to 1199.98 pixels", () => {
   assert.ok(css().includes(`@media ${q} {`))
 })
 
-test("the band aligns with the page through --wide", () => {
-  const c = css()
-  assert.match(c, /\.top\s*\{[^}]*padding:[^;]*var\(--wide\)/)
-  assert.match(mediaBlock(c, "min-width: 1440px"), /--wide:\s*96rem/)
+test("the --wide variable is gone", () => {
+  assert.ok(!css().includes("--wide"))
 })
 
 test("the page bottom space is on main, not on sections", () => {

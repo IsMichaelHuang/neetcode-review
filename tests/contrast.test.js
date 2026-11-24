@@ -5,8 +5,8 @@ import { readFileSync } from "node:fs"
 const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8")
   .replace(/\/\*[\s\S]*?\*\//g, "")
 const NAMES = [
-  "paper", "ink", "ink-2", "rule", "cover",
-  "on-cover", "clean", "struggled", "failed", "focus",
+  "paper", "sheet", "ink", "ink-2", "rule",
+  "edge", "accent", "clean", "struggled", "failed",
 ]
 
 // The light block is the first ":root {". The dark block is inside
@@ -64,14 +64,10 @@ test("both token blocks hold all ten tokens as six-digit hex", () => {
   }
 })
 
-const PAIRS = [
-  ["ink", "paper"],
-  ["ink-2", "paper"],
-  ["clean", "paper"],
-  ["struggled", "paper"],
-  ["failed", "paper"],
-  ["on-cover", "cover"],
-]
+const PAIRS = []
+for (const fg of ["ink", "ink-2", "accent", "clean", "struggled", "failed"]) {
+  for (const bg of ["paper", "sheet"]) PAIRS.push([fg, bg])
+}
 for (const [fg, bg] of PAIRS) {
   test(`${fg} on ${bg} has contrast 4.5 or more in both schemes`, () => {
     each((s, t, c) => {
@@ -82,32 +78,40 @@ for (const [fg, bg] of PAIRS) {
   })
 }
 
-for (const state of ["clean", "struggled", "failed"]) {
-  for (const p of [0.1, 0.2]) {
-    test(`${state} on ${p * 100} percent of itself keeps 4.5`, () => {
-      each((s, t, c) => {
-        assert.ok(t[state] && t.paper, `${s} lacks a token`)
-        const bg = mix(c(state), c("paper"), p)
-        const r = ratio(c(state), bg)
-        assert.ok(r >= 4.5, `${s}: ${state} on ${p} mix is ${r.toFixed(2)}`)
-      })
+// [text, mixed color, percent of the mixed color, ground, min ratio]
+const MIXES = []
+for (const n of ["clean", "struggled", "failed"]) {
+  for (const p of [0.11, 0.2]) MIXES.push([n, n, p, "sheet", 4.5])
+}
+for (const p of [0.08, 0.14]) {
+  MIXES.push(["ink", "ink", p, "sheet", 4.5])
+  MIXES.push(["edge", "ink", p, "sheet", 3])
+}
+for (const p of [0.18, 0.28]) MIXES.push(["ink", "accent", p, "sheet", 4.5])
+MIXES.push(["ink", "sheet", 0.6, "paper", 4.5])
+for (const [fg, top, p, ground, min] of MIXES) {
+  const name = `${fg} on ${Math.round(p * 100)} percent ${top} over ${ground}`
+  test(`${name} has contrast ${min} or more`, () => {
+    each((s, t, c) => {
+      assert.ok(t[fg] && t[top] && t[ground], `${s} lacks a token`)
+      const r = ratio(c(fg), mix(c(top), c(ground), p))
+      assert.ok(r >= min, `${s}: ${name} is ${r.toFixed(2)}`)
     })
-  }
+  })
 }
 
-test("focus on paper has contrast 3 or more in both schemes", () => {
-  each((s, t, c) => {
-    assert.ok(t.focus && t.paper, `${s} lacks a token`)
-    const r = ratio(c("focus"), c("paper"))
-    assert.ok(r >= 3, `${s}: focus on paper is ${r.toFixed(2)}`)
+for (const [fg, bg] of [
+  ["accent", "paper"], ["accent", "sheet"],
+  ["edge", "paper"], ["edge", "sheet"],
+]) {
+  test(`${fg} on ${bg} has contrast 3 or more in both schemes`, () => {
+    each((s, t, c) => {
+      assert.ok(t[fg] && t[bg], `${s} lacks a token`)
+      const r = ratio(c(fg), c(bg))
+      assert.ok(r >= 3, `${s}: ${fg} on ${bg} is ${r.toFixed(2)}`)
+    })
   })
-})
-
-test("the band color is the same in both schemes", () => {
-  const t = tokens()
-  assert.ok(t.light.cover)
-  assert.equal(t.light.cover, t.dark.cover)
-})
+}
 
 test("no hex color or rgb() appears outside the two token blocks", () => {
   const rest = css.replace(/:root\s*\{[^}]*\}/g, "")
@@ -125,7 +129,7 @@ test("no hsl, hwb, lab, lch, oklab, oklch, or color() outside tokens", () => {
 
 test("the tokens have the values of the design file", () => {
   const doc = readFileSync(
-    new URL("../docs/plans/page-redesign-design.md", import.meta.url),
+    new URL("../docs/plans/pond-mist-design.md", import.meta.url),
     "utf8",
   )
   const want = { light: {}, dark: {} }

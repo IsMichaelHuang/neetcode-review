@@ -110,14 +110,6 @@ const entry = (doc, row, on, codes, index) =>
 
 export const todaySection = (doc, view, on, codes) => {
   const queue = view.queue
-  const notes = view.notices.map((t) =>
-    h(doc, "p", { cls: "notice", role: "status", text: t }),
-  )
-  if (view.importError !== null) {
-    notes.push(
-      h(doc, "p", { cls: "error", role: "alert", text: view.importError }),
-    )
-  }
   const list =
     queue.length === 0
       ? [h(doc, "p", { cls: "empty", text: "Nothing to review today." })]
@@ -153,7 +145,6 @@ export const todaySection = (doc, view, on, codes) => {
         text: `${view.doneCount} of ${view.target} done`,
       }),
     ]),
-    ...notes,
     ...list,
     ...more,
   ])

@@ -1,55 +1,46 @@
-// The band and the page. The sections live in their own modules.
-import { h, labelled } from "./h.js"
+// The page frame: the header, the notices, and the sections.
+import { h } from "./h.js"
 import { topicCodes } from "./labels.js"
 import { todaySection } from "./render-today.js"
 import { topicsSection, tableSection } from "./render-lists.js"
+import { settingsSection } from "./render-settings.js"
 
-const topBar = (doc, view, on) => {
-  const target = h(doc, "input", {
-    id: "target",
-    type: "number",
-    min: 1,
-    max: 10,
-    value: String(view.target),
-  })
-  target.addEventListener("change", (e) =>
-    on.onTarget(e.target.value === "" ? NaN : Number(e.target.value)),
+const noteList = (doc, view) => {
+  const notes = view.notices.map((t) =>
+    h(doc, "p", { cls: "notice", role: "status", text: t }),
   )
-  const exp = h(doc, "button", { type: "button", id: "export", text: "Export" })
-  exp.addEventListener("click", () => on.onExport())
-  const imp = h(doc, "input", {
-    id: "import",
-    type: "file",
-    accept: "application/json,.json",
-  })
-  imp.addEventListener("change", async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    let text = ""
-    try {
-      text = await file.text()
-    } catch {
-      // An unreadable file goes on as empty text, which is not valid JSON.
-    }
-    on.onImport(text)
-  })
-  return h(doc, "header", { cls: "top" }, [
-    h(doc, "h1", { text: "NeetCode Review" }),
-    h(doc, "div", { cls: "tools" }, [
-      labelled(doc, "target", "Daily target", target),
-      exp,
-      labelled(doc, "import", "Import ratings", imp),
-    ]),
-  ])
+  if (view.importError !== null) {
+    notes.push(
+      h(doc, "p", { cls: "error", role: "alert", text: view.importError }),
+    )
+  }
+  return notes
 }
+
+const same = (a, b) =>
+  a.length === b.length &&
+  a.every((n, i) => n.className === b[i].className &&
+    n.textContent === b[i].textContent)
 
 export const render = (root, view, on) => {
   const doc = root.ownerDocument
+  if (root.children.length === 0) {
+    root.append(
+      h(doc, "header", { cls: "top" }, [
+        h(doc, "h1", { text: "NeetCode Review" }),
+      ]),
+      h(doc, "div", { cls: "notes" }),
+      h(doc, "div", { cls: "page" }),
+    )
+  }
+  const [, notes, page] = root.children
+  const next = noteList(doc, view)
+  if (!same(next, notes.children)) notes.replaceChildren(...next)
   const codes = topicCodes(view.topicOptions)
-  root.replaceChildren(
-    topBar(doc, view, on),
+  page.replaceChildren(
     todaySection(doc, view, on, codes),
     topicsSection(doc, view, codes),
     tableSection(doc, view, on, codes),
+    settingsSection(doc, view, on),
   )
 }

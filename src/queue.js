@@ -1,4 +1,4 @@
-import { DIFFICULTY_ORDER } from "./config.js"
+import { DIFFICULTY_ORDER, LEVEL_ORDER } from "./config.js"
 import { daysBetween } from "./dates.js"
 import { isWeak, replay } from "./schedule.js"
 
@@ -33,6 +33,13 @@ export const startOrder = (problems) => {
   }
   return [...groups.values(), ...others.values()].flatMap(roundRobin)
 }
+
+// Only the display order. An unknown level goes last.
+const rank = (p) => {
+  const i = LEVEL_ORDER.indexOf(p.difficulty)
+  return i === -1 ? LEVEL_ORDER.length : i
+}
+export const byLevel = (list) => [...list].sort((a, b) => rank(a) - rank(b))
 
 export const buildToday = ({ problems, ratings, target, today }) => {
   const done = []

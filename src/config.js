@@ -8,6 +8,7 @@ export const MIN_TARGET = 1
 export const MAX_TARGET = 10
 export const RATINGS = ["failed", "struggled", "clean"]
 export const DIFFICULTY_ORDER = ["Medium", "Hard", "Easy"]
+export const LEVEL_ORDER = ["Easy", "Medium", "Hard"]
 export const ID_PATTERN = /^[a-z0-9-]+$/
 export const STORAGE_KEY = "neetcode-review:state"
 export const BAD_KEY = "neetcode-review:state.bad"

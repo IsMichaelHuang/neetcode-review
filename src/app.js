@@ -3,7 +3,7 @@ import { MIN_TARGET, MAX_TARGET, NOTICES } from "./config.js"
 import { parseTree, mergeCatalog } from "./catalog.js"
 import { localDate, formatDay, daysBetween } from "./dates.js"
 import { replay, rate as rateHistory, isWeak } from "./schedule.js"
-import { buildToday, topicSummary } from "./queue.js"
+import { buildToday, byLevel, topicSummary } from "./queue.js"
 import {
   emptyState,
   loadState,
@@ -92,7 +92,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
       target: state.target,
       today,
     })
-    const queue = [...done, ...open.map((o) => o.problem)]
+    const queue = byLevel([...done, ...open.map((o) => o.problem)])
     const all = [...problems].sort(
       (a, b) => cmp(a.title, b.title) || cmp(a.id, b.id),
     )

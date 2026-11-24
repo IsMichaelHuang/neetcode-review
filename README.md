@@ -32,7 +32,7 @@ per line. Both need `git`, so they work only in a clone.
 The site has four pages in one HTML file. The part of the address
 after `#` selects the page:
 
-- `#/` shows Today, the list of problems to review.
+- `#/` shows Today, the list of problems to review, from Easy to Hard.
 - `#/topics` shows the counts for each topic.
 - `#/problems` shows the table of all problems, with two filters.
 - `#/settings` holds the daily target, Export, and Import.

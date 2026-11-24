@@ -37,37 +37,37 @@ seconds.
 
 ## Direction contract
 
-THESIS: The page is the yearbook of his own games. Each review is one
-annotated entry, and one symbol says how it went. It refuses the dark
-dashboard of cards and progress rings.
+THESIS: The page is a quiet pond. The work of today lies on one
+clear sheet, and all other content recedes into the mist. It refuses
+the dashboard of cards, progress rings, and alarm colors.
 
-OWN-WORLD: An ultramarine band is the cover. Below it is ink on
-paper: ruled tables with hairlines, no card, no rounded panel, no
-shadow. Titles are in a serif face. Labels are bold sans capitals.
-Each topic has a black square with a white code letter. Each rating
-has a filled square with a symbol: "!" for Clean in green, "!?" for
-Struggled in amber, "?" for Failed in red. The dark scheme keeps the
-band and puts paper-white ink on a blue-black ground.
+OWN-WORLD: A misty blue-green ground and a near-white sheet with
+round corners. All text is in the system sans face, in regular and
+medium weights. Each control is a pill. A rating is a small color dot and a
+word: pine green for Clean, amber brown for Struggled, muted brick
+for Failed. Each topic has a round chip with a code letter. No band
+and no shadow. Lines are thin and soft. The dark scheme is the pond at night: a
+green-black ground and a raised dark sheet.
 
-STORY: He reads row 1 of Today, opens the problem, returns, and
-presses one symbol. The row then carries its annotation.
+STORY: He reads row 1 on the sheet, opens the problem, returns, and
+presses one pill. The pill fills with its color, and the row says
+"done".
 
-FIRST VIEWPORT: At 1440 by 900, the band is 64 pixels high. The name
-is at the left. The daily target, Export, and Import are at the
-right. The left two thirds hold the head "Today" with the date and
-the done count, then one ruled row for each problem: number, title,
-topic code and name, level, status, the solution button, and the
-three rating buttons at the right end. The head "All problems" with
-both filters and the first table rows follow on the same screen. The
-right third holds the topic index: code, topic, reviewed count, and
-weak count. The primary action is the group of rating buttons.
+FIRST VIEWPORT: At 1440 by 900, the name is at the left in pine
+green and the tools are at the right, both on the ground. Below, the
+Today sheet holds the head "Today" with the date and the done count,
+then one row for each problem: number, title, topic chip and name,
+level, status, the solution button, and the three rating pills at
+the right end. The topic index is a rail at the right, on the
+ground. The primary action is the group of rating pills.
 
-FORM: Informant Notation, candidate 5 of 7 on the grounded list.
-seed:86b4cf2e101db3a4. The signature move is the annotation symbols
-with the coded topic index. The signature interaction: a press on a
-rating puts its symbol into the status of the row. Motion: a hover
-changes the ground of a control in 150 milliseconds. Nothing moves
-on load or on a press, because the page redraws after each action.
+FORM: Pond mist. The owner pinned the direction, so no roll ran.
+seed: none (pinned). His words: "Go with the 'zen' vibe" and "I
+like, pond mist". The signature move is the one sheet on the mist
+ground. The signature interaction: a press on a rating pill fills
+it with its color. Motion: a hover changes the ground of a control
+in 150 milliseconds. Nothing moves on load or on a press, because
+the page redraws after each action.
 
 FINISH: `unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance`
 

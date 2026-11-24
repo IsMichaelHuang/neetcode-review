@@ -1,372 +1,399 @@
 ---
 name: NeetCode Review
-description: Ink on paper under an ultramarine band, with rating symbols.
+description: One clear sheet on a misty ground, with pills and color dots.
 colors:
-  paper: "#ffffff"
-  ink: "#14110f"
-  ink-2: "#4a4744"
-  rule: "#c9c7c2"
-  cover: "#1d3fbf"
-  on-cover: "#ffffff"
-  clean: "#177043"
-  struggled: "#8a5200"
-  failed: "#b71c1c"
-  focus: "#1d3fbf"
-  paper-dark: "#0f1320"
-  ink-dark: "#f2f0ea"
-  ink-2-dark: "#b9b6ae"
-  rule-dark: "#3a4058"
-  clean-dark: "#5fd08f"
-  struggled-dark: "#f0b24a"
-  failed-dark: "#ff8f85"
-  focus-dark: "#9db4ff"
+  paper: "#e9f0ef"
+  sheet: "#fbfdfc"
+  ink: "#1d2b2e"
+  ink-2: "#4d5f62"
+  rule: "#d6e0de"
+  edge: "#6f7f80"
+  accent: "#2c6769"
+  clean: "#256a4c"
+  struggled: "#7c5512"
+  failed: "#a23f3c"
+  paper-dark: "#131c1d"
+  sheet-dark: "#1b2728"
+  ink-dark: "#e4ecea"
+  ink-2-dark: "#a3b3b2"
+  rule-dark: "#2c3a3b"
+  edge-dark: "#7f9192"
+  accent-dark: "#7fc0bf"
+  clean-dark: "#78c79d"
+  struggled-dark: "#e0b164"
+  failed-dark: "#ea928b"
 typography:
   name:
-    fontFamily: "Charter, Palatino, Georgia, serif"
-    fontSize: "1.5rem"
-    fontWeight: 700
+    fontFamily: "system-ui, -apple-system, Segoe UI, Arial, sans-serif"
+    fontSize: "1.375rem"
+    fontWeight: 600
     lineHeight: 1.2
   section-head:
-    fontFamily: "Charter, Palatino, Georgia, serif"
-    fontSize: "1.875rem"
-    fontWeight: 700
-    lineHeight: 1.1
+    fontFamily: "system-ui, -apple-system, Segoe UI, Arial, sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 600
+    lineHeight: 1.2
   entry-title:
-    fontFamily: "Charter, Palatino, Georgia, serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Arial, sans-serif"
     fontSize: "1.1875rem"
-    fontWeight: 700
-    lineHeight: 1.4
+    fontWeight: 500
   body:
     fontFamily: "system-ui, -apple-system, Segoe UI, Arial, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.4
+    lineHeight: 1.5
   small:
     fontFamily: "system-ui, -apple-system, Segoe UI, Arial, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 400
-    lineHeight: 1.4
   label:
     fontFamily: "system-ui, -apple-system, Segoe UI, Arial, sans-serif"
+    fontSize: "0.8125rem"
+    fontWeight: 400
+  code-letter:
+    fontFamily: "system-ui, -apple-system, Segoe UI, Arial, sans-serif"
     fontSize: "0.75rem"
-    fontWeight: 700
-    letterSpacing: "0.06em"
+    fontWeight: 500
+    lineHeight: 1
   code:
     fontFamily: "ui-monospace, SF Mono, Menlo, Consolas, monospace"
     fontSize: "0.875rem"
     fontWeight: 400
-    lineHeight: 1.4
 rounded:
-  none: "0"
+  pill: "999px"
+  round: "50%"
+  sheet: "1.25rem"
+  box: "0.75rem"
 spacing:
   pad: "1rem"
   pad-wide: "2rem"
-  entry-y: "0.75rem"
-  section-gap: "2.5rem"
+  sheet-pad: "1.5rem"
+  entry-y: "1rem"
+  section-gap: "3rem"
   rail: "18.5rem"
+  rail-gap: "1.5rem"
   content-max: "76rem"
 components:
-  band:
-    backgroundColor: "{colors.cover}"
-    textColor: "{colors.on-cover}"
-    height: "64px"
-    padding: "0.75rem 1rem"
+  sheet:
+    backgroundColor: "{colors.sheet}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.sheet}"
+    padding: "1.5rem"
   button:
-    backgroundColor: "{colors.paper}"
+    backgroundColor: "{colors.sheet}"
     textColor: "{colors.ink}"
     typography: "{typography.small}"
-    rounded: "{rounded.none}"
-    padding: "0.25rem 0.625rem"
-  band-button:
-    backgroundColor: "{colors.cover}"
-    textColor: "{colors.on-cover}"
-    rounded: "{rounded.none}"
-    padding: "0.25rem 0.625rem"
+    rounded: "{rounded.pill}"
+    padding: "0.375rem 0.875rem"
   rating-button-clean:
-    backgroundColor: "{colors.paper}"
     textColor: "{colors.clean}"
-    rounded: "{rounded.none}"
-    height: "2.125rem"
+    rounded: "{rounded.pill}"
+    padding: "0.375rem 0.875rem 0.375rem 0.75rem"
   rating-button-clean-pressed:
     backgroundColor: "{colors.clean}"
-    textColor: "{colors.paper}"
-  rating-symbol:
+    textColor: "{colors.sheet}"
+  rating-dot:
     backgroundColor: "{colors.clean}"
-    textColor: "{colors.paper}"
-    size: "1.375rem"
+    rounded: "{rounded.round}"
+    size: "0.625rem"
   topic-code:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.paper}"
-    typography: "{typography.label}"
-    size: "1.375rem"
-  entry:
-    backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
-    padding: "0.625rem 0"
+    typography: "{typography.code-letter}"
+    rounded: "{rounded.round}"
+    size: "1.375rem"
+  notice:
+    backgroundColor: "{colors.sheet}"
+    rounded: "{rounded.box}"
+    padding: "0.875rem 1rem"
+  solution-box:
+    backgroundColor: "{colors.paper}"
+    typography: "{typography.code}"
+    rounded: "{rounded.box}"
+    padding: "0.875rem 1rem"
 ---
 
 # Design System: NeetCode Review
 
 ## Overview
 
-Creative North Star: "Informant Notation"
+Creative North Star: "Pond Mist"
 
 The page is one Operate surface. It is a daily review list for one owner.
-He sits at a laptop with another site open beside it. The window is often
-700 to 900 pixels wide. He reads what to solve, solves it elsewhere, comes
-back, and presses one rating.
+He sits at a laptop with another site open beside it. He reads what to
+solve, solves it elsewhere, comes back, and presses one rating.
 
-The look is a yearbook of his own games. An ultramarine band is the cover.
-Below it is ink on paper with hairline rules. Each review is one annotated
-entry. One filled square with a symbol says how it went. The page has no
-card, no panel, no image, and no icon.
+The look is a quiet pond. The ground is a misty blue-green. The work of
+today lies on one near-white sheet with round corners. The header, the
+topic index, and the table of all problems sit on the ground. The dark
+scheme is the pond at night: a green-black ground and a raised dark sheet.
 
 The page uses system fonts only. The content security policy allows no
-font file, no image from another host, and no inline style. The page
-follows the system light or dark setting.
+font file, no image from another host, and no inline style. Both color
+schemes follow the system setting.
 
 Key Characteristics:
-- One band, one ink, one paper. Color marks only the band and the ratings.
-- Rules do the work of structure. A 3 pixel rule ends a section head.
-  A 1 pixel rule ends a row.
-- A rating symbol always has its word next to it.
-- Square corners everywhere. No shadow. No gradient.
+- One sheet on the ground. Only Today lies on it.
+- Each control is a pill. Each small mark is a circle.
+- A rating is a color dot and a word.
+- Color is rare: the accent for the name and the numbers, and three
+  rating colors.
+- Thin lines in a soft tone separate rows. No band, no shadow, no gradient.
 - Fixed sizes in rem from a short scale. No fluid type.
 - No authored motion. Hover is a tint in 150 milliseconds.
 
 ## Colors
 
-The palette is ink, paper, one blue, and three rating colors. Each color
-has a light value and a dark value. The tokens sit in two `:root` blocks
-in `styles.css`. Tests in `tests/contrast.test.js` check contrast of text
-and focus colors in both schemes.
+The palette is a mist ground, a sheet, two inks, two line tones, one
+accent, and three rating colors. Ten tokens exist in each scheme. The
+tokens sit in two `:root` blocks in `styles.css`. A test in
+`tests/contrast.test.js` checks the contrast in both schemes.
 
 ### Primary
-- Cover Ultramarine (#1d3fbf): the band behind the name and the tools.
-  Text on it is on-cover white (#ffffff). The blue is the same in the dark
-  scheme. In the light scheme it is also the focus outline color.
-- Focus Periwinkle (#9db4ff, dark scheme only): the focus outline on the
-  dark ground.
+- Pond Accent (#2c6769, dark #7fc0bf): the name in the header, the number
+  of an entry, the focus outline, and the underline of a link on hover.
+  An 18 percent mix into the sheet is the ground of a topic code. A 28
+  percent mix is the selection ground.
 
 ### Secondary
-- Clean Green (#177043, dark #5fd08f): the Clean rating.
-- Struggled Amber (#8a5200, dark #f0b24a): the Struggled rating.
-- Failed Red (#b71c1c, dark #ff8f85): the Failed rating, the weak count,
+- Pine Green (#256a4c, dark #78c79d): the Clean rating.
+- Amber Brown (#7c5512, dark #e0b164): the Struggled rating.
+- Muted Brick (#a23f3c, dark #ea928b): the Failed rating, the weak count,
   and error text.
 
 ### Neutral
-- Paper (#ffffff, dark #0f1320): the page ground. The dark ground is a
-  blue-black.
-- Ink (#14110f, dark #f2f0ea): text, entry rules, control borders, and the
-  topic code square.
-- Quiet Ink (#4a4744, dark #b9b6ae): the date, the level, the word "none",
-  the word "new", and the legend.
-- Index Rule (#c9c7c2, dark #3a4058): the hairlines of the topic index.
+- Mist (#e9f0ef, dark #131c1d): the page ground and the ground of the old
+  solution box.
+- Sheet (#fbfdfc, dark #1b2728): the Today sheet, a notice, the ground of
+  each control, and the text on a pressed rating button.
+- Ink (#1d2b2e, dark #e4ecea): text and links.
+- Quiet Ink (#4d5f62, dark #a3b3b2): labels, column heads, the date, the
+  level, the done count, the legend, "new", and "none".
+- Rule (#d6e0de, dark #2c3a3b): the lines between rows.
+- Edge (#6f7f80, dark #7f9192): the border of a control, the underline of
+  a link, and the scrollbar thumb.
 
 ### Named Rules
 The Hex Home Rule. A hex color appears only in the two `:root` blocks.
 Every other rule uses `var(...)` or `color-mix(...)`.
 
-The Word First Rule. Color is a second signal. A state always has a word.
+The Word First Rule. Color is a second signal. A dot always has its word
+next to it.
 
-The Band Only Rule. The blue fills the band and nothing else on paper.
+The One Color Variable Rule. A rating class sets `--c` to its rating
+color. The dot, the word, and the button ground all read `--c`.
 
 ## Typography
 
-Display Font: Charter with Iowan Old Style, Palatino, Georgia, and serif
-as fallback.
-Body Font: system-ui with the platform sans fallbacks.
-Label and Mono Font: labels use the body face in bold capitals. Old
-solutions use ui-monospace with Menlo and Consolas as fallback.
+Display Font: system-ui with the platform sans fallbacks.
+Body Font: the same stack.
+Label and Mono Font: labels use the body face. Old solutions use
+ui-monospace with SF Mono, Menlo, and Consolas as fallback.
 
-Character: a serif for names and titles gives the page a printed feel.
-Bold sans capitals label the columns and the fields. Numbers use
-tabular figures.
+Character: one sans face carries all text. Size and weight make the
+order. Labels are in normal case with no letter spacing. Numbers use
+tabular figures. The page has no serif face.
 
 ### Hierarchy
-- Section head (serif, 700, 1.875rem, 1.1): Today, Topics, All problems.
-- Name (serif, 700, 1.5rem, 1.2): "NeetCode Review" in the band.
-- Entry title (serif, 700, 1.1875rem): a problem title in Today. The done
-  count uses the same size in sans bold.
-- Body (sans, 400, 1rem, 1.4): table titles and base text.
-- Small (sans, 400, 0.875rem): buttons, topic names, level, status, index
-  rows, and table cells.
-- Label (sans, 700, 0.75rem, 0.06em, capitals): column heads, field
-  labels, table heads, and the topic code letter.
-- Code (mono, 400, 0.875rem): the old solution inside a bordered box.
+- Section head (600, 1.5rem, 1.2): Today, Topics, All problems.
+- Name (600, 1.375rem, 1.2): "NeetCode Review" in the accent color.
+- Entry title (500, 1.1875rem): a problem title in Today.
+- Body (400, 1rem, 1.5): base text. Table titles and the done count use
+  this size at weight 500.
+- Small (400, 0.875rem): controls, topic names, level, status, index
+  rows, table cells, and the legend.
+- Label (400, 0.8125rem, Quiet Ink): field labels, the column heads of
+  Today, and table heads.
+- Code letter (500, 0.75rem, line height 1): the letter in a topic code.
+- Code (mono, 400, 0.875rem): the old solution.
 
 ### Named Rules
-The Short Scale Rule. Only these sizes exist in rem: 0.75, 0.875, 1,
-1.1875, 1.5, and 1.875. A test reads the sizes in `styles.css`.
+The Short Scale Rule. Only these sizes exist in rem: 0.75, 0.8125, 0.875,
+1, 1.1875, 1.375, and 1.5. A test in `tests/static.test.js` reads the
+sizes in `styles.css`.
 
-The Native Weight Rule. Weights run 400, 600, 700, 800, and 900. The
-urgency classes use 600 to 900 to show how late a problem is. A system
-face can show 800 and 900 as 700. The status text carries the meaning.
+The Four Weights Rule. Weights are 400, 500, 600, and 700. The status of
+a due entry steps through them to show how late it is. The status text
+carries the meaning.
 
 ## Layout
 
-The page is one grid on `main#app`. A gutter, a content column of at most
-76rem, a gap, a rail column, and a second gutter make the columns. The
-side pad is 1rem under 720 pixels and 2rem from 720 pixels. The band
-spans all columns. Its text lines up with the page content through
-`--wide`, which is 76rem and 96rem at 1440 pixels or more. Space below
-the page is 3rem on `main`. Sections have a top margin of 2.5rem.
+The page is one grid on `main#app`. The columns are a gutter, a content
+column of at most 76rem, a gap, a rail, and a second gutter. The side pad
+is 1rem under 720 pixels and 2rem from 720 pixels. Space below the page
+is 3rem. A section has a top margin of 3rem. Today has 1.5rem.
 
-Four layouts depend on the viewport width.
-- 1440 pixels or more: two columns. Today and All problems sit at the
-  left. The topic index sits at the right in a rail of 18.5rem with a
-  gap of 1.5rem. An entry is one row.
-- 1200 to 1439 pixels: one column in the order Today, Topics, All
-  problems. An entry is one row. The topic index flows in columns of
-  18.5rem.
-- 720 to 1199 pixels: one column. An entry has two lines. Line 1 holds
-  the number, the title, the level, and the status. Line 2 holds the
-  topic, the solution button, and the three rating buttons.
-- Under 720 pixels: one column. An entry is stacked. The three rating
-  buttons share the width in equal tracks. Under 480 pixels the rating
-  symbol sits above its word.
+The header sits on the ground. The name is at the left. The daily target,
+Export, and Import ratings are at the right. The tools wrap on a narrow
+window.
 
-The direction contract gives the topic index the right third of a 1440
-pixel screen. The built rail is 18.5rem, about one fifth. The narrower
-rail gives the entry title more width.
+The layouts depend on the window width.
+- From 1440 pixels: the Topics section is a rail of 18.5rem at the right,
+  with a gap of 1.5rem. Today and All problems sit at the left. The
+  header spans both.
+- From 1200 pixels: an entry of Today is one row. Under 1440 pixels the
+  order is Today, Topics, All problems in one column. The topic index
+  flows in columns of 18.5rem with a gap of 2rem.
+- From 720 to 1199 pixels: an entry has two lines. Line 1 holds the
+  number, the title, the level, and the status. Line 2 holds the topic,
+  the Solution button, and the rating group.
+- Under 720 pixels: an entry is stacked. The three rating buttons share
+  the width in equal tracks with a gap of 0.25rem.
+- Under 480 pixels: a rating button shows the dot above the word.
 
-At 1200 pixels or more, the Today section owns seven tracks:
+From 1200 pixels the Today sheet owns seven tracks:
 `1.5rem minmax(12rem, 1fr) 9rem 3.75rem 9rem 5rem max-content`. The column
-heads, the list, and each entry use a subgrid on those tracks. A shown
-solution spans all tracks in a row of its own.
+heads, the list, and each entry use a subgrid on those tracks. The column
+gap is 0.75rem. A shown solution spans all tracks in a row of its own.
 
-Measured numbers from the browser pass. At exactly 1440 pixels the title
-track is 206 pixels. The longest title has 57 characters and takes three
-lines. It takes two lines at 1200 and at 720 pixels, and one line at 900
-pixels. The rating group is 311 pixels at 1440. The index name track is
-185 pixels at 1440.
+From 720 to 1199 pixels an entry owns six tracks:
+`1.5rem minmax(0, 1fr) max-content max-content 3.75rem 9rem`.
 
-Text children have `min-width: 0`. Titles and names wrap anywhere. A rating
-word never wraps.
+Measured widths in a browser on macOS. The rating group is 289 pixels
+wide from 720 pixels. The title track is 192 pixels at 1440, 260 pixels
+at 1200, and 509 pixels at 900.
 
-Open item: at 375 pixels the table of all problems scrolls sideways inside
-its wrapper, and one column is cut at the screen edge. The design review
-left this open. The owner decides the fix.
+Text children have `min-width: 0`. Titles and names wrap anywhere. A
+rating word never wraps.
 
-Spacing rhythm: 0.25rem inside buttons, 0.375rem and 0.5rem between small
-parts, 0.75rem between an entry and its rule, 2.5rem between sections.
+Spacing rhythm. Small parts have 0.375rem or 0.5rem between them. Columns
+have 0.75rem. An entry has 1rem above and below. An index row has 0.5rem.
+A table cell has 0.75rem. Sections have 3rem between them.
+
+Open items:
+- At 375 pixels the table of all problems scrolls sideways inside its
+  wrapper. The table has a minimum width of 36rem.
+- Only macOS was measured. Other platforms use other system fonts, so
+  the widths can differ.
 
 ## Elevation & Depth
 
-The page is flat. It has no shadow and no gradient. Rules, borders, and
-the band show structure. Fills show state. Nothing floats, and nothing
-overlaps.
+The page is flat. It has no shadow and no gradient. Tone shows depth. The
+sheet is lighter than the ground in the light scheme. In the dark scheme
+the sheet is a raised tone above a darker ground. The solution box has
+the ground tone, so it reads as a hollow in the sheet. Nothing floats,
+and nothing overlaps.
 
 ### Named Rules
-The Flat Paper Rule. Do not add `box-shadow`, a gradient, or a blur. When one
-appears, a test in `tests/static.test.js` fails the build.
+The Tone Not Shadow Rule. Do not add `box-shadow`, a gradient, or a blur.
+A test in `tests/static.test.js` fails on each of them.
 
 ## Shapes
 
-Every corner is square. Controls set `border-radius: 0`. A test fails on
-any other radius, even as a longhand. Borders carry the form.
-- Section head: a 3 pixel rule in ink below it.
-- Entry and table row: a 1 pixel rule in ink.
-- Index row: a 1 pixel rule in Index Rule.
-- Control on paper: a 1 pixel border in ink.
-- Control on the band: a 2 pixel border in on-cover.
-- Rating button: a 2 pixel border in its rating color.
-- Notice: a 1 pixel border in ink. Old solution box: a 1 pixel border in
-  ink, at most 24rem high, with its own scroll.
+Every form is round. Four radius values exist, and a test fails on any
+other value.
+- Pill (999px): each button, select, number input, and file button.
+- Circle (50%): the rating dot and the topic code.
+- Sheet (1.25rem): the Today sheet.
+- Box (0.75rem): a notice and the old solution box.
 
-The recurring forms are two small squares. The topic code is 1.375rem. The
-rating symbol is 1.375rem, and 1.875rem inside a rating button from 480
-pixels.
+Lines are thin and soft.
+- Entry, index row, table row, and the column heads of Today: a 1 pixel
+  line in Rule below. The last entry of Today has no line.
+- Control: a 1 pixel border in Edge.
+- Rating button, sheet, notice, and solution box: no border.
+- A section head has no line under it.
+
+The recurring forms are two circles. The rating dot is 0.625rem. The
+topic code is 1.375rem.
 
 ## Components
 
-### Band
-- A flat ultramarine bar at least 64 pixels high. The name is at the
-  left. The daily target, Export, and Import ratings are at the right.
-- The tools wrap on narrow windows. The target field is on a paper
-  ground with ink text. The buttons are clear with white text and a 2 pixel
-  white border. The file button follows the same look.
+### Sheet
+- The Today section alone. Ground is Sheet. The radius is 1.25rem. The
+  padding is 1.5rem from 720 pixels and 1rem under 720 pixels.
+- The head holds "Today", the date in Quiet Ink, and the done count at
+  the right end.
 
 ### Buttons and fields
-- Shape: square. Padding 0.25rem 0.625rem. Text 0.875rem. Border 1 pixel
-  in ink. Ground is paper.
-- Hover: the ground becomes a 10 percent mix of the control color into its
-  ground, in 150 milliseconds with ease-out.
-- Active: a 20 percent mix. No other state change exists.
-- Focus: a 3 pixel outline in the focus color with a 2 pixel offset. On the
-  band the outline is on-cover.
+- Shape: a pill. Padding 0.375rem 0.875rem. Text 0.875rem in Ink. Ground
+  is Sheet. Border 1 pixel in Edge.
+- Hover: the ground is an 8 percent mix of Ink into Sheet, in 150
+  milliseconds with ease-out.
+- Active: a 14 percent mix. No other state change exists.
+- Focus: a 2 pixel outline in the accent color with a 3 pixel offset.
 - Selects and the number input keep their native arrows. The number input
-  is 4.5rem wide and bold. No control is ever disabled.
+  is 4.5rem wide at weight 500. The file input is 13.5rem wide.
+- A label sits above its field in the header. In the table filters it
+  sits at the left of its field.
 
 ### Rating buttons
-- Three buttons in one group: Clean, Struggled, Failed. Each has a symbol
-  square and its word. "!" is Clean, "!?" is Struggled, "?" is Failed.
-- Look: a 2 pixel border and the word in the rating color. The symbol
-  square is filled with the rating color and holds the symbol in paper.
-- Pressed: the whole button fills with the rating color. The word turns
-  paper. The symbol square turns paper with the symbol in the rating
-  color. A pressed button does not change on hover.
-- From 480 pixels the symbol block touches the border, and the word has
-  0.5rem of space at the right. Under 480 pixels the symbol sits above the
-  word.
-- Under `forced-colors: active` a pressed button has a 4 pixel border.
+- Three pills in one group: Clean, Struggled, Failed. Each has a dot and
+  its word with a gap of 0.5rem.
+- Look: no border. The ground is an 11 percent mix of the rating color
+  into Sheet. The word is in the rating color at weight 600.
+- Hover: a 20 percent mix.
+- Pressed: the pill fills with the rating color. The word and the dot
+  turn Sheet. A pressed pill does not change on hover or on a press.
+- Under 480 pixels the dot sits above the word with a gap of 0.25rem.
+  The padding is 0.375rem 0.25rem.
+- Under `forced-colors: active` a rating button has a 1 pixel border and
+  a pressed one has a 3 pixel border. The dot keeps its own color.
 
 ### Entry
 - One ordered list item for each problem. Parts: number, title as a link,
   topic code and name, level, status, a Solution button, and the rating
-  group.
-- The status shows urgency by weight. Due today is 600. One to two days is
-  700. Three to six days is 800. Seven or more days is 900. A new entry is
-  Quiet Ink. A done entry is bold in its rating color with its symbol.
-- A press on a rating puts its symbol in the status of the row.
+  group at the right end.
+- The number is in the accent color at weight 500.
+- The status shows urgency by weight. Due today is 400. One to two days
+  is 500. Three to six days is 600. Seven or more days is 700.
+- A status of "new" is in Quiet Ink. A done entry shows the dot and
+  "done" with the rating word, in the rating color at weight 600.
+
+### Links
+- Ink text with a 1 pixel underline in Edge and an offset of 3 pixels. On
+  hover the underline takes the accent color. A visited link looks the
+  same.
 
 ### Topic index
-- One row for each topic: code square, name, "reviewed of total", and the
-  weak count in Failed Red. A zero weak count has `opacity: 0` and still
-  reads aloud.
-- Topic code letters follow the alphabetical order of the topics. The
-  letters run A to Z, then AA, AB, and so on.
+- One row for each topic: code circle, name, "reviewed of total", and the
+  weak count in Muted Brick at weight 600. A zero weak count has
+  `opacity: 0` and still reads aloud.
+- The code circle has an 18 percent accent tint and an Ink letter. Code
+  letters follow the order of the topics. They run A to Z, then AA, AB,
+  and so on.
 
 ### Table of all problems
-- A ruled table with capital label heads. Only the title cell wraps. The
-  table has a minimum width of 36rem inside a wrapper that scrolls
-  sideways. The last rating shows its symbol and word. A missing value
-  shows "none" in Quiet Ink.
+- A table on the ground with label heads in normal case. Only the title
+  cell wraps. A wrapper scrolls the table sideways on a narrow window.
+- The last rating shows its dot and word. A missing value shows "none"
+  in Quiet Ink.
 
 ### Notice and error
-- A notice is a ruled box with 1 pixel ink border. An error is bold in
-  Failed Red.
+- A notice is a box on a Sheet ground with a radius of 0.75rem and no
+  border. An error is Muted Brick text at weight 600.
 
 ### Old solution
-- Hidden until the owner asks. Then a bordered monospace box that spans the
-  entry. A link to other submissions follows it.
+- Hidden until the owner asks. Then a monospace box spans the entry. Its
+  ground is Mist, and its radius is 0.75rem. It is at most 24rem high and
+  has its own scroll. A link to other submissions follows it.
 
 ## Do's and Don'ts
 
 ### Do:
-- Do show a rating as a symbol and a word. The words are Clean,
-  Struggled, and Failed.
-- Do keep topic code letters in the alphabetical order of the topics.
+- Do show a rating as a dot and a word. The words are Clean, Struggled,
+  and Failed.
+- Do keep one sheet. Other sections sit on the ground.
 - Do put every color in the two `:root` blocks and use `var(...)` after
   that.
-- Do keep the sizes of the short scale.
-- Do keep hover as a 10 percent tint in 150 milliseconds and active as a
-  20 percent tint.
+- Do keep the sizes of the short scale and the four radius values.
+- Do keep hover as an 8 percent tint in 150 milliseconds and active as a
+  14 percent tint.
 - Do keep `transition: none` under `prefers-reduced-motion: reduce`.
-- Do give each new class a selector. A test in `tests/styles.test.js`
-  checks it.
-- Do keep each control reachable by keyboard with the 3 pixel focus
+- Do give each class a selector. A test in `tests/styles.test.js` checks
+  it.
+- Do keep each control reachable by keyboard with the 2 pixel focus
   outline.
 - Do keep text contrast at 4.5 to 1 or more in both schemes.
 
 ### Don't:
-- Do not use a radius, a shadow, or a gradient.
-- Do not add `@font-face`, `@keyframes`, a font file, an image, or an
-  inline style. The content security policy blocks them.
+- Do not add a band, a shadow, a gradient, or a blur.
+- Do not add `@font-face`, `@import`, `@keyframes`, a font file, an
+  image, or an inline style. The content security policy blocks them.
 - Do not add authored motion. The page redraws after each action, so
   nothing moves on load or on a press.
 - Do not use color as the only signal for a state.
-- Do not use the ultramarine for a fill on paper.
+- Do not use a serif face, capitals for labels, or letter spacing.
 - Do not add `!important`.
-- Do not turn the page into cards, rings, or a dashboard.
+- Do not turn the page into cards, rings, or a dashboard with alarm
+  colors.
 - Do not use the look or the logo of NeetCode.

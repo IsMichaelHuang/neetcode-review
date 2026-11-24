@@ -30,8 +30,8 @@ dependency. System fonts only.
   styles in the old look.
 - Pages are hash routes in the one HTML file: `#/`, `#/topics`,
   `#/problems`, `#/settings`. Rejected: four HTML files. A change of
-  file reloads the page, and a rating that the browser could not
-  save lives in memory only, so a reload loses it. Hash routes also
+  file reloads the page. A rating that the browser did not save
+  lives in memory only, so a reload loses it. Hash routes also
   leave `index.html` and its security policy unchanged.
 - With pages, each page shows one section on one sheet. The
   two-column layout with the topic rail is gone.
@@ -56,17 +56,17 @@ dependency. System fonts only.
 1. In both schemes, text contrast is 4.5 to 1 or more. The border of
    a control and the focus mark are 3 to 1 or more.
 2. A rating has a dot and a word in each place. No symbol remains.
-3. Given no hash, `#/`, or an unknown hash, when the page loads,
-   then only Today shows.
-4. Given `#/topics`, `#/problems`, or `#/settings`, when the page
-   loads, then only that page shows.
+3. If the address has no hash, `#/`, or an unknown hash, the site
+   shows only Today.
+4. If the hash is `#/topics`, `#/problems`, or `#/settings`, the
+   site shows only that page.
 5. On each page the menu has four links, and only the link of the
    current page has `aria-current="page"`.
-6. Given a press on a menu link, then the page changes with no
-   reload, the document title names the page, and the keyboard focus
-   moves to the heading of the page.
-7. Given a rating that is in memory only, when he changes the page,
-   then the rating is still there.
+6. After a press on a menu link, the page changes with no reload.
+   The document title names the page, and the keyboard focus moves
+   to the heading of the page.
+7. If a rating is in memory only, the rating stays after a change
+   of page.
 8. The controls `target`, `export`, and `import` exist on Settings
    only, with the same ids, names, and behavior.
 9. A notice shows on every page. The import error shows on Settings.
@@ -146,7 +146,7 @@ go-ahead after the hand-off report.
 - A person who knows the one-page site must learn the menu. An old
   link to the site still opens Today.
 - A change of page drops what lives in the document only: the name
-  of a chosen file and a target that he typed but did not confirm.
+  of a chosen file and a typed target that the page did not take.
 - Known and not new: a press on Export right after an edit of the
   target can be lost to the redraw. The menu does not have this
   fault, because the header stays.
@@ -169,14 +169,15 @@ accessibility, tests, and styles with security. They found 6
 blockers and about 20 major items. All are fixed in this version.
 
 - Blockers: present tests broke with no name in the plan, and Task 2
-  of the draft could not end with a passing run. Fix: each changed
+  of the draft did not end with a passing run. Fix: each changed
   or deleted test has its name in a task, and the basic route code
   lands in the same task as the split.
 - The pages came first in the draft. That state needed throwaway
   styles in the old look and had white text on a white ground. Fix:
   the look comes first.
-- A redraw rebuilt the header and the notices. A press on a menu
-  link could be lost, and a screen reader read each notice again.
+- A redraw rebuilt the header and the notices. A redraw lost a press
+  on a menu link in some cases, and a screen reader read each notice
+  again.
   Fix: both stay in the document.
 - The import error followed the user to each page. Fix: Settings
   only.
@@ -209,3 +210,34 @@ Rejected, with reasons:
   change is simpler, and each page is short above the fold.
 - A fix for the lost Export press. The fault is not new, and the fix
   needs a change of the focus logic that this plan does not touch.
+
+## Four questions: the look
+
+Regressions:
+
+- No logic file changed. The tests of the app, the store, the queue,
+  and the start code pass unchanged. The full run has 329 tests.
+- Each control keeps its id and its accessible name.
+- A script read nine widths from 375 to 1700 pixels: no sideways
+  scroll of the body, no overlap in an entry, no wrapped word in a
+  rating button.
+- A rating symbol is gone from the screen. The word stays in each
+  place, so no meaning is lost.
+- Not measured: Safari, Firefox, Windows, Linux, and a real phone.
+
+Security flaws:
+
+- None found. `index.html` and its security policy did not change.
+  The render code still writes text with `textContent` only. The
+  dot class comes from a fixed table, and a test feeds it the keys
+  "constructor" and "__proto__".
+
+Efficiency:
+
+- The style sheet has 379 lines, 13 fewer than before. The page
+  loads no font file and no image.
+
+Extra test cases:
+
+- A layout test in a real browser is still missing. A person runs
+  the width script by hand.

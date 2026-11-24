@@ -23,12 +23,18 @@ file `docs/plans/pond-mist-design.md` holds this table, and
 | `--failed` | `#a23f3c` | `#ea928b` | Failed |
 
 Type: the system sans face for all text, and the mono face for the
-old solution. No serif. Weights 400, 500, 600, and 700. Sizes in
-rem, and no other size: 0.75 (code letter), 0.8125 (labels, column
-heads), 0.875 (controls, topic, level, status, table cells, hints),
-1 (body, table titles, count), 1.1875 (entry titles), 1.375 (the
-name), 1.5 (section headings). Body line height 1.5. Labels are in
-normal case with no letter spacing.
+old solution. No serif. Weights 400, 500, 600, and 700. Body line
+height 1.5. Sizes in rem, and no other size:
+
+- 0.75: the code letter
+- 0.8125: labels and column heads
+- 0.875: controls, topic, level, status, table cells, hints
+- 1: body, table titles, the count
+- 1.1875: entry titles
+- 1.375: the name
+- 1.5: section headings
+
+Labels are in normal case with no letter spacing.
 
 Shapes: a radius is one of `999px` (controls, menu links), `50%`
 (dots, code circles), `1.25rem` (the sheet), `0.75rem` (the solution
@@ -56,10 +62,10 @@ Controls and states:
   `--ink`, a 1 pixel border in `--edge`, a pill, padding 0.375rem
   0.875rem. Hover: 8 percent `--ink` mixed into `--sheet`. Active:
   14 percent. Native arrows stay. The file input text is `--ink`.
-- Rating button: no border, ground 11 percent of the rating color
-  mixed into `--sheet`, the word in the rating color with weight
-  600, a dot of 0.625rem, a gap of 0.5rem, padding 0.375rem 0.875rem
-  0.375rem 0.75rem. Hover: 20 percent. Pressed: ground the rating
+- Rating button: no border. Ground: 11 percent of the rating color
+  mixed into `--sheet`. The word is in the rating color with weight
+  600. The dot is 0.625rem, and the gap is 0.5rem. Padding: 0.375rem
+  0.875rem 0.375rem 0.75rem. Hover: 20 percent. Pressed: ground the rating
   color, word and dot in `--sheet`, no change on hover. The word
   names the button, so it needs no border. Under 480 pixels: three
   equal buttons, the dot above the word, a gap of 0.25rem, padding
@@ -142,8 +148,9 @@ div.page                  a render replaces its one child
 - After the first render, `render` never changes the children of
   the root. It changes `aria-current`, the children of `div.notes`,
   and the child of `div.page` only.
-- A render replaces the children of `div.notes` only if the list of
-  class and text pairs differs from the list on screen.
+- If the list of class and text pairs differs from the list on
+  screen, a render replaces the children of `div.notes`. If the
+  lists are equal, the render leaves them.
 - The fake document has no `firstChild` and no `querySelector`. The
   render code reads `root.children` to find the kept nodes.
 - Each page heading `h2` has `tabindex="-1"`.
@@ -157,8 +164,9 @@ div.page                  a render replaces its one child
   Today.
 - `paint` reads `win.location.hash` each time, passes
   `pageOf(hash)` to `render`, and sets `document.title`.
-- On `hashchange`, only if the page differs from the last page:
-  paint, then `scrollTo(0, 0)`, then focus the heading of the page.
+- If a `hashchange` gives a page that differs from the last page,
+  the code paints, calls `scrollTo(0, 0)`, and then focuses the
+  heading of the page.
   Every other paint keeps the focus by id, as now.
 - The start code at the end of the file passes `win: window`.
 

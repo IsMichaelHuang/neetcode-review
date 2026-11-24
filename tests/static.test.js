@@ -209,3 +209,12 @@ test("the page keeps room for the scrollbar", () => {
 test("a page heading shows no focus ring", () => {
   assert.match(css(), /h2:focus-visible\s*\{\s*outline:\s*0;?\s*\}/)
 })
+
+test("a wrapped menu starts at the left, under the name", () => {
+  const menu = css().match(/\.menu\s*\{([^}]*)\}/)[1]
+  assert.doesNotMatch(menu, /margin-left/)
+})
+
+test("the Settings heading has space below it", () => {
+  assert.match(css(), /\.settings \.head\s*\{\s*padding-bottom:\s*1rem/)
+})

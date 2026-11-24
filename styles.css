@@ -61,7 +61,7 @@ a {
   color: var(--ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: var(--edge);
+  text-decoration-color: color-mix(in srgb, var(--ink) 50%, var(--sheet));
   text-underline-offset: 3px;
 }
 a:visited { color: var(--ink); }
@@ -140,7 +140,6 @@ label, .cols, th {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
-  margin-left: auto;
 }
 .menu a {
   padding: 0.375rem 0.75rem;
@@ -301,6 +300,7 @@ pre {
 .due-3 { font-weight: 700; }
 
 /* Settings */
+.settings .head { padding-bottom: 1rem; }
 .settings .field { align-items: flex-start; }
 .setting + .setting { margin-top: 1.5rem; }
 .hint { margin-top: 0.25rem; font-size: 0.875rem; color: var(--ink-2); }

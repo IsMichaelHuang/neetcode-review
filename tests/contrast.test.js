@@ -148,3 +148,13 @@ test("the tokens have the values of the design file", () => {
     }
   }
 })
+
+// A link underline is softer than a control border, and still 3 to 1.
+test("the link underline is a 50 percent ink mix with contrast 3", () => {
+  const rule = "text-decoration-color: color-mix(in srgb, var(--ink) 50%"
+  assert.ok(css.includes(`${rule}, var(--sheet));`), "no underline mix")
+  each((s, t, c) => {
+    const r = ratio(mix(c("ink"), c("sheet"), 0.5), c("sheet"))
+    assert.ok(r >= 3, `${s}: the underline is ${r.toFixed(2)}`)
+  })
+})

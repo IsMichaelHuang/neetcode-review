@@ -1,8 +1,11 @@
-// Tests of the Topics section and the All problems section.
+// Tests of the Topics section and the Problems section.
 import test from "node:test"
 import assert from "node:assert/strict"
 import { find, fire, hasClass, byClass } from "./dom.js"
 import { row, view, draw, byId, one } from "./render.fixtures.js"
+
+const onTopics = (v, log) => draw(v, log, "topics")
+const onProblems = (v, log) => draw(v, log, "problems")
 
 const tableRows = (doc) =>
   find(doc.app, (n) => n.tag === "tbody")[0].children
@@ -16,7 +19,7 @@ const label = (doc, id) =>
 
 test("a change of a filter calls onFilter with topic and status", () => {
   const log = []
-  const doc = draw(view(), log)
+  const doc = onProblems(view(), log)
   byId(doc, "filter-topic").value = "Trees"
   const status = byId(doc, "filter-status")
   status.value = "weak"
@@ -26,7 +29,7 @@ test("a change of a filter calls onFilter with topic and status", () => {
 
 test("an index row shows code, name, count, and weak count", () => {
   const topics = [{ topic: "Trees", total: 11, reviewed: 3, weak: 1 }]
-  const doc = draw(view({ topics, topicOptions: ["Graphs", "Trees"] }))
+  const doc = onTopics(view({ topics, topicOptions: ["Graphs", "Trees"] }))
   const li = one(doc.app, "index").children[0]
   const [code, name, num, weak] = li.children
   assert.equal(code.className, "code")
@@ -48,7 +51,7 @@ test("an index row shows code, name, count, and weak count", () => {
 
 test("an index row with weak 0 has the class nil", () => {
   const topics = [{ topic: "Trees", total: 4, reviewed: 4, weak: 0 }]
-  const doc = draw(view({ topics }))
+  const doc = onTopics(view({ topics }))
   const weak = one(doc.app, "weak")
   assert.equal(weak.children[0].textContent, "0")
   assert.equal(weak.children[1].className, "sr")
@@ -58,13 +61,13 @@ test("an index row with weak 0 has the class nil", () => {
 
 test("an index topic with no code has no span.code", () => {
   const topics = [{ topic: "Other", total: 4, reviewed: 4, weak: 0 }]
-  const doc = draw(view({ topics }))
+  const doc = onTopics(view({ topics }))
   const li = one(doc.app, "index").children[0]
   assert.equal(byClass(li, "code").length, 0)
 })
 
 test("p.legend is hidden and reads reviewed and weak", () => {
-  const doc = draw(view())
+  const doc = onTopics(view())
   const legend = one(doc.app, "legend")
   assert.equal(legend.tag, "p")
   assert.equal(legend.attrs["aria-hidden"], "true")
@@ -72,7 +75,7 @@ test("p.legend is hidden and reads reviewed and weak", () => {
 })
 
 test("the table heads are the five column names", () => {
-  const doc = draw(view())
+  const doc = onProblems(view())
   const ths = find(doc.app, (n) => n.tag === "th").map((n) => n.textContent)
   assert.deepEqual(ths, [
     "Problem",
@@ -84,7 +87,7 @@ test("the table heads are the five column names", () => {
 })
 
 test("a table topic cell holds the code and then the name", () => {
-  const doc = draw(
+  const doc = onProblems(
     view({
       table: [row({ topic: "Trees" })],
       topicOptions: ["Graphs", "Trees"],
@@ -99,7 +102,7 @@ test("a table topic cell holds the code and then the name", () => {
 })
 
 test("a failed last rating shows its dot and word", () => {
-  const doc = draw(view({ table: [row({ lastRating: "failed" })] }))
+  const doc = onProblems(view({ table: [row({ lastRating: "failed" })] }))
   const td = cells(tableRows(doc)[0])[3]
   assert.equal(td.children.length, 2)
   assert.equal(td.children[0].className, "dot dot-failed")
@@ -111,7 +114,7 @@ test("a failed last rating shows its dot and word", () => {
 })
 
 test("no last rating shows span.nil with none", () => {
-  const doc = draw(view({ table: [row({ lastRating: null })] }))
+  const doc = onProblems(view({ table: [row({ lastRating: null })] }))
   const td = cells(tableRows(doc)[0])[3]
   assert.equal(td.children.length, 1)
   assert.equal(td.children[0].className, "nil")
@@ -119,18 +122,18 @@ test("no last rating shows span.nil with none", () => {
 })
 
 test("a next due date shows as a short day and null shows none", () => {
-  const set = draw(view({ table: [row({ due: "2026-11-27" })] }))
+  const set = onProblems(view({ table: [row({ due: "2026-11-27" })] }))
   const td = cells(tableRows(set)[0])[4]
   assert.equal(td.children.length, 1)
   assert.equal(td.children[0].textContent, "Fri, Nov 27")
-  const none = draw(view({ table: [row({ due: null })] }))
+  const none = onProblems(view({ table: [row({ due: null })] }))
   const nil = cells(tableRows(none)[0])[4].children[0]
   assert.equal(nil.className, "nil")
   assert.equal(nil.textContent, "none")
 })
 
 test("an empty table has one tr.empty with a full-width cell", () => {
-  const doc = draw(view({ table: [] }))
+  const doc = onProblems(view({ table: [] }))
   const rows = tableRows(doc)
   assert.equal(rows.length, 1)
   assert.equal(rows[0].className, "empty")
@@ -144,19 +147,19 @@ test("an empty table has one tr.empty with a full-width cell", () => {
 })
 
 test("the filter labels are Topic and Status", () => {
-  const doc = draw(view())
+  const doc = onProblems(view())
   assert.equal(label(doc, "filter-topic").textContent, "Topic")
   assert.equal(label(doc, "filter-status").textContent, "Status")
 })
 
 test("a problem title in the table is a link in td.title", () => {
-  const doc = draw(view({ table: [row({ title: "Alpha" })] }))
+  const doc = onProblems(view({ table: [row({ title: "Alpha" })] }))
   const td = cells(tableRows(doc)[0])[0]
   assert.equal(td.className, "title")
   assert.equal(td.children[0].textContent, "Alpha")
 })
 
 test("the topic index has the list role", () => {
-  const doc = draw(view())
+  const doc = onTopics(view())
   assert.equal(one(doc.app, "index").attrs.role, "list")
 })

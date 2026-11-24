@@ -1,6 +1,7 @@
 // Starts the page: joins the controller to the screen.
 import { createApp } from "./app.js"
 import { render } from "./render.js"
+import { pageOf } from "./pages.js"
 
 const EXPORT_NAME = "neetcode-review-ratings.json"
 
@@ -27,14 +28,21 @@ const download = (document, text) => {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-export const start = async ({ document, fetchFn, storage, now, confirmFn }) => {
+export const start = async ({
+  document,
+  fetchFn,
+  storage,
+  now,
+  confirmFn,
+  win,
+}) => {
   const known = await loadKnown(fetchFn)
   const app = createApp({ fetchFn, storage, now, known })
   const root = document.getElementById("app")
   // Keep the keyboard focus on the same control across a render.
   const paint = () => {
     const id = document.activeElement?.id
-    render(root, app.view(), handlers)
+    render(root, app.view(), handlers, pageOf(win?.location.hash ?? ""))
     if (id) document.getElementById(id)?.focus?.()
   }
   const handlers = {
@@ -74,6 +82,7 @@ if (typeof window !== "undefined") {
     document: window.document,
     fetchFn: window.fetch.bind(window),
     storage: safeStorage(),
+    win: window,
     now: () => new Date(),
     confirmFn: () =>
       window.confirm(

@@ -122,8 +122,10 @@ test("the queue list has the list role", () => {
 })
 
 test("every blank-target link is safe and goes to a known host", () => {
-  const doc = draw(view({ queue: [row({ solution: { text: "x" } })] }))
-  const links = find(doc.app, (n) => n.tag === "a")
+  const v = view({ queue: [row({ solution: { text: "x" } })] })
+  const links = ["today", "problems"].flatMap((page) =>
+    find(one(draw(v, undefined, page).app, "page"), (n) => n.tag === "a"),
+  )
   assert.ok(links.length >= 3)
   for (const a of links) {
     assert.equal(a.attrs.target, "_blank")
@@ -139,7 +141,8 @@ test("a null folder URL makes no link", () => {
   const doc = draw(
     view({ queue: [row({ folderUrl: null, solution: { text: "x" } })] }),
   )
-  const hrefs = find(doc.app, (n) => n.tag === "a").map((a) => a.attrs.href)
+  const links = find(one(doc.app, "page"), (n) => n.tag === "a")
+  const hrefs = links.map((a) => a.attrs.href)
   assert.ok(hrefs.every((h) => h.startsWith("https://neetcode.io/")))
 })
 

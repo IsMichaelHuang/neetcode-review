@@ -3,6 +3,7 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { everyState, draw } from "./render.fixtures.js"
 import { find } from "./dom.js"
+import { PAGES } from "../src/pages.js"
 
 const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8")
   .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -10,9 +11,11 @@ const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8")
 const tokens = () => {
   const found = new Set()
   for (const v of everyState()) {
-    for (const n of find(draw(v).app, () => true)) {
-      for (const t of String(n.className ?? "").split(" ")) {
-        if (t) found.add(t)
+    for (const { id } of PAGES) {
+      for (const n of find(draw(v, undefined, id).app, () => true)) {
+        for (const t of String(n.className ?? "").split(" ")) {
+          if (t) found.add(t)
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-// The Topics section and the All problems section.
+// The Topics section and the Problems section.
 import { formatDay } from "./dates.js"
 import {
   h,
@@ -26,7 +26,7 @@ const nil = (doc) => h(doc, "span", { cls: "nil", text: "none" })
 export const topicsSection = (doc, view, codes) =>
   h(doc, "section", { cls: "topics", "aria-labelledby": "topics-h" }, [
     h(doc, "div", { cls: "head" }, [
-      h(doc, "h2", { id: "topics-h", text: "Topics" }),
+      h(doc, "h2", { id: "topics-h", tabindex: "-1", text: "Topics" }),
       h(doc, "p", {
         cls: "legend",
         "aria-hidden": "true",
@@ -96,9 +96,10 @@ export const tableSection = (doc, view, on, codes) => {
         ]
       : view.table.map((r) => tableRow(doc, r, codes))
   const th = (t) => h(doc, "th", { scope: "col", text: t })
-  return h(doc, "section", { cls: "all", "aria-labelledby": "all-h" }, [
+  const attrs = { cls: "problems", "aria-labelledby": "problems-h" }
+  return h(doc, "section", attrs, [
     h(doc, "div", { cls: "head" }, [
-      h(doc, "h2", { id: "all-h", text: "All problems" }),
+      h(doc, "h2", { id: "problems-h", tabindex: "-1", text: "Problems" }),
       h(doc, "div", { cls: "filters" }, [
         labelled(doc, "filter-topic", "Topic", topic),
         labelled(doc, "filter-status", "Status", status),

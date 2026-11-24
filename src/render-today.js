@@ -138,7 +138,7 @@ export const todaySection = (doc, view, on, codes) => {
       : []
   return h(doc, "section", { cls: "today", "aria-labelledby": "today-h" }, [
     h(doc, "div", { cls: "head" }, [
-      h(doc, "h2", { id: "today-h", text: "Today" }),
+      h(doc, "h2", { id: "today-h", tabindex: "-1", text: "Today" }),
       h(doc, "p", { cls: "date", text: view.todayLabel }),
       h(doc, "p", {
         cls: "count",

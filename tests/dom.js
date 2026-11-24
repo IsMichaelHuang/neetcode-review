@@ -93,3 +93,22 @@ export const text = (root) => {
 export const fire = (node, type, event = { target: node }) => {
   for (const fn of node.listeners[type] ?? []) fn(event)
 }
+
+// A fake window: a hash, listeners, a way to fire events, scrollTo calls.
+export const fakeWindow = (hash = "") => {
+  const win = {
+    location: { hash },
+    listeners: {},
+    scrolls: [],
+    addEventListener(type, fn) {
+      ;(this.listeners[type] ??= []).push(fn)
+    },
+    fire(type) {
+      for (const fn of this.listeners[type] ?? []) fn({ type })
+    },
+    scrollTo(...args) {
+      this.scrolls.push(args)
+    },
+  }
+  return win
+}

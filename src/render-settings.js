@@ -53,7 +53,7 @@ const importControl = (doc, on) => {
 export const settingsSection = (doc, view, on) =>
   h(doc, "section", { cls: "settings", "aria-labelledby": "settings-h" }, [
     h(doc, "div", { cls: "head" }, [
-      h(doc, "h2", { id: "settings-h", text: "Settings" }),
+      h(doc, "h2", { id: "settings-h", tabindex: "-1", text: "Settings" }),
     ]),
     h(doc, "div", { cls: "setting" }, [
       labelled(doc, "target", "Daily target", targetControl(doc, view, on)),

@@ -50,9 +50,9 @@ export const handlers = (log = []) => {
   return h
 }
 
-export const draw = (v, log) => {
+export const draw = (v, log, page) => {
   const doc = fakeDocument()
-  render(doc.app, v, handlers(log))
+  render(doc.app, v, handlers(log), page)
   return doc
 }
 

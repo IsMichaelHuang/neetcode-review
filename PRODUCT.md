@@ -101,7 +101,7 @@ The voice is plain and short. Labels say what a control does.
 1. The next problem comes first. Other content waits below it.
 2. The old solution stays hidden until he asks for it.
 3. No rating is lost without a notice.
-4. The page stays one page. It does not grow into a study platform.
+4. The site stays small: four pages. It does not grow into a study platform.
 5. A rating is an honest report. Each rating shows as a word, and
    color is a second signal only.
 

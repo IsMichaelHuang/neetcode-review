@@ -2,7 +2,9 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import { find, fire, byClass } from "./dom.js"
-import { view, draw, byId } from "./render.fixtures.js"
+import { view, draw as drawPage, byId } from "./render.fixtures.js"
+
+const draw = (v, log) => drawPage(v, log, "settings")
 
 const later = () => new Promise((r) => setImmediate(r))
 

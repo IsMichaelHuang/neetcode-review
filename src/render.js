@@ -4,12 +4,13 @@ import { topicCodes } from "./labels.js"
 import { todaySection } from "./render-today.js"
 import { topicsSection, tableSection } from "./render-lists.js"
 import { settingsSection } from "./render-settings.js"
+import { PAGES } from "./pages.js"
 
-const noteList = (doc, view) => {
+const noteList = (doc, view, page) => {
   const notes = view.notices.map((t) =>
     h(doc, "p", { cls: "notice", role: "status", text: t }),
   )
-  if (view.importError !== null) {
+  if (page === "settings" && view.importError !== null) {
     notes.push(
       h(doc, "p", { cls: "error", role: "alert", text: view.importError }),
     )
@@ -22,25 +23,42 @@ const same = (a, b) =>
   a.every((n, i) => n.className === b[i].className &&
     n.textContent === b[i].textContent)
 
-export const render = (root, view, on) => {
+const SECTIONS = {
+  today: todaySection,
+  topics: (doc, view, on, codes) => topicsSection(doc, view, codes),
+  problems: tableSection,
+  settings: (doc, view, on) => settingsSection(doc, view, on),
+}
+
+const menu = (doc) =>
+  h(
+    doc,
+    "nav",
+    { cls: "menu", "aria-label": "Pages" },
+    PAGES.map((p) =>
+      h(doc, "a", { id: `nav-${p.id}`, href: p.hash, text: p.label }),
+    ),
+  )
+
+export const render = (root, view, on, page = "today") => {
   const doc = root.ownerDocument
+  const id = Object.hasOwn(SECTIONS, page) ? page : "today"
   if (root.children.length === 0) {
     root.append(
       h(doc, "header", { cls: "top" }, [
         h(doc, "h1", { text: "NeetCode Review" }),
+        menu(doc),
       ]),
       h(doc, "div", { cls: "notes" }),
       h(doc, "div", { cls: "page" }),
     )
   }
-  const [, notes, page] = root.children
-  const next = noteList(doc, view)
+  const [top, notes, body] = root.children
+  top.children[1].children.forEach((a, i) =>
+    a.setAttribute("aria-current", PAGES[i].id === id ? "page" : "false"),
+  )
+  const next = noteList(doc, view, id)
   if (!same(next, notes.children)) notes.replaceChildren(...next)
   const codes = topicCodes(view.topicOptions)
-  page.replaceChildren(
-    todaySection(doc, view, on, codes),
-    topicsSection(doc, view, codes),
-    tableSection(doc, view, on, codes),
-    settingsSection(doc, view, on),
-  )
+  body.replaceChildren(SECTIONS[id](doc, view, on, codes))
 }

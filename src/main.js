@@ -1,7 +1,7 @@
 // Starts the page: joins the controller to the screen.
 import { createApp } from "./app.js"
 import { render } from "./render.js"
-import { pageOf } from "./pages.js"
+import { pageOf, titleOf } from "./pages.js"
 
 const EXPORT_NAME = "neetcode-review-ratings.json"
 
@@ -40,9 +40,13 @@ export const start = async ({
   const app = createApp({ fetchFn, storage, now, known })
   const root = document.getElementById("app")
   // Keep the keyboard focus on the same control across a render.
+  const pageNow = () => pageOf(win?.location.hash ?? "")
+  let shown = null
   const paint = () => {
     const id = document.activeElement?.id
-    render(root, app.view(), handlers, pageOf(win?.location.hash ?? ""))
+    shown = pageNow()
+    render(root, app.view(), handlers, shown)
+    document.title = titleOf(shown)
     if (id) document.getElementById(id)?.focus?.()
   }
   const handlers = {
@@ -54,6 +58,14 @@ export const start = async ({
     onExport: () => download(document, app.exportText()),
     onImport: (text) => (app.importText(text, confirmFn), paint()),
   }
+  // A new page paints first, then scrolls up, then focuses its heading.
+  win?.addEventListener("hashchange", () => {
+    const page = pageNow()
+    if (page === shown) return
+    paint()
+    win.scrollTo(0, 0)
+    document.getElementById(`${page}-h`)?.focus?.()
+  })
   document.addEventListener("visibilitychange", () => {
     app.refresh()
     paint()

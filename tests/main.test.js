@@ -132,3 +132,83 @@ test("a start with no win draws the Today section only", async () => {
   })
   assert.deepEqual(sections(doc), ["today"])
 })
+
+const boot = async (hash, storage = fakeStorage()) => {
+  const doc = fakeDocument()
+  const win = fakeWindow(hash)
+  const { fetchFn } = fakeFetch(routes())
+  await start({
+    document: doc,
+    fetchFn,
+    storage,
+    now,
+    confirmFn: () => true,
+    win,
+  })
+  const byId = (id) => find(doc.app, (n) => n.attrs.id === id)[0]
+  return { doc, win, byId }
+}
+const go = (win, hash) => {
+  win.location.hash = hash
+  win.fire("hashchange")
+}
+
+test("a start at #/topics sets the title and moves no focus", async () => {
+  const { doc } = await boot("#/topics")
+  assert.equal(doc.title, "Topics · NeetCode Review")
+  assert.notEqual(doc.activeElement?.id, "topics-h")
+})
+
+test("a start at an unknown hash gives Today and the plain title", async () => {
+  const { doc } = await boot("#/nope")
+  assert.equal(doc.title, "NeetCode Review")
+  assert.deepEqual(sections(doc), ["today"])
+})
+
+test("a hashchange to another page paints, scrolls, and focuses", async () => {
+  const { doc, win, byId } = await boot("#/")
+  byId("nav-settings").focus()
+  go(win, "#/settings")
+  assert.deepEqual(sections(doc), ["settings"])
+  assert.equal(doc.title, "Settings · NeetCode Review")
+  assert.deepEqual(win.scrolls, [[0, 0]])
+  assert.equal(doc.activeElement.id, "settings-h")
+})
+
+test("a hashchange within the same page does nothing", async () => {
+  const { doc, win, byId } = await boot("#/")
+  byId("nav-topics").focus()
+  go(win, "#/typo")
+  assert.deepEqual(win.scrolls, [])
+  assert.equal(doc.activeElement.id, "nav-topics")
+  assert.deepEqual(sections(doc), ["today"])
+})
+
+test("a rating press does not scroll", async () => {
+  const { doc, win } = await boot("#/")
+  const pick = () =>
+    find(doc.app, (n) => /^rate-.*-clean$/.test(n.attrs.id ?? ""))[0]
+  fire(pick(), "click")
+  assert.equal(pick().attrs["aria-pressed"], "true")
+  assert.deepEqual(win.scrolls, [])
+})
+
+test("a visibilitychange on #/topics still shows Topics", async () => {
+  const { doc } = await boot("#/topics")
+  fire(doc, "visibilitychange")
+  assert.deepEqual(sections(doc), ["topics"])
+})
+
+test("a rating stays pressed after a trip when writes fail", async () => {
+  const storage = fakeStorage({ failWrites: true })
+  const { doc, win } = await boot("#/", storage)
+  const pick = () =>
+    find(doc.app, (n) => /^rate-.*-clean$/.test(n.attrs.id ?? ""))[0]
+  const button = pick()
+  fire(button, "click")
+  assert.equal(pick().attrs["aria-pressed"], "true")
+  go(win, "#/topics")
+  go(win, "#/")
+  assert.equal(pick().attrs["aria-pressed"], "true")
+  assert.equal(pick().attrs.id, button.attrs.id)
+})

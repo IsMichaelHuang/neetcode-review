@@ -204,3 +204,8 @@ test("a head with one child keeps the child at the left", () => {
 test("the page keeps room for the scrollbar", () => {
   assert.match(css(), /\nhtml\s*\{[^}]*scrollbar-gutter:\s*stable/)
 })
+
+// The script moves the focus to a page heading. A heading is no control.
+test("a page heading shows no focus ring", () => {
+  assert.match(css(), /h2:focus-visible\s*\{\s*outline:\s*0;?\s*\}/)
+})

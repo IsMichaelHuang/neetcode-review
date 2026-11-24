@@ -54,7 +54,8 @@ export const render = (root, view, on, page = "today") => {
     )
   }
   const [top, notes, body] = root.children
-  top.children[1].children.forEach((a, i) =>
+  // children is an HTMLCollection in a browser: it has no forEach.
+  ;[...top.children[1].children].forEach((a, i) =>
     a.setAttribute("aria-current", PAGES[i].id === id ? "page" : "false"),
   )
   const next = noteList(doc, view, id)

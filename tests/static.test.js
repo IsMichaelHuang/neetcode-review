@@ -187,3 +187,20 @@ test("at 1200 pixels a shown solution spans all tracks", () => {
   )
   assert.ok(hit, "no rule gives .solution grid-column: 1 / -1")
 })
+
+// In a browser, children is an HTMLCollection. It has no array methods.
+test("the source calls no array method on children", () => {
+  const bad = /\.children\.(forEach|map|filter|every|some|find|reduce)\b/
+  for (const name of readdirSync(new URL("../src", import.meta.url))) {
+    assert.doesNotMatch(read(`src/${name}`), bad, name)
+  }
+})
+
+test("a head with one child keeps the child at the left", () => {
+  assert.match(css(), /\.head > :last-child:not\(:first-child\)\s*\{/)
+})
+
+// The table page has a scrollbar. The other pages must not jump sideways.
+test("the page keeps room for the scrollbar", () => {
+  assert.match(css(), /\nhtml\s*\{[^}]*scrollbar-gutter:\s*stable/)
+})

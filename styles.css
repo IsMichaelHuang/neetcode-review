@@ -34,6 +34,7 @@
 * { box-sizing: border-box; }
 
 /* --c is the color of a rating. Controls sit on the --sheet ground. */
+html { scrollbar-gutter: stable; }
 body {
   --c: var(--ink);
   margin: 0;
@@ -181,7 +182,7 @@ section {
   padding-bottom: 0.5rem;
 }
 .head > * { min-width: 0; }
-.head > :last-child { margin-left: auto; }
+.head > :last-child:not(:first-child) { margin-left: auto; }
 .head h2 { font-size: 1.5rem; line-height: 1.2; }
 .count { font-size: 1rem; color: var(--ink-2); }
 .filters { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }

@@ -212,3 +212,16 @@ test("a rating stays pressed after a trip when writes fail", async () => {
   assert.equal(pick().attrs["aria-pressed"], "true")
   assert.equal(pick().attrs.id, button.attrs.id)
 })
+
+// A paint can run after the hash changes and before hashchange fires.
+test("a paint that sees a new page scrolls and focuses one time", async () => {
+  const { doc, win, byId } = await boot("#/")
+  byId("nav-settings").focus()
+  win.location.hash = "#/settings"
+  fire(doc, "visibilitychange")
+  assert.deepEqual(sections(doc), ["settings"])
+  assert.equal(doc.activeElement.id, "settings-h")
+  win.fire("hashchange")
+  assert.deepEqual(win.scrolls, [[0, 0]])
+  assert.equal(doc.activeElement.id, "settings-h")
+})

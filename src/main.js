@@ -39,14 +39,18 @@ export const start = async ({
   const known = await loadKnown(fetchFn)
   const app = createApp({ fetchFn, storage, now, known })
   const root = document.getElementById("app")
-  // Keep the keyboard focus on the same control across a render.
   const pageNow = () => pageOf(win?.location.hash ?? "")
   let shown = null
+  // A render keeps the keyboard focus on the same control. A new page
+  // scrolls up and gets the focus on its heading.
   const paint = () => {
-    const id = document.activeElement?.id
-    shown = pageNow()
-    render(root, app.view(), handlers, shown)
-    document.title = titleOf(shown)
+    const page = pageNow()
+    const moved = shown !== null && page !== shown
+    const id = moved ? `${page}-h` : document.activeElement?.id
+    shown = page
+    render(root, app.view(), handlers, page)
+    document.title = titleOf(page)
+    if (moved) win.scrollTo(0, 0)
     if (id) document.getElementById(id)?.focus?.()
   }
   const handlers = {
@@ -58,13 +62,8 @@ export const start = async ({
     onExport: () => download(document, app.exportText()),
     onImport: (text) => (app.importText(text, confirmFn), paint()),
   }
-  // A new page paints first, then scrolls up, then focuses its heading.
   win?.addEventListener("hashchange", () => {
-    const page = pageNow()
-    if (page === shown) return
-    paint()
-    win.scrollTo(0, 0)
-    document.getElementById(`${page}-h`)?.focus?.()
+    if (pageNow() !== shown) paint()
   })
   document.addEventListener("visibilitychange", () => {
     app.refresh()

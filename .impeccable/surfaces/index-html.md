@@ -56,7 +56,7 @@ presses one pill. The pill fills with its color, and the row says
 "done".
 
 FIRST VIEWPORT: The window is 1440 by 900. The name is at the left
-in pine green. The menu of four pills is at the right. Both are on
+in the pond accent color. The menu of four pills is at the right. Both are on
 the ground. The pill of the current page has the sheet ground. Below,
 one sheet holds the page. On Today the sheet holds the head "Today"
 with the date and the done count, then one row for each problem:

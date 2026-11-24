@@ -80,8 +80,9 @@ Controls and states:
   has none. A section heading has no rule under it.
 - `.weak` is `--failed`, weight 600. `.weak.nil { opacity: 0; }`
   stays.
-- Link: `--ink` with a 1 pixel underline in `--edge`. Hover: the
-  underline is `--accent`.
+- Link: `--ink` with a 1 pixel underline. The underline is a 50
+  percent mix of `--ink` into `--sheet`. Hover: the underline is
+  `--accent`.
 - Focus: a 2 pixel outline in `--accent` with a 3 pixel offset.
 - Selection: 28 percent `--accent` mixed into `--sheet`, text
   `--ink`. The scrollbar uses `--edge` on `--paper`.

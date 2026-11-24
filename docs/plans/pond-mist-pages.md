@@ -241,3 +241,61 @@ Extra test cases:
 
 - A layout test in a real browser is still missing. A person runs
   the width script by hand.
+
+## Four questions: the pages
+
+Regressions:
+
+- No logic file changed. The tests of the app, the store, and the
+  queue pass unchanged. The full run has 371 tests.
+- Each control keeps its id and its accessible name. The daily
+  target, Export, and Import are on the Settings page.
+- An address with no hash opens Today, so an old link still works.
+- A script read all four pages at nine widths from 375 to 1700
+  pixels: no sideways scroll of the body, no overlap in an entry,
+  and no wrapped word in a rating button or a menu link.
+- The browser found two faults that the unit tests did not see. The
+  menu code called an array method on `children`, and the focus
+  stayed on a menu link after an edit of the target. Both are fixed,
+  and each has a test.
+- After a deploy, a browser can hold an old script next to the new
+  style sheet for about ten minutes. A reload corrects it.
+- Not measured: Safari, Firefox, Windows, Linux, a real phone, and
+  a screen reader. The Export download and the Import file dialog
+  did not run in a browser. Unit tests cover both handlers.
+
+Security flaws:
+
+- None found. The code compares the hash with four fixed values.
+  No text from the hash reaches the document, a class, the title,
+  or a link. Tests feed it "constructor" and "__proto__".
+- `index.html` and its security policy did not change. The change
+  adds no network target, no storage key, and no dependency.
+
+Efficiency:
+
+- A change of page redraws one section. The header and the notice
+  area are built one time.
+- The style sheet has 397 of 400 allowed lines. The next style
+  change needs a cut first, or the owner allows a second sheet.
+
+Extra test cases:
+
+- A test in a real browser. The fake document holds `children` as
+  an array, and both browser faults came from that gap.
+- A run with a screen reader, for the notices and the focus on the
+  page heading.
+
+## Design review
+
+The impeccable finish reviewer read ten screenshots of the four
+pages. It asked for four fixes, and all four are applied:
+
+- a softer link underline, which still has a contrast of 3 to 1
+- the wrapped menu at the left under the name
+- more space below the Settings heading
+- the true list of weights in the direction contract
+
+The reviewer left one idea to the owner: a done row in Today has
+the same strong title as an open row. A weaker title for a done row
+makes the next open problem stand out.

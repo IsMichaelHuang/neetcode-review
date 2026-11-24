@@ -4,26 +4,200 @@
   "title": "Design System: NeetCode Review",
   "extensions": {
     "colorMeta": {
-      "paper": { "role": "neutral", "displayName": "Mist", "canonical": "#e9f0ef", "dark": "#131c1d", "tonalRamp": ["#131c1d", "#2c3a3b", "#4d5f62", "#6f7f80", "#a3b3b2", "#d6e0de", "#e9f0ef", "#fbfdfc"] },
-      "sheet": { "role": "neutral", "displayName": "Sheet", "canonical": "#fbfdfc", "dark": "#1b2728", "tonalRamp": ["#1b2728", "#2c3a3b", "#4d5f62", "#7f9192", "#a3b3b2", "#d6e0de", "#e9f0ef", "#fbfdfc"] },
-      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#1d2b2e", "dark": "#e4ecea", "tonalRamp": ["#131c1d", "#1d2b2e", "#35474a", "#4d5f62", "#7f9192", "#a3b3b2", "#cdd8d6", "#e4ecea"] },
-      "ink-2": { "role": "neutral", "displayName": "Quiet Ink", "canonical": "#4d5f62", "dark": "#a3b3b2", "tonalRamp": ["#1d2b2e", "#35474a", "#4d5f62", "#6f7f80", "#8a9a9a", "#a3b3b2", "#c4d0ce", "#e4ecea"] },
-      "rule": { "role": "neutral", "displayName": "Rule", "canonical": "#d6e0de", "dark": "#2c3a3b", "tonalRamp": ["#1b2728", "#2c3a3b", "#4d5f62", "#7f9192", "#a3b3b2", "#c4d0ce", "#d6e0de", "#e9f0ef"] },
-      "edge": { "role": "neutral", "displayName": "Edge", "canonical": "#6f7f80", "dark": "#7f9192", "tonalRamp": ["#1d2b2e", "#35474a", "#4d5f62", "#6f7f80", "#7f9192", "#a3b3b2", "#c4d0ce", "#e4ecea"] },
-      "accent": { "role": "primary", "displayName": "Pond Accent", "canonical": "#2c6769", "dark": "#7fc0bf", "tonalRamp": ["#0f2c2d", "#1c4749", "#2c6769", "#3f8586", "#5ba3a3", "#7fc0bf", "#b3dad9", "#e2f1f0"] },
-      "clean": { "role": "secondary", "displayName": "Pine Green", "canonical": "#256a4c", "dark": "#78c79d", "tonalRamp": ["#0e2f21", "#194b35", "#256a4c", "#378965", "#55a981", "#78c79d", "#b0dfc5", "#e1f3ea"] },
-      "struggled": { "role": "secondary", "displayName": "Amber Brown", "canonical": "#7c5512", "dark": "#e0b164", "tonalRamp": ["#382506", "#593c0b", "#7c5512", "#a27326", "#c39244", "#e0b164", "#eccf9f", "#f8eedb"] },
-      "failed": { "role": "secondary", "displayName": "Muted Brick", "canonical": "#a23f3c", "dark": "#ea928b", "tonalRamp": ["#4a1a18", "#752b29", "#a23f3c", "#c05a55", "#d87670", "#ea928b", "#f3bfba", "#fbe9e7"] }
+      "paper": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "#e9f0ef",
+        "dark": "#131c1d",
+        "tonalRamp": [
+          "#131c1d",
+          "#2c3a3b",
+          "#4d5f62",
+          "#6f7f80",
+          "#a3b3b2",
+          "#d6e0de",
+          "#e9f0ef",
+          "#fbfdfc"
+        ]
+      },
+      "sheet": {
+        "role": "neutral",
+        "displayName": "Sheet",
+        "canonical": "#fbfdfc",
+        "dark": "#1b2728",
+        "tonalRamp": [
+          "#1b2728",
+          "#2c3a3b",
+          "#4d5f62",
+          "#7f9192",
+          "#a3b3b2",
+          "#d6e0de",
+          "#e9f0ef",
+          "#fbfdfc"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1d2b2e",
+        "dark": "#e4ecea",
+        "tonalRamp": [
+          "#131c1d",
+          "#1d2b2e",
+          "#35474a",
+          "#4d5f62",
+          "#7f9192",
+          "#a3b3b2",
+          "#cdd8d6",
+          "#e4ecea"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Quiet Ink",
+        "canonical": "#4d5f62",
+        "dark": "#a3b3b2",
+        "tonalRamp": [
+          "#1d2b2e",
+          "#35474a",
+          "#4d5f62",
+          "#6f7f80",
+          "#8a9a9a",
+          "#a3b3b2",
+          "#c4d0ce",
+          "#e4ecea"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#d6e0de",
+        "dark": "#2c3a3b",
+        "tonalRamp": [
+          "#1b2728",
+          "#2c3a3b",
+          "#4d5f62",
+          "#7f9192",
+          "#a3b3b2",
+          "#c4d0ce",
+          "#d6e0de",
+          "#e9f0ef"
+        ]
+      },
+      "edge": {
+        "role": "neutral",
+        "displayName": "Edge",
+        "canonical": "#6f7f80",
+        "dark": "#7f9192",
+        "tonalRamp": [
+          "#1d2b2e",
+          "#35474a",
+          "#4d5f62",
+          "#6f7f80",
+          "#7f9192",
+          "#a3b3b2",
+          "#c4d0ce",
+          "#e4ecea"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Pond Accent",
+        "canonical": "#2c6769",
+        "dark": "#7fc0bf",
+        "tonalRamp": [
+          "#0f2c2d",
+          "#1c4749",
+          "#2c6769",
+          "#3f8586",
+          "#5ba3a3",
+          "#7fc0bf",
+          "#b3dad9",
+          "#e2f1f0"
+        ]
+      },
+      "clean": {
+        "role": "secondary",
+        "displayName": "Pine Green",
+        "canonical": "#256a4c",
+        "dark": "#78c79d",
+        "tonalRamp": [
+          "#0e2f21",
+          "#194b35",
+          "#256a4c",
+          "#378965",
+          "#55a981",
+          "#78c79d",
+          "#b0dfc5",
+          "#e1f3ea"
+        ]
+      },
+      "struggled": {
+        "role": "secondary",
+        "displayName": "Amber Brown",
+        "canonical": "#7c5512",
+        "dark": "#e0b164",
+        "tonalRamp": [
+          "#382506",
+          "#593c0b",
+          "#7c5512",
+          "#a27326",
+          "#c39244",
+          "#e0b164",
+          "#eccf9f",
+          "#f8eedb"
+        ]
+      },
+      "failed": {
+        "role": "secondary",
+        "displayName": "Muted Brick",
+        "canonical": "#a23f3c",
+        "dark": "#ea928b",
+        "tonalRamp": [
+          "#4a1a18",
+          "#752b29",
+          "#a23f3c",
+          "#c05a55",
+          "#d87670",
+          "#ea928b",
+          "#f3bfba",
+          "#fbe9e7"
+        ]
+      }
     },
     "typographyMeta": {
-      "name": { "displayName": "Name", "purpose": "The page name in the header, in the accent color." },
-      "section-head": { "displayName": "Section Head", "purpose": "Today, Topics, All problems." },
-      "entry-title": { "displayName": "Entry Title", "purpose": "A problem title in Today." },
-      "body": { "displayName": "Body", "purpose": "Base text. Table titles and the done count use this size at weight 500." },
-      "small": { "displayName": "Small", "purpose": "Controls, topic names, level, status, index rows, table cells, and the legend." },
-      "label": { "displayName": "Label", "purpose": "Field labels, the column heads of Today, and table heads, in Quiet Ink." },
-      "code-letter": { "displayName": "Code Letter", "purpose": "The letter in a topic code." },
-      "code": { "displayName": "Code", "purpose": "The old solution." }
+      "name": {
+        "displayName": "Name",
+        "purpose": "The page name in the header, in the accent color."
+      },
+      "section-head": {
+        "displayName": "Section Head",
+        "purpose": "Today, Topics, Problems, Settings."
+      },
+      "entry-title": {
+        "displayName": "Entry Title",
+        "purpose": "A problem title in Today."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Base text. Table titles and the done count use this size at weight 500."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Controls, menu links, hints, topic names, level, status, index rows, table cells, and the legend."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, the column heads of Today, and table heads, in Quiet Ink."
+      },
+      "code-letter": {
+        "displayName": "Code Letter",
+        "purpose": "The letter in a topic code."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "The old solution."
+      }
     },
     "fontStacks": {
       "sans": "system-ui, -apple-system, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif",
@@ -31,32 +205,57 @@
     },
     "shadows": [],
     "motion": [
-      { "name": "tint-hover", "value": "background-color 150ms ease-out", "purpose": "Hover is an 8 percent mix of Ink into Sheet. Active is 14 percent. A rating button uses 11 percent at rest and 20 percent on hover. Off under prefers-reduced-motion. No keyframes." }
+      {
+        "name": "tint-hover",
+        "value": "background-color 150ms ease-out",
+        "purpose": "Hover is an 8 percent mix of Ink into Sheet. Active is 14 percent. A rating button uses 11 percent at rest and 20 percent on hover. A menu link uses a 60 percent mix of Sheet into Mist on hover. Off under prefers-reduced-motion. No keyframes."
+      }
     ],
     "breakpoints": [
-      { "name": "dot-beside-word", "value": "480px" },
-      { "name": "two-line-entry", "value": "720px" },
-      { "name": "one-row-entry", "value": "1200px" },
-      { "name": "topics-rail", "value": "1440px" }
+      {
+        "name": "dot-beside-word",
+        "value": "480px"
+      },
+      {
+        "name": "two-line-entry",
+        "value": "720px"
+      },
+      {
+        "name": "one-row-entry",
+        "value": "1200px"
+      }
     ],
     "layoutMeasures": {
-      "railWidth": "18.5rem",
-      "railGap": "1.5rem",
       "contentMax": "76rem",
+      "settingsMax": "36rem",
+      "indexColumn": "18.5rem",
+      "indexColumnGap": "2rem",
+      "indexColumnsFrom1200": 3,
+      "indexColumnsAt900": 2,
+      "indexColumnsTo480": 1,
       "todayTracksFrom1200": "1.5rem minmax(12rem, 1fr) 9rem 3.75rem 9rem 5rem max-content",
       "entryTracks720To1199": "1.5rem minmax(0, 1fr) max-content max-content 3.75rem 9rem",
       "ratingGroupFrom720": "289px",
-      "titleTrackAt1440": "192px",
-      "titleTrackAt1200": "260px",
+      "titleTrackAt1440": "355px",
+      "titleTrackAt1200": "275px",
       "titleTrackAt900": "509px",
-      "tableMinWidth": "36rem"
+      "tableMinWidth": "36rem",
+      "scrollbarGutter": "stable"
     },
     "openItems": [
       "At 375 pixels the table of all problems scrolls sideways inside its wrapper.",
-      "Only macOS was measured."
+      "The measures come from macOS and one browser engine."
     ]
   },
   "components": [
+    {
+      "name": "Menu",
+      "kind": "nav",
+      "refersTo": "menu-link",
+      "description": "Four pill links on the ground. The link of the current page has the sheet ground and weight 600.",
+      "html": "<nav class=\"ds-menu\" aria-label=\"Pages\"><a class=\"ds-ml\" href=\"#\" aria-current=\"page\">Today</a><a class=\"ds-ml\" href=\"#\">Topics</a><a class=\"ds-ml\" href=\"#\">Problems</a><a class=\"ds-ml\" href=\"#\">Settings</a></nav>",
+      "css": ".ds-menu { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 1rem; background: var(--paper, #e9f0ef); } .ds-ml { padding: 0.375rem 0.75rem; border-radius: 999px; font-size: 0.875rem; white-space: nowrap; text-decoration: none; color: var(--ink, #1d2b2e); transition: background-color 150ms ease-out; } .ds-ml:hover { background: color-mix(in srgb, var(--sheet, #fbfdfc) 60%, var(--paper, #e9f0ef)); } .ds-ml[aria-current=\"page\"] { background: var(--sheet, #fbfdfc); font-weight: 600; } .ds-ml:focus-visible { outline: 2px solid var(--accent, #2c6769); outline-offset: 3px; }"
+    },
     {
       "name": "Button",
       "kind": "button",
@@ -79,7 +278,7 @@
       "refersTo": "sheet",
       "description": "One review row on the sheet. Number, title, topic, level, status.",
       "html": "<div class=\"ds-sheet\"><div class=\"ds-entry\"><span class=\"ds-no\">1</span><a class=\"ds-title\" href=\"#\">Example problem title</a><span class=\"ds-topic\"><span class=\"ds-code\">A</span>Arrays</span><span class=\"ds-lv\">Medium</span><span class=\"ds-st\">2 days overdue</span></div><div class=\"ds-entry\"><span class=\"ds-no\">2</span><a class=\"ds-title\" href=\"#\">Second example title</a><span class=\"ds-topic\"><span class=\"ds-code\">B</span>Graphs</span><span class=\"ds-lv\">Easy</span><span class=\"ds-st ds-new\">new</span></div></div>",
-      "css": ".ds-sheet { background: var(--sheet, #fbfdfc); color: var(--ink, #1d2b2e); border-radius: 1.25rem; padding: 1.5rem; } .ds-entry { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.375rem 0.75rem; padding: 1rem 0; border-bottom: 1px solid var(--rule, #d6e0de); } .ds-entry:last-child { border-bottom: 0; } .ds-no { color: var(--accent, #2c6769); font-weight: 500; } .ds-title { flex: 1 1 auto; font-size: 1.1875rem; font-weight: 500; color: var(--ink, #1d2b2e); text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--edge, #6f7f80); text-underline-offset: 3px; } .ds-title:hover { text-decoration-color: var(--accent, #2c6769); } .ds-title:focus-visible { outline: 2px solid var(--accent, #2c6769); outline-offset: 3px; } .ds-topic { display: inline-flex; align-items: center; font-size: 0.875rem; } .ds-code { display: inline-flex; align-items: center; justify-content: center; width: 1.375rem; height: 1.375rem; margin-right: 0.5rem; border-radius: 50%; background: color-mix(in srgb, var(--accent, #2c6769) 18%, var(--sheet, #fbfdfc)); font-size: 0.75rem; font-weight: 500; line-height: 1; } .ds-lv { font-size: 0.875rem; color: var(--ink-2, #4d5f62); } .ds-st { font-size: 0.875rem; font-weight: 500; } .ds-new { font-weight: 400; color: var(--ink-2, #4d5f62); }"
+      "css": ".ds-sheet { background: var(--sheet, #fbfdfc); color: var(--ink, #1d2b2e); border-radius: 1.25rem; padding: 1.5rem; } .ds-entry { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.375rem 0.75rem; padding: 1rem 0; border-bottom: 1px solid var(--rule, #d6e0de); } .ds-entry:last-child { border-bottom: 0; } .ds-no { color: var(--accent, #2c6769); font-weight: 500; } .ds-title { flex: 1 1 auto; font-size: 1.1875rem; font-weight: 500; color: var(--ink, #1d2b2e); text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, var(--ink, #1d2b2e) 50%, var(--sheet, #fbfdfc)); text-underline-offset: 3px; } .ds-title:hover { text-decoration-color: var(--accent, #2c6769); } .ds-title:focus-visible { outline: 2px solid var(--accent, #2c6769); outline-offset: 3px; } .ds-topic { display: inline-flex; align-items: center; font-size: 0.875rem; } .ds-code { display: inline-flex; align-items: center; justify-content: center; width: 1.375rem; height: 1.375rem; margin-right: 0.5rem; border-radius: 50%; background: color-mix(in srgb, var(--accent, #2c6769) 18%, var(--sheet, #fbfdfc)); font-size: 0.75rem; font-weight: 500; line-height: 1; } .ds-lv { font-size: 0.875rem; color: var(--ink-2, #4d5f62); } .ds-st { font-size: 0.875rem; font-weight: 500; } .ds-new { font-weight: 400; color: var(--ink-2, #4d5f62); }"
     },
     {
       "name": "Topic Index Row",
@@ -93,9 +292,9 @@
       "name": "Field",
       "kind": "input",
       "refersTo": "button",
-      "description": "A label in Quiet Ink above a pill number input.",
-      "html": "<div class=\"ds-field\"><label for=\"ds-target\">Daily target</label><input id=\"ds-target\" class=\"ds-input\" type=\"number\" min=\"1\" max=\"10\" value=\"3\"></div>",
-      "css": ".ds-field { display: flex; flex-direction: column; gap: 0.125rem; } .ds-field label { font-size: 0.8125rem; color: var(--ink-2, #4d5f62); } .ds-input { font: inherit; font-size: 0.875rem; font-weight: 500; width: 4.5rem; color: var(--ink, #1d2b2e); background: var(--sheet, #fbfdfc); border: 1px solid var(--edge, #6f7f80); border-radius: 999px; padding: 0.375rem 0.875rem; transition: background-color 150ms ease-out; } .ds-input:hover { background: color-mix(in srgb, var(--ink, #1d2b2e) 8%, var(--sheet, #fbfdfc)); } .ds-input:focus-visible { outline: 2px solid var(--accent, #2c6769); outline-offset: 3px; }"
+      "description": "A setting: a label in Quiet Ink above a pill number input, with a hint line below.",
+      "html": "<div class=\"ds-set\"><div class=\"ds-field\"><label for=\"ds-target\">Daily target</label><input id=\"ds-target\" class=\"ds-input\" type=\"number\" min=\"1\" max=\"10\" value=\"3\"></div><p class=\"ds-hint\">The number of problems on the Today page, from 1 to 10.</p></div>",
+      "css": ".ds-set { background: var(--sheet, #fbfdfc); padding: 1.5rem; border-radius: 1.25rem; } .ds-field { display: flex; flex-direction: column; align-items: flex-start; gap: 0.125rem; } .ds-field label { font-size: 0.8125rem; color: var(--ink-2, #4d5f62); } .ds-input { font: inherit; font-size: 0.875rem; font-weight: 500; width: 4.5rem; color: var(--ink, #1d2b2e); background: var(--sheet, #fbfdfc); border: 1px solid var(--edge, #6f7f80); border-radius: 999px; padding: 0.375rem 0.875rem; transition: background-color 150ms ease-out; } .ds-input:hover { background: color-mix(in srgb, var(--ink, #1d2b2e) 8%, var(--sheet, #fbfdfc)); } .ds-input:focus-visible { outline: 2px solid var(--accent, #2c6769); outline-offset: 3px; } .ds-hint { margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--ink-2, #4d5f62); }"
     },
     {
       "name": "Old Solution Box",
@@ -108,43 +307,64 @@
   ],
   "narrative": {
     "northStar": "Pond Mist",
-    "overview": "The page is one Operate surface. It is a daily review list for one owner. He sits at a laptop with another site open beside it. He reads what to solve, solves it elsewhere, comes back, and presses one rating. The look is a quiet pond. The ground is a misty blue-green. The work of today lies on one near-white sheet with round corners. The header, the topic index, and the table of all problems sit on the ground. The dark scheme is the pond at night: a green-black ground and a raised dark sheet. The page uses system fonts only. The content security policy allows no font file, no image from another host, and no inline style. Both color schemes follow the system setting.",
+    "overview": "The site is one Operate surface for one owner. It has four pages in one HTML file: Today, Topics, Problems, and Settings. He sits at a laptop with another site open beside it. He reads what to solve, solves it elsewhere, comes back, and presses one rating. The look is a quiet pond. The ground is a misty blue-green. Each page shows one section on one near-white sheet with round corners. The name, the menu, and the notices sit on the ground. The dark scheme is the pond at night: a green-black ground and a raised dark sheet. Both schemes follow the system setting. The site uses system fonts only.",
     "keyCharacteristics": [
-      "One sheet on the ground. Only Today lies on it.",
-      "Each control is a pill. Each small mark is a circle.",
+      "One sheet on the ground for each page.",
+      "Each control and each menu link is a pill. Each small mark is a circle.",
       "A rating is a color dot and a word.",
-      "Color is rare: the accent for the name and the numbers, and three rating colors.",
+      "Color is rare: one accent and three rating colors.",
       "Thin lines in a soft tone separate rows. No band, no shadow, no gradient.",
       "Fixed sizes in rem from a short scale. No fluid type.",
       "No authored motion. Hover is a tint in 150 milliseconds."
     ],
     "rules": [
-      { "name": "The Hex Home Rule", "body": "A hex color appears only in the two :root blocks. Every other rule uses var(...) or color-mix(...).", "section": "colors" },
-      { "name": "The Word First Rule", "body": "Color is a second signal. A dot always has its word next to it.", "section": "colors" },
-      { "name": "The One Color Variable Rule", "body": "A rating class sets --c to its rating color. The dot, the word, and the button ground all read --c.", "section": "colors" },
-      { "name": "The Short Scale Rule", "body": "Only these sizes exist in rem: 0.75, 0.8125, 0.875, 1, 1.1875, 1.375, and 1.5. A test in tests/static.test.js reads the sizes in styles.css.", "section": "typography" },
-      { "name": "The Four Weights Rule", "body": "Weights are 400, 500, 600, and 700. The status of a due entry steps through them to show how late it is. The status text carries the meaning.", "section": "typography" },
-      { "name": "The Tone Not Shadow Rule", "body": "Do not add box-shadow, a gradient, or a blur. A test in tests/static.test.js fails on each of them.", "section": "elevation" }
+      {
+        "name": "The Hex Home Rule",
+        "body": "A hex color appears only in the two :root blocks. Every other rule uses var(...) or color-mix(...).",
+        "section": "colors"
+      },
+      {
+        "name": "The Word First Rule",
+        "body": "Color is a second signal. A dot always has its word next to it.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Color Variable Rule",
+        "body": "A rating class sets --c to its rating color. The dot, the word, and the button ground all read --c.",
+        "section": "colors"
+      },
+      {
+        "name": "The Short Scale Rule",
+        "body": "Only these sizes exist in rem: 0.75, 0.8125, 0.875, 1, 1.1875, 1.375, and 1.5. A test in tests/static.test.js reads the sizes in styles.css.",
+        "section": "typography"
+      },
+      {
+        "name": "The Four Weights Rule",
+        "body": "Weights are 400, 500, 600, and 700. The status of a due entry steps through them to show how late it is. The status text carries the meaning.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tone Not Shadow Rule",
+        "body": "Do not add box-shadow, a gradient, or a blur. A test in tests/static.test.js fails on each of them.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do show a rating as a dot and a word. The words are Clean, Struggled, and Failed.",
-      "Do keep one sheet. Other sections sit on the ground.",
-      "Do put every color in the two :root blocks and use var(...) after that.",
-      "Do keep the sizes of the short scale and the four radius values.",
-      "Do keep hover as an 8 percent tint in 150 milliseconds and active as a 14 percent tint.",
+      "Do keep one sheet for each page. The name, the menu, and the notices sit on the ground.",
+      "Do keep the named rules, the short scale, and the four radius values.",
       "Do keep transition: none under prefers-reduced-motion: reduce.",
       "Do give each class a selector. A test in tests/styles.test.js checks it.",
-      "Do keep each control reachable by keyboard with the 2 pixel focus outline.",
+      "Do keep each control reachable by keyboard, with the focus outline.",
       "Do keep text contrast at 4.5 to 1 or more in both schemes."
     ],
     "donts": [
       "Do not add a band, a shadow, a gradient, or a blur.",
       "Do not add @font-face, @import, @keyframes, a font file, an image, or an inline style. The content security policy blocks them.",
-      "Do not add authored motion. The page redraws after each action, so nothing moves on load or on a press.",
-      "Do not use color as the only signal for a state.",
+      "Do not add authored motion. Nothing moves on load or on a press.",
       "Do not use a serif face, capitals for labels, or letter spacing.",
       "Do not add !important.",
-      "Do not turn the page into cards, rings, or a dashboard with alarm colors.",
+      "Do not turn a page into cards, rings, or a dashboard with alarm colors.",
       "Do not use the look or the logo of NeetCode."
     ]
   }

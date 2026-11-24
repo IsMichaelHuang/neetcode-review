@@ -110,5 +110,6 @@ The voice is plain and short. Labels say what a control does.
 - Each control works with the keyboard and shows a clear focus mark.
 - Text contrast is 4.5 to 1 or more.
 - No meaning depends on color alone.
-- The page works at a width of 375 pixels with no sideways scroll.
+- The page body does not scroll sideways at a width of 375 pixels.
+  The table of all problems scrolls sideways inside its own frame.
 - Each control has a name that a screen reader can read.

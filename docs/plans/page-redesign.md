@@ -125,16 +125,17 @@ The PR passes 400 changed lines, and its text states this reason.
 
 ## Risks
 
-- The widths in "Layout" are estimates until Task 4 measures them.
+- The layout widths are measured on macOS only. The design file
+  holds the measured numbers.
 - `subgrid` and `color-mix` need a browser from 2023 or later. The
   page already supports current browsers only.
 - The faces differ by system. Charter and Iowan Old Style exist on
   macOS. Windows gets Palatino or Georgia, and Linux gets a serif
   like Times. Text widths change with the face, so the breakpoints
   fit macOS best. Only macOS is checked.
-- The dev agent of Task 3 writes the styles with no browser. The
-  browser pass of Task 4 will find layout faults, and one fix round
-  is expected.
+- The dev agents wrote the styles with no browser. The browser
+  passes found each layout fault after the code was written. No
+  test in a real browser guards the layout.
 - A person who knows the old page must learn the new place of each
   control. Names and ids stay.
 

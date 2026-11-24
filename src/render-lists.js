@@ -36,7 +36,7 @@ export const topicsSection = (doc, view, codes) =>
     h(
       doc,
       "ul",
-      { cls: "index" },
+      { cls: "index", role: "list" },
       view.topics.map((t) =>
         h(doc, "li", {}, [
           ...topicName(doc, codes, t.topic),

@@ -151,7 +151,7 @@ section.topics [aria-labelledby=topics-h]
   div.head
     h2#topics-h           "Topics"
     p.legend [aria-hidden=true]  "reviewed · weak"
-  ul.index
+  ul.index [role=list]
     li                    span.code + span.name
                           + span.num: span "3 of 11" + span.sr
                             "reviewed"

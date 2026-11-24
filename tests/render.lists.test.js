@@ -153,3 +153,8 @@ test("a problem title in the table is a link in td.title", () => {
   assert.equal(td.className, "title")
   assert.equal(td.children[0].textContent, "Alpha")
 })
+
+test("the topic index has the list role", () => {
+  const doc = draw(view())
+  assert.equal(one(doc.app, "index").attrs.role, "list")
+})

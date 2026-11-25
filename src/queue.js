@@ -1,11 +1,10 @@
 import { DIFFICULTY_ORDER, LEVEL_ORDER } from "./config.js"
-import { daysBetween } from "./dates.js"
 import { isWeak, replay } from "./schedule.js"
 
-const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0)
+export const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0)
 
 // An id with no own key, or an empty list, has no history.
-const historyOf = (ratings, id) =>
+export const historyOf = (ratings, id) =>
   Object.hasOwn(ratings, id) ? ratings[id] : []
 
 // Take one problem from each topic in turn, until all are used.
@@ -55,17 +54,13 @@ export const buildToday = ({ problems, ratings, target, today }) => {
   done.sort((a, b) => cmp(a.id, b.id))
   due.sort((a, b) => cmp(a.date, b.date) || cmp(a.problem.id, b.problem.id))
   const slots = Math.max(0, target - done.length)
-  const open = due.slice(0, slots).map(({ problem, date }) => ({
-    problem,
-    kind: "due",
-    overdueDays: daysBetween(date, today),
-  }))
+  const open = due.slice(0, slots).map(({ problem }) => problem)
   const fresh = startOrder(problems).filter(
     (p) => historyOf(ratings, p.id).length === 0,
   )
   for (const problem of fresh) {
     if (open.length >= slots) break
-    open.push({ problem, kind: "new", overdueDays: 0 })
+    open.push(problem)
   }
   return { done, open, waiting: Math.max(0, due.length - slots) }
 }

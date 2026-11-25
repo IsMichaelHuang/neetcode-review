@@ -3,7 +3,7 @@ import { MIN_TARGET, MAX_TARGET, NOTICES } from "./config.js"
 import { parseTree, mergeCatalog } from "./catalog.js"
 import { localDate, formatDay, daysBetween } from "./dates.js"
 import { replay, rate as rateHistory, isWeak } from "./schedule.js"
-import { buildToday, byLevel, topicSummary } from "./queue.js"
+import { buildToday, byLevel, cmp, historyOf, topicSummary } from "./queue.js"
 import {
   emptyState,
   loadState,
@@ -13,7 +13,6 @@ import {
 } from "./store.js"
 import { loadTree, rawUrl, problemUrl, folderUrl } from "./github.js"
 
-const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0)
 const STATUSES = ["new", "due", "weak"]
 
 export const createApp = ({ fetchFn, storage, now, known }) => {
@@ -28,9 +27,6 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
   let filters = { topic: "all", status: "all" }
   const solutions = new Map()
   const pending = new Map()
-
-  const historyOf = (id) =>
-    Object.hasOwn(state.ratings, id) ? state.ratings[id] : []
 
   // A failed read is always retried, even when a save failed before.
   const refresh = () => {
@@ -55,7 +51,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
   }
 
   const rowFor = (p, today) => {
-    const history = historyOf(p.id)
+    const history = historyOf(state.ratings, p.id)
     const due = history.length > 0 ? replay(history).due : null
     let kind = "later"
     if (history.some((e) => e.date === today)) kind = "done"
@@ -79,7 +75,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
 
   const matches = (row, p) => {
     if (filters.topic !== "all" && row.topic !== filters.topic) return false
-    if (filters.status === "weak") return isWeak(historyOf(p.id))
+    if (filters.status === "weak") return isWeak(historyOf(state.ratings, p.id))
     return filters.status === "all" || row.kind === filters.status
   }
 
@@ -92,7 +88,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
       target: state.target,
       today,
     })
-    const queue = byLevel([...done, ...open.map((o) => o.problem)])
+    const queue = byLevel([...done, ...open])
     const all = [...problems].sort(
       (a, b) => cmp(a.title, b.title) || cmp(a.id, b.id),
     )
@@ -103,7 +99,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
       today,
       todayLabel: formatDay(today),
       target: state.target,
-      doneCount: rows.filter(([r]) => r.kind === "done").length,
+      doneCount: done.length,
       waiting,
       notices: [...new Set(notices.filter(Boolean))],
       importError,
@@ -156,7 +152,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
       if (!problems.some((p) => p.id === id)) return
       const today = localDate(now())
       change((s) => {
-        const next = rateHistory(historyOf(id), today, rating)
+        const next = rateHistory(historyOf(state.ratings, id), today, rating)
         return { ...s, ratings: { ...s.ratings, [id]: next } }
       })
     },

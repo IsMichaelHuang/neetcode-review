@@ -41,10 +41,9 @@ test("AC2: a fresh start gives four Medium problems of mixed topics", () => {
   )
   const r = build(problems)
   assert.equal(r.open.length, 4)
-  assert.ok(r.open.every((o) => o.kind === "new"))
-  assert.ok(r.open.every((o) => o.problem.difficulty === "Medium"))
+  assert.ok(r.open.every((o) => o.difficulty === "Medium"))
   for (let i = 1; i < r.open.length; i++) {
-    assert.notEqual(r.open[i].problem.topic, r.open[i - 1].problem.topic)
+    assert.notEqual(r.open[i].topic, r.open[i - 1].topic)
   }
   assert.deepEqual(r.done, [])
   assert.equal(r.waiting, 0)
@@ -64,27 +63,18 @@ test("AC5: due problems come first by due date, then new ones", () => {
     p3: [entry("2026-11-15", "struggled")],
   }
   const r = build(problems, ratings)
-  assert.deepEqual(ids(r.open.map((o) => o.problem)), [
+  assert.deepEqual(ids(r.open), [
     "p1",
     "p3",
     "p2",
     "n1",
   ])
-  assert.deepEqual(
-    r.open.map((o) => o.kind),
-    ["due", "due", "due", "new"],
-  )
-  assert.deepEqual(
-    r.open.map((o) => o.overdueDays),
-    [12, 2, 1, 0],
-  )
 })
 
-test("a problem due today is open with overdueDays 0", () => {
+test("a problem due today is open", () => {
   const r = build([problem("p", "A")], { p: [entry("2026-11-19", "failed")] })
   assert.equal(r.open.length, 1)
-  assert.equal(r.open[0].kind, "due")
-  assert.equal(r.open[0].overdueDays, 0)
+  assert.equal(r.open[0].id, "p")
 })
 
 test("a problem due in the future is not open", () => {
@@ -140,7 +130,7 @@ test("rating a problem today keeps the order of the new problems", () => {
     problem("a2", "A"),
   ]
   const before = build(list)
-  assert.deepEqual(ids(before.open.map((o) => o.problem)), [
+  assert.deepEqual(ids(before.open), [
     "a1",
     "b1",
     "c1",
@@ -148,7 +138,7 @@ test("rating a problem today keeps the order of the new problems", () => {
   ])
   const after = build(list, { a1: [entry(today, "clean")] })
   assert.deepEqual(ids(after.done), ["a1"])
-  assert.deepEqual(ids(after.open.map((o) => o.problem)), [
+  assert.deepEqual(ids(after.open), [
     "b1",
     "c1",
     "d1",
@@ -165,7 +155,7 @@ test("a rating for an id that is not in problems changes nothing", () => {
 test("an id such as constructor with no rating is a new problem", () => {
   const r = build([problem("constructor", "A")])
   assert.equal(r.open.length, 1)
-  assert.equal(r.open[0].kind, "new")
+  assert.equal(r.open[0].id, "constructor")
 })
 
 test("topicSummary counts total, reviewed, and weak, sorted by topic", () => {

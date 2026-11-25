@@ -224,3 +224,49 @@ newline in the 401-line file. Both are in the plan.
 
 Noted and accepted: `known` gave true for the array `["clean"]`, and
 now gives false. The view gives a string or null only.
+
+## Verification
+
+- `npm test` runs 385 tests, and all pass. Task 1 added 2 tests, and
+  Task 2 added 6.
+- `npm run limits` prints nothing and exits with 0.
+  `index.html` and `styles.css` did not change.
+- The code and the tests change about 210 lines. The rest of the diff
+  is this plan.
+- In the browser, Today showed five rows. The first row was Easy and
+  due today. Next came three Medium rows: done, 4 days overdue, and
+  new. The last row was Hard and 14 days overdue. The count read
+  "1 of 5 done".
+- A rating on the Medium row set the button to pressed and kept the
+  focus on it. Settings showed min 1, max 10, and the same hint. The
+  Weak filter on Problems listed the three problems with a failed or
+  struggled rating. The console showed no error.
+
+## Four questions
+
+Regressions:
+
+- None found. `buildToday` has one caller, `app.js`. It used only the
+  problems. The app tests keep the kind and overdue checks that left
+  the queue tests. The browser pass showed the same rows, counts, and
+  texts as before.
+- `RATINGS` has a new order. Its users call `includes` only.
+- `known` now gives false for the array `["clean"]`. The view gives a
+  string or null only, so no screen changes.
+
+Security flaws:
+
+- None found. The change adds no input, no network target, and no
+  storage key. The guards that use `Object.hasOwn` stay. `known`
+  still gives false for "constructor", and a test covers it.
+
+Efficiency:
+
+- The view no longer counts every row for `doneCount`, and `replay`
+  no longer walks the history twice. The files in `src/` have 6
+  fewer lines.
+
+Extra test cases:
+
+- None needed. The limits script has a test for each of its three
+  results. Each moved check has a new home in the app tests.

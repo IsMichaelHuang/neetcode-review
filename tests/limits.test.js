@@ -1,16 +1,18 @@
 import test from "node:test"
 import assert from "node:assert/strict"
-import { execFileSync, spawnSync } from "node:child_process"
+import { spawnSync } from "node:child_process"
 import { mkdtempSync, writeFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 test("no file breaks the size limits", () => {
-  const out = execFileSync("sh", ["scripts/check-limits.sh"], {
+  // spawnSync, so a failure shows the WIDE and LONG lines.
+  const r = spawnSync("sh", ["scripts/check-limits.sh"], {
     cwd: new URL("../", import.meta.url),
     encoding: "utf8",
   })
-  assert.equal(out, "")
+  assert.equal(r.stdout, "")
+  assert.equal(r.status, 0)
 })
 
 const script = new URL("../scripts/check-limits.sh", import.meta.url).pathname

@@ -1,5 +1,5 @@
 // Shared DOM helpers. All text goes in through textContent.
-import { RATING_LABEL, DOT_CLASS } from "./labels.js"
+import { RATING_KEYS, RATING_LABEL, DOT_CLASS } from "./labels.js"
 
 // Make an element. attrs: cls, text, value, or any other attribute.
 export const h = (doc, tag, attrs = {}, kids = []) => {
@@ -44,7 +44,7 @@ export const select = (doc, id, options, current) => {
 }
 
 // True only for the three known ratings, so "constructor" is not one.
-export const known = (rating) => Object.hasOwn(RATING_LABEL, rating)
+export const known = (rating) => RATING_KEYS.includes(rating)
 
 // The color dot of a rating. A word always sits next to it.
 export const dot = (doc, rating) =>

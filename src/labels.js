@@ -1,8 +1,10 @@
 // Text helpers and fixed class tables for the render code.
-export const RATING_KEYS = Object.freeze(["clean", "struggled", "failed"])
+import { RATINGS } from "./config.js"
+
+export const RATING_KEYS = RATINGS
 
 const table = (fn) =>
-  Object.freeze(Object.fromEntries(RATING_KEYS.map((k, i) => [k, fn(k, i)])))
+  Object.freeze(Object.fromEntries(RATING_KEYS.map((k) => [k, fn(k)])))
 
 export const RATING_LABEL = table((k) => k[0].toUpperCase() + k.slice(1))
 export const RATE_CLASS = table((k) => `rate-${k}`)

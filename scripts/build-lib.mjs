@@ -1,5 +1,5 @@
 // Pure logic. No network and no file access.
-const LEVELS = ["Easy", "Medium", "Hard"]
+import { LEVEL_ORDER } from "../src/config.js"
 const text = (v) => typeof v === "string" && v.length > 0
 
 export function buildProblems(ids, list, nameMap, manual) {
@@ -20,7 +20,7 @@ export function buildProblems(ids, list, nameMap, manual) {
       missing.push(id)
       continue
     }
-    const difficulty = LEVELS.includes(x.difficulty)
+    const difficulty = LEVEL_ORDER.includes(x.difficulty)
       ? x.difficulty
       : "Unknown"
     problems.push({ id, title: x.problem, topic: x.pattern, difficulty })

@@ -3,19 +3,17 @@ import { addDays } from "./dates.js"
 
 const byDate = (a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)
 
-// Walk the history in date order. "prev" is the step after the
-// entry before this one, or null before the first entry.
+// Walk the history in date order. "step" is null before the first entry.
 export const replay = (history) => {
   let step = null
-  for (const { rating } of [...history].sort(byDate)) {
-    const prev = step
+  const sorted = [...history].sort(byDate)
+  for (const { rating } of sorted) {
     if (rating === "failed") step = 0
-    else if (rating === "struggled") step = Math.max(prev ?? 0, 1)
-    else step = Math.min(Math.max((prev ?? -1) + 1, 2), LADDER.length - 1)
+    else if (rating === "struggled") step = Math.max(step ?? 0, 1)
+    else step = Math.min(Math.max((step ?? -1) + 1, 2), LADDER.length - 1)
   }
   if (step === null) return { step: null, due: null }
-  const last = history.reduce((a, b) => (byDate(a, b) >= 0 ? a : b))
-  return { step, due: addDays(last.date, LADDER[step]) }
+  return { step, due: addDays(sorted.at(-1).date, LADDER[step]) }
 }
 
 export const rate = (history, date, rating) => {

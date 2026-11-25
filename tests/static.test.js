@@ -218,3 +218,11 @@ test("a wrapped menu starts at the left, under the name", () => {
 test("the Settings heading has space below it", () => {
   assert.match(css(), /\.settings \.head\s*\{\s*padding-bottom:\s*1rem/)
 })
+
+test("the target range comes from MIN_TARGET and MAX_TARGET", () => {
+  for (const file of ["src/render-settings.js", "src/store.js"]) {
+    const code = read(file)
+    assert.doesNotMatch(code, /\b10\b/, file)
+    assert.match(code, /import[^;]*\bMAX_TARGET\b[^;]*from/, file)
+  }
+})

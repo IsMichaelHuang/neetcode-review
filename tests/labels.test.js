@@ -4,6 +4,7 @@ import {
   RATING_KEYS, RATING_LABEL, RATE_CLASS, DOT_CLASS,
   DONE_CLASS, DUE_CLASS, topicCodes, statusText, urgency, statusClass,
 } from "../src/labels.js"
+import { RATINGS } from "../src/config.js"
 
 test("topicCodes gives A and B to two topics in order", () => {
   assert.deepEqual([...topicCodes(["Graphs", "Trees"])],
@@ -143,4 +144,9 @@ test("each exported object and array is frozen", () => {
   const all = [RATING_KEYS, RATING_LABEL, RATE_CLASS,
     DOT_CLASS, DONE_CLASS, DUE_CLASS]
   for (const x of all) assert.ok(Object.isFrozen(x))
+})
+
+test("RATING_KEYS is the one frozen RATINGS list", () => {
+  assert.equal(RATING_KEYS, RATINGS)
+  assert.ok(Object.isFrozen(RATINGS))
 })

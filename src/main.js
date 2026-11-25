@@ -84,7 +84,7 @@ const safeStorage = () => {
     const fail = () => {
       throw new Error("storage is not available")
     }
-    return { getItem: fail, setItem: fail, removeItem: fail }
+    return { getItem: fail, setItem: fail }
   }
 }
 

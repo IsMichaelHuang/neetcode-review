@@ -25,7 +25,8 @@ npm run limits
 
 `npm test` runs the unit tests with the Node test runner. `npm run
 limits` checks that each file has at most 400 lines and 80 characters
-per line. Both need `git`, so they work only in a clone.
+per line. It exits with an error on a broken limit. Both need `git`,
+so they work only in a clone.
 
 ## Pages
 

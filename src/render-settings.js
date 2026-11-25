@@ -1,5 +1,6 @@
 // The Settings section: the daily target, Export, and Import.
 import { h, labelled } from "./h.js"
+import { MIN_TARGET, MAX_TARGET } from "./config.js"
 
 const hint = (doc, id, words) => h(doc, "p", { cls: "hint", id, text: words })
 
@@ -7,8 +8,8 @@ const targetControl = (doc, view, on) => {
   const target = h(doc, "input", {
     id: "target",
     type: "number",
-    min: 1,
-    max: 10,
+    min: String(MIN_TARGET),
+    max: String(MAX_TARGET),
     value: String(view.target),
     "aria-describedby": "target-hint",
   })
@@ -60,7 +61,8 @@ export const settingsSection = (doc, view, on) =>
       hint(
         doc,
         "target-hint",
-        "The number of problems on the Today page, from 1 to 10.",
+        `The number of problems on the Today page, from ${MIN_TARGET} ` +
+          `to ${MAX_TARGET}.`,
       ),
     ]),
     h(doc, "div", { cls: "setting" }, [

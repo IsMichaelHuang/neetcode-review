@@ -45,7 +45,8 @@ export const validate = (value) => {
     if (value.version !== 1) return fail("The version must be 1.")
     const t = value.target
     if (!Number.isInteger(t) || t < MIN_TARGET || t > MAX_TARGET) {
-      return fail("The target must be a whole number from 1 to 10.")
+      const range = `from ${MIN_TARGET} to ${MAX_TARGET}`
+      return fail(`The target must be a whole number ${range}.`)
     }
     if (!isPlain(value.ratings)) return fail("The ratings must be an object.")
     const ratings = {}

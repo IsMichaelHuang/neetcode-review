@@ -1,5 +1,6 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
 import { buildProblems } from "../scripts/build-lib.mjs"
 
 const item = {
@@ -91,4 +92,14 @@ test("a mixed run returns one problem and one missing id", () => {
   const r = buildProblems(["contains-duplicate", "nope"], [item], {}, [])
   assert.equal(r.problems.length, 1)
   assert.deepEqual(r.missing, ["nope"])
+})
+
+test("build-lib takes its levels from config.js", () => {
+  const code = readFileSync(
+    new URL("../scripts/build-lib.mjs", import.meta.url),
+    "utf8",
+  )
+  assert.match(code, /import[^;\n]*\bLEVEL_ORDER\b/)
+  assert.match(code, /from "\.\.\/src\/config\.js"/)
+  assert.doesNotMatch(code, /LEVELS =/)
 })

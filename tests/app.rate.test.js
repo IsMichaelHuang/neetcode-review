@@ -302,6 +302,34 @@ test("today shows Easy, Medium, Hard and picks the same problems", async () => {
     target: 5,
     today: "2026-11-20",
   })
-  const picked = [...done, ...open.map((o) => o.problem)].map((p) => p.id)
+  const picked = [...done, ...open].map((p) => p.id)
   assert.deepEqual(v.queue.map((r) => r.id).sort(), picked.sort())
+})
+
+test("the queue rows keep their kind and overdue days", async () => {
+  const storage = fakeStorage()
+  seed(storage, {
+    "add-two-numbers": [entry("2026-11-07", "failed")],
+    "anagram-groups": [entry("2026-11-17", "failed")],
+    "binary-tree-right-side-view": [entry("2026-11-18", "failed")],
+  })
+  const { app } = await setup(storage)
+  const q = app.view().queue
+  assert.deepEqual(q.map((r) => r.id), [
+    "add-two-numbers",
+    "anagram-groups",
+    "binary-tree-right-side-view",
+    "coin-change",
+  ])
+  assert.deepEqual(q.map((r) => r.kind), ["due", "due", "due", "new"])
+  assert.deepEqual(q.map((r) => r.overdueDays), [12, 2, 1, 0])
+})
+
+test("a problem due today is a due row with 0 overdue days", async () => {
+  const storage = fakeStorage()
+  seed(storage, { [P1]: [entry("2026-11-19", "failed")] })
+  const { app } = await setup(storage)
+  const r = find(app.view().queue, P1)
+  assert.equal(r.kind, "due")
+  assert.equal(r.overdueDays, 0)
 })

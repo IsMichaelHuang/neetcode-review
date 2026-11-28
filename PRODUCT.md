@@ -61,7 +61,8 @@ Functions:
 - A summary for each topic, and a table of all problems with a topic
   filter and a status filter.
 - Export and import of the ratings as a file.
-- Notices for stale data, for a failed save, and for damaged data.
+- Notices for stale data, a failed save, damaged data, and no export
+  in the last 14 days.
 
 Terms: a problem is new, due, done, or later. If the last rating of
 a problem is Struggled or Failed, the problem counts as weak in its

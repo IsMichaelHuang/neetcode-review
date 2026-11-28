@@ -62,9 +62,11 @@ that storage, so they can read your ratings.
 
 ## Storage keys
 
-The page uses three keys in `localStorage`:
+The page uses four keys in `localStorage`:
 
 - `neetcode-review:state` holds your ratings and your daily target.
+- `neetcode-review:exported` holds the date of your last export, as
+  `YYYY-MM-DD`. It is not part of the export file.
 - `neetcode-review:state.bad` holds a copy of saved data that was
   damaged.
 - `neetcode-review:tree` holds the cached file list.
@@ -98,6 +100,17 @@ Both controls are on the Settings page. Press Export to download
 `neetcode-review-ratings.json`. Choose a file under "Import ratings"
 to load it back in. The page asks you before it replaces your
 current ratings.
+
+If no export is dated within the last 14 days, the Today page shows a
+notice. The page measures from your first rating when you have never
+exported. A good Import also sets the date, because the file then
+holds the ratings that are in the page. The date marks the start of
+the download. The page cannot know that the browser saved the file.
+
+On your first rating or your first Export in a page load, the page
+asks the browser to keep the storage. This is a request, and the
+browser can refuse it. It does not stop "clear site data" in the
+settings of the browser, so an export is still the safe copy.
 
 ## Rebuild `data/problems.json`
 

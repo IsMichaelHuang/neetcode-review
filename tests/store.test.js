@@ -7,10 +7,13 @@ import {
   exportText,
   loadState,
   saveState,
+  loadExported,
+  saveExported,
 } from "../src/store.js"
 import {
   STORAGE_KEY,
   BAD_KEY,
+  EXPORTED_KEY,
   NOTICES,
   MAX_IMPORT_CHARS,
 } from "../src/config.js"
@@ -209,4 +212,37 @@ test("validate shares no object with its input", () => {
   r.state.ratings["two-sum"][0].rating = "failed"
   r.state.ratings["two-sum"].push(entry("2026-12-01", "clean"))
   assert.deepEqual(input, good())
+})
+
+test("loadExported gives a real date or null", () => {
+  const s = fakeStorage()
+  assert.equal(loadExported(s), null)
+  s.setItem(EXPORTED_KEY, "2026-11-20")
+  assert.equal(loadExported(s), "2026-11-20")
+  for (const bad of ["2026-02-30", "soon", "", "2026-11-2"]) {
+    s.setItem(EXPORTED_KEY, bad)
+    assert.equal(loadExported(s), null)
+  }
+})
+
+test("loadExported gives null when the read throws", () => {
+  assert.equal(loadExported(fakeStorage({ failReads: true })), null)
+})
+
+test("saveExported stores the date and leaves the state key alone", () => {
+  const s = fakeStorage()
+  assert.equal(saveExported(s, "2026-11-20"), true)
+  assert.equal(s.getItem(EXPORTED_KEY), "2026-11-20")
+  assert.equal(s.getItem(STORAGE_KEY), null)
+})
+
+test("saveExported gives false when the write throws", () => {
+  const s = fakeStorage({ failWrites: true })
+  assert.equal(saveExported(s, "2026-11-20"), false)
+})
+
+test("saveExported refuses a date that is not real", () => {
+  const s = fakeStorage()
+  assert.equal(saveExported(s, "2026-13-01"), false)
+  assert.equal(s.getItem(EXPORTED_KEY), null)
 })

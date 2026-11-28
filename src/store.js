@@ -5,6 +5,7 @@ import {
   RATINGS,
   ID_PATTERN,
   STORAGE_KEY,
+  EXPORTED_KEY,
   BAD_KEY,
   MAX_IMPORT_CHARS,
   NOTICES,
@@ -96,7 +97,28 @@ export const loadState = (storage) => {
   return { state: emptyState(), notice: NOTICES.damaged }
 }
 
-export const saveState = (storage, state) => {
+// The date of the last export. It is not part of the state object, so the
+// export file and validate do not change.
+export const loadExported = (storage) => {
+  try {
+    const date = storage.getItem(EXPORTED_KEY)
+    return isRealDate(date) ? date : null
+  } catch {
+    return null
+  }
+}
+
+export const saveExported = (storage, date) => {
+  if (!isRealDate(date)) return false
+  try {
+    storage.setItem(EXPORTED_KEY, date)
+    return true
+  } catch {
+    return false
+  }
+}
+
+export const saveState =(storage, state) => {
   const r = validate(state)
   if (!r.ok) return false
   try {

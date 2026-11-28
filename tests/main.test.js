@@ -199,6 +199,17 @@ test("a rating press does not scroll", async () => {
   assert.deepEqual(win.scrolls, [])
 })
 
+test("after a key rating, the focus is on the pressed button", async () => {
+  const { doc } = await boot("#/")
+  const li = find(doc.app, (n) => n.tag === "li")[1]
+  const link = find(li, (n) => n.tag === "a")[0]
+  const rate = find(li, (n) => n.attrs.id?.startsWith("rate-"))[0]
+  const want = rate.attrs.id.replace(/clean$/, "struggled")
+  fire(li, "keydown", { key: "2", target: link, preventDefault() {} })
+  assert.equal(doc.activeElement.attrs.id, want)
+  assert.equal(doc.activeElement.attrs["aria-pressed"], "true")
+})
+
 test("a visibilitychange on #/topics still shows Topics", async () => {
   const { doc } = await boot("#/topics")
   fire(doc, "visibilitychange")
@@ -318,15 +329,4 @@ test("an Export that throws marks nothing and asks nothing", async () => {
   assert.throws(() => fire(byId("export"), "click"))
   assert.equal(storage.getItem(EXPORTED_KEY), null)
   assert.equal(nav.calls, 0)
-})
-
-test("after a key rating, the focus is on the pressed button", async () => {
-  const { doc } = await boot("#/")
-  const li = find(doc.app, (n) => n.tag === "li")[1]
-  const link = find(li, (n) => n.tag === "a")[0]
-  const rate = find(li, (n) => n.attrs.id?.startsWith("rate-"))[0]
-  const want = rate.attrs.id.replace(/clean$/, "struggled")
-  fire(li, "keydown", { key: "2", target: link, preventDefault() {} })
-  assert.equal(doc.activeElement.attrs.id, want)
-  assert.equal(doc.activeElement.attrs["aria-pressed"], "true")
 })

@@ -53,13 +53,31 @@ export const start = async ({
     if (moved) win.scrollTo(0, 0)
     if (id) document.getElementById(id)?.focus?.()
   }
+  // Ask the browser one time to keep the storage. A user action starts
+  // it, so a browser prompt is never a surprise. A refusal shows nothing.
+  let asked = false
+  const askPersist = () => {
+    if (asked) return
+    asked = true
+    try {
+      const p = win?.navigator?.storage?.persist?.()
+      Promise.resolve(p).catch(() => {})
+    } catch {
+      // The request is only a request, so a failure changes nothing.
+    }
+  }
   const handlers = {
-    onRate: (id, rating) => (app.rate(id, rating), paint()),
+    onRate: (id, rating) => (askPersist(), app.rate(id, rating), paint()),
     onReveal: async (id) => (await app.reveal(id), paint()),
     // Paint after the focus move ends, so focus lands on the new node.
     onTarget: (n) => (app.setTarget(n), setTimeout(paint, 0)),
     onFilter: (f) => (app.setFilter(f), paint()),
-    onExport: () => download(document, app.exportText()),
+    onExport: () => {
+      download(document, app.exportText())
+      askPersist()
+      app.markExported()
+      paint()
+    },
     onImport: (text) => (app.importText(text, confirmFn), paint()),
   }
   win?.addEventListener("hashchange", () => {

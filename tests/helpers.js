@@ -37,6 +37,19 @@ export const fakeStorage = ({ failWrites = false, failReads = false } = {}) => {
   }
 }
 
+// A navigator whose storage.persist counts its calls. `persist` is the
+// function that runs on each call.
+export const fakeNavigator = (persist = async () => true) => {
+  const nav = { calls: 0 }
+  nav.storage = {
+    persist() {
+      nav.calls++
+      return persist()
+    },
+  }
+  return nav
+}
+
 // routes maps a URL to { status, body } or to an Error to throw.
 export const fakeFetch = (routes) => {
   const calls = []

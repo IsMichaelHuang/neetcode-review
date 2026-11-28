@@ -56,6 +56,7 @@ Functions:
 - A list for today. It picks due problems first and new problems after, and
   shows them from Easy to Hard.
 - Three ratings: Clean, Struggled, and Failed.
+- Keys 1, 2, and 3 rate the problem that holds the focus.
 - A daily target from 1 to 10 problems.
 - A button that shows his old solution for one problem.
 - A summary for each topic, and a table of all problems with a topic

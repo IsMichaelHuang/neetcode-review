@@ -10,6 +10,8 @@ const checkNodes = (nodes) => {
 
 const makeElement = (doc, tag) => ({
   tag,
+  tagName: tag.toUpperCase(),
+  isContentEditable: false,
   ownerDocument: doc,
   children: [],
   attrs: {},

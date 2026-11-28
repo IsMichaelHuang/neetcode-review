@@ -1,6 +1,7 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import { readFileSync, readdirSync } from "node:fs"
+import { readCss } from "./helpers.js"
 
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
@@ -68,7 +69,44 @@ test("styles.css has no data URL", () => {
   assert.ok(!read("styles.css").includes("url(data:"))
 })
 
-const css = () => read("styles.css").replace(/\/\*[\s\S]*?\*\//g, "")
+test("index.html links styles.css and then lists.css", () => {
+  const links = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)]
+  assert.deepEqual(links.map((m) => m[1]), ["styles.css", "lists.css"])
+})
+
+test("lists.css has no :root block, no hex color, and no url(", () => {
+  const c = read("lists.css").replace(/\/\*[\s\S]*?\*\//g, "")
+  assert.ok(c.length > 0)
+  assert.ok(!/:root/.test(c))
+  assert.ok(!/#[0-9a-f]{3,8}\b/i.test(c))
+  assert.ok(!/url\(/.test(c))
+})
+
+test("the Topic index and Table rules are in the joined styles", () => {
+  const c = css()
+  for (const re of [
+    /\.topics, \.problems\s*\{/,
+    /\.index\s*\{/,
+    /\.index li\s*\{/,
+    /\.legend\s*\{/,
+    /\.table-wrap\s*\{/,
+    /\ntable\s*\{/,
+    /\nth, td\s*\{/,
+    /td\.title\s*\{/,
+    /tr\.empty td\s*\{/,
+    /td \.word\s*\{/,
+    /th, td:not\(\.title\), td \.name\s*\{/,
+  ]) {
+    assert.match(c, re)
+  }
+})
+
+test("the Topic index and Table rules are not in styles.css", () => {
+  const c = read("styles.css")
+  assert.ok(!/\.table-wrap|\.index li\s*\{|td\.title/.test(c))
+})
+
+const css = readCss
 
 test("each border radius is one of the four allowed values", () => {
   const ok = ["999px", "50%", "1.25rem", "0.75rem"]

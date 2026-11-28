@@ -1,6 +1,7 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
+import { readCss } from "./helpers.js"
 
 const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8")
   .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -114,14 +115,14 @@ for (const [fg, bg] of [
 }
 
 test("no hex color or rgb() appears outside the two token blocks", () => {
-  const rest = css.replace(/:root\s*\{[^}]*\}/g, "")
+  const rest = readCss().replace(/:root\s*\{[^}]*\}/g, "")
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(rest), "a hex color is outside")
   assert.ok(!/rgba?\(/i.test(rest), "an rgb() is outside")
   assert.ok(css.length > 0)
 })
 
 test("no hsl, hwb, lab, lch, oklab, oklch, or color() outside tokens", () => {
-  const rest = css.replace(/:root\s*\{[^}]*\}/g, "")
+  const rest = readCss().replace(/:root\s*\{[^}]*\}/g, "")
   const re = /(?<![\w-])(hsla?|hwb|lab|lch|oklab|oklch|color)\(/i
   assert.ok(!re.test(rest), "a banned color function is outside")
   assert.ok(/color-mix\(/.test(rest), "color-mix must stay allowed")

@@ -1,12 +1,11 @@
 import test from "node:test"
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { readCss } from "./helpers.js"
 import { everyState, draw } from "./render.fixtures.js"
 import { find } from "./dom.js"
 import { PAGES } from "../src/pages.js"
 
-const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8")
-  .replace(/\/\*[\s\S]*?\*\//g, "")
+const css = readCss()
 
 const tokens = () => {
   const found = new Set()

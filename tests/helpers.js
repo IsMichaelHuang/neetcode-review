@@ -68,3 +68,10 @@ export const fakeFetch = (routes) => {
   }
   return { fetchFn, calls }
 }
+
+// The text of both style files, without comments.
+export const readCss = () =>
+  ["styles.css", "lists.css"]
+    .map((f) => readFileSync(new URL(f, ROOT), "utf8"))
+    .join("\n")
+    .replace(/\/\*[\s\S]*?\*\//g, "")

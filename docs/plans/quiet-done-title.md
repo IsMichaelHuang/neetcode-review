@@ -75,3 +75,14 @@ Revert the merge commit. No saved data changes.
   is lighter, in both color schemes.
 
 ## Four questions
+
+1. Regressions. None found. The class `done` has no other selector,
+   so no rule matches it by accident. The link keeps its underline,
+   its hover color, and its focus outline. Only the title of a done
+   row changes.
+2. Security. None found. The change adds a class from a fixed text
+   and one CSS rule. No input reaches the page.
+3. Efficiency. None found. The change is one class and one rule.
+4. More tests. Action: check the page in a browser in both color
+   schemes, with one done row and one open row. The contrast test
+   already covers Quiet Ink on Sheet.

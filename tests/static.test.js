@@ -226,3 +226,10 @@ test("the target range comes from MIN_TARGET and MAX_TARGET", () => {
     assert.match(code, /import[^;]*\bMAX_TARGET\b[^;]*from/, file)
   }
 })
+
+test("a done title is Quiet Ink at weight 400", () => {
+  const m = css().match(/\.done \.title a\s*\{([^}]*)\}/)
+  assert.ok(m, "no .done .title a rule")
+  assert.match(m[1], /color:\s*var\(--ink-2\)/)
+  assert.match(m[1], /font-weight:\s*400/)
+})

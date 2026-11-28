@@ -294,6 +294,7 @@ pre {
   color: var(--c);
   font-weight: 600;
 }
+.done .title a { color: var(--ink-2); font-weight: 400; }
 .due-0 { font-weight: 400; }
 .due-1 { font-weight: 500; }
 .due-2 { font-weight: 600; }

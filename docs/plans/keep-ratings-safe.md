@@ -116,5 +116,22 @@ Revert the merge commit. No saved ratings change.
    only through `isRealDate`, and it writes only a date it made.
 3. Efficiency. None found. `backupDue` walks all histories once for
    each paint. The list has about 110 problems, so the cost is small.
-4. More tests. Action: run Export and Import in a real browser (idea
-   3), with the user's OK for the download and the file dialog.
+4. More tests. Done: Export and Import ran in a real browser (idea
+   3), with the user's OK. See "Browser pass".
+
+## Browser pass
+
+The pass ran on a merge of all four branches, with test data of two
+problems and four entries.
+
+- Export: pass. The file downloads as `neetcode-review-ratings.json`.
+  Its bytes match the saved state, and it has no date field. The
+  date key gets today, and the Today notice goes away.
+- Import, cancelled: pass. The prompt shows, and nothing changes.
+- Import, a file that is not JSON: pass. The error shows, and nothing
+  changes.
+- Import, the exported file: pass. The prompt shows. The ratings and
+  the target match the file, and the date key gets today.
+
+A script set the file on the input and answered the prompt, because
+the tools cannot drive the file dialog of the system.

@@ -1,6 +1,7 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import { readFileSync, readdirSync } from "node:fs"
+import { readCss } from "./helpers.js"
 
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
@@ -68,7 +69,83 @@ test("styles.css has no data URL", () => {
   assert.ok(!read("styles.css").includes("url(data:"))
 })
 
-const css = () => read("styles.css").replace(/\/\*[\s\S]*?\*\//g, "")
+test("index.html links styles.css and then lists.css", () => {
+  const links = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)]
+  assert.deepEqual(links.map((m) => m[1]), ["styles.css", "lists.css"])
+})
+
+test("lists.css has no :root block, no hex color, and no url(", () => {
+  const c = read("lists.css").replace(/\/\*[\s\S]*?\*\//g, "")
+  assert.ok(c.length > 0)
+  assert.ok(!/:root/.test(c))
+  assert.ok(!/#[0-9a-f]{3,8}\b/i.test(c))
+  assert.ok(!/url\(/.test(c))
+})
+
+test("the Topic index and Table rules are in the joined styles", () => {
+  const c = css()
+  for (const re of [
+    /\.topics, \.problems\s*\{/,
+    /\.index\s*\{/,
+    /\.index li\s*\{/,
+    /\.legend\s*\{/,
+    /\.table-wrap\s*\{/,
+    /\ntable\s*\{/,
+    /\nth, td\s*\{/,
+    /td\.title\s*\{/,
+    /tr\.empty td\s*\{/,
+    /td \.word\s*\{/,
+    /th, td:not\(\.title\), td \.name\s*\{/,
+  ]) {
+    assert.match(c, re)
+  }
+})
+
+// The lists.css phone block, not the one in styles.css.
+const phone = () => {
+  const c = read("lists.css").replace(/\/\*[\s\S]*?\*\//g, "")
+  const at = c.indexOf("@media (max-width: 719.98px) {")
+  assert.ok(at >= 0, "no phone block in lists.css")
+  let depth = 0
+  for (let i = c.indexOf("{", at); i < c.length; i++) {
+    if (c[i] === "{") depth++
+    if (c[i] === "}" && --depth === 0) {
+      return c.slice(c.indexOf("{", at) + 1, i)
+    }
+  }
+  return assert.fail("unclosed phone block")
+}
+
+// The declarations of the rule with this exact selector.
+const rule = (block, sel) => {
+  const all = [...block.matchAll(/([^{}]+)\{([^}]*)\}/g)]
+  const m = all.find((x) => x[1].trim() === sel)
+  assert.ok(m, `no rule for ${sel}`)
+  return m[2]
+}
+
+test("the phone block of lists.css lets the table shrink", () => {
+  assert.match(rule(phone(), "table"), /min-width:\s*0/)
+})
+
+test("the phone block hides thead without display: none", () => {
+  const head = rule(phone(), "thead")
+  assert.match(head, /position:\s*absolute/)
+  assert.match(head, /clip-path:\s*inset\(50%\)/)
+  assert.doesNotMatch(head, /display:\s*none/)
+})
+
+test("the phone block shows a cell label from data-label", () => {
+  const label = rule(phone(), "td[data-label]::before")
+  assert.match(label, /content:\s*attr\(data-label\)/)
+})
+
+test("the Topic index and Table rules are not in styles.css", () => {
+  const c = read("styles.css")
+  assert.ok(!/\.table-wrap|\.index li\s*\{|td\.title/.test(c))
+})
+
+const css = readCss
 
 test("each border radius is one of the four allowed values", () => {
   const ok = ["999px", "50%", "1.25rem", "0.75rem"]

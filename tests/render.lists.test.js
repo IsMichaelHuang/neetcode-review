@@ -163,3 +163,39 @@ test("the topic index has the list role", () => {
   const doc = onTopics(view())
   assert.equal(one(doc.app, "index").attrs.role, "list")
 })
+
+const HEADS = ["Problem", "Topic", "Level", "Last rating", "Next due"]
+const labels = (tds) => tds.slice(1).map((td) => td.attrs["data-label"])
+
+test("each cell but the title has a data-label from the heads", () => {
+  const doc = onProblems(view({ table: [row({ title: "Alpha" })] }))
+  const tds = cells(tableRows(doc)[0])
+  assert.equal(tds[0].attrs["data-label"], undefined)
+  assert.deepEqual(labels(tds), HEADS.slice(1))
+})
+
+test("a label never comes from row data", () => {
+  const doc = onProblems(view({ table: [row({ title: "data-label" })] }))
+  assert.deepEqual(labels(cells(tableRows(doc)[0])), HEADS.slice(1))
+})
+
+test("the table parts have explicit roles", () => {
+  const doc = onProblems(view({ table: [row()] }))
+  const all = (tag) => find(doc.app, (n) => n.tag === tag)
+  assert.equal(all("table")[0].attrs.role, "table")
+  for (const p of [...all("thead"), ...all("tbody")]) {
+    assert.equal(p.attrs.role, "rowgroup")
+  }
+  for (const tr of all("tr")) assert.equal(tr.attrs.role, "row")
+  for (const th of all("th")) assert.equal(th.attrs.role, "columnheader")
+  for (const td of all("td")) assert.equal(td.attrs.role, "cell")
+})
+
+test("the empty row has a cell role and no data-label", () => {
+  const doc = onProblems(view({ table: [] }))
+  const tr = tableRows(doc)[0]
+  assert.equal(tr.attrs.role, "row")
+  assert.equal(tr.children[0].attrs.role, "cell")
+  assert.equal(tr.children[0].attrs["data-label"], undefined)
+  assert.equal(tr.children[0].attrs.colspan, "5")
+})

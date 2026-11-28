@@ -114,5 +114,6 @@ The voice is plain and short. Labels say what a control does.
 - Text contrast is 4.5 to 1 or more.
 - No meaning depends on color alone.
 - The page body does not scroll sideways at a width of 375 pixels.
-  The table of all problems scrolls sideways inside its own frame.
+  The table of all problems shows each row as a stack, so it does not
+  scroll sideways at that width.
 - Each control has a name that a screen reader can read.

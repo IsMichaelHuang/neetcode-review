@@ -210,7 +210,7 @@ tabular figures. The site has no serif face.
 ### Named Rules
 The Short Scale Rule. Only these sizes exist in rem: 0.75, 0.8125, 0.875,
 1, 1.1875, 1.375, and 1.5. A test in `tests/static.test.js` reads the
-sizes in `styles.css`.
+sizes in `styles.css` and `lists.css`.
 
 The Four Weights Rule. Weights are 400, 500, 600, and 700. The status of
 a due entry steps through them to show how late it is. The status text
@@ -259,8 +259,6 @@ have 0.75rem. An entry has 1rem above and below. An index row has 0.5rem.
 A table cell has 0.75rem.
 
 Open items:
-- At 375 pixels the table of all problems scrolls sideways inside its
-  wrapper. The table has a minimum width of 36rem.
 - The measures come from macOS and one browser engine. Other platforms
   use other system fonts, so the widths can differ.
 
@@ -360,7 +358,9 @@ Lines are thin and soft.
 
 ### Table of all problems
 - A table on the Problems sheet with label heads in normal case. Only the
-  title cell wraps. A wrapper scrolls the table on a narrow window.
+  title cell wraps. From 720 pixels a wrapper scrolls the table. Under
+  720 pixels each row is a stack: the title, then the other cells with
+  their column name before the value. The heads stay for screen readers.
 - The last rating shows its dot and word. A missing value shows "none"
   in Quiet Ink.
 

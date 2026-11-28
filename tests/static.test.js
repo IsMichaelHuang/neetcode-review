@@ -101,6 +101,45 @@ test("the Topic index and Table rules are in the joined styles", () => {
   }
 })
 
+// The lists.css phone block, not the one in styles.css.
+const phone = () => {
+  const c = read("lists.css").replace(/\/\*[\s\S]*?\*\//g, "")
+  const at = c.indexOf("@media (max-width: 719.98px) {")
+  assert.ok(at >= 0, "no phone block in lists.css")
+  let depth = 0
+  for (let i = c.indexOf("{", at); i < c.length; i++) {
+    if (c[i] === "{") depth++
+    if (c[i] === "}" && --depth === 0) {
+      return c.slice(c.indexOf("{", at) + 1, i)
+    }
+  }
+  return assert.fail("unclosed phone block")
+}
+
+// The declarations of the rule with this exact selector.
+const rule = (block, sel) => {
+  const all = [...block.matchAll(/([^{}]+)\{([^}]*)\}/g)]
+  const m = all.find((x) => x[1].trim() === sel)
+  assert.ok(m, `no rule for ${sel}`)
+  return m[2]
+}
+
+test("the phone block of lists.css lets the table shrink", () => {
+  assert.match(rule(phone(), "table"), /min-width:\s*0/)
+})
+
+test("the phone block hides thead without display: none", () => {
+  const head = rule(phone(), "thead")
+  assert.match(head, /position:\s*absolute/)
+  assert.match(head, /clip-path:\s*inset\(50%\)/)
+  assert.doesNotMatch(head, /display:\s*none/)
+})
+
+test("the phone block shows a cell label from data-label", () => {
+  const label = rule(phone(), "td[data-label]::before")
+  assert.match(label, /content:\s*attr\(data-label\)/)
+})
+
 test("the Topic index and Table rules are not in styles.css", () => {
   const c = read("styles.css")
   assert.ok(!/\.table-wrap|\.index li\s*\{|td\.title/.test(c))

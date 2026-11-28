@@ -58,17 +58,28 @@ export const topicsSection = (doc, view, codes) =>
     ),
   ])
 
+// A cell has a role and a label, so a stacked row keeps its meaning.
+const cell = (doc, i, attrs, kids = []) =>
+  h(doc, "td", { role: "cell", "data-label": HEADS[i], ...attrs }, kids)
+
 const tableRow = (doc, r, codes) =>
-  h(doc, "tr", {}, [
-    h(doc, "td", { cls: "title" }, [outside(doc, r.problemUrl, r.title)]),
-    h(doc, "td", {}, topicName(doc, codes, r.topic)),
-    h(doc, "td", { text: r.difficulty }),
-    h(doc, "td", {}, last(doc, r.lastRating)),
-    h(doc, "td", {}, [
-      r.due === null
-        ? nil(doc)
-        : h(doc, "span", { text: formatDay(r.due) }),
+  h(doc, "tr", { role: "row" }, [
+    h(doc, "td", { role: "cell", cls: "title" }, [
+      outside(doc, r.problemUrl, r.title),
     ]),
+    cell(doc, 1, {}, topicName(doc, codes, r.topic)),
+    cell(doc, 2, { text: r.difficulty }),
+    cell(doc, 3, {}, last(doc, r.lastRating)),
+    cell(
+      doc,
+      4,
+      {},
+      [
+        r.due === null
+          ? nil(doc)
+          : h(doc, "span", { text: formatDay(r.due) }),
+      ],
+    ),
   ])
 
 export const tableSection = (doc, view, on, codes) => {
@@ -87,15 +98,17 @@ export const tableSection = (doc, view, on, codes) => {
   const rows =
     view.table.length === 0
       ? [
-          h(doc, "tr", { cls: "empty" }, [
+          h(doc, "tr", { cls: "empty", role: "row" }, [
             h(doc, "td", {
+              role: "cell",
               colspan: "5",
               text: "No problem matches these filters.",
             }),
           ]),
         ]
       : view.table.map((r) => tableRow(doc, r, codes))
-  const th = (t) => h(doc, "th", { scope: "col", text: t })
+  const th = (t) =>
+    h(doc, "th", { scope: "col", role: "columnheader", text: t })
   const attrs = { cls: "problems", "aria-labelledby": "problems-h" }
   return h(doc, "section", attrs, [
     h(doc, "div", { cls: "head" }, [
@@ -106,9 +119,11 @@ export const tableSection = (doc, view, on, codes) => {
       ]),
     ]),
     h(doc, "div", { cls: "table-wrap" }, [
-      h(doc, "table", {}, [
-        h(doc, "thead", {}, [h(doc, "tr", {}, HEADS.map(th))]),
-        h(doc, "tbody", {}, rows),
+      h(doc, "table", { role: "table" }, [
+        h(doc, "thead", { role: "rowgroup" }, [
+          h(doc, "tr", { role: "row" }, HEADS.map(th)),
+        ]),
+        h(doc, "tbody", { role: "rowgroup" }, rows),
       ]),
     ]),
   ])

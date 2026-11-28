@@ -41,6 +41,17 @@ after `#` selects the page:
 A change of page does not load the site again. A rating that the
 browser did not save stays on screen.
 
+## Keys
+
+On the Today page, put the focus on a problem. Tab to its title link,
+its Solution button, or one of its rating buttons. Then press 1, 2, or
+3 to rate it: 1 is Clean, 2 is Struggled, and 3 is Failed. The key
+rates only the problem that holds the focus. It does nothing when the
+focus is outside a problem, in a field, or in a solution box. A held
+key, and a key with Ctrl, Alt, or Cmd, do nothing. A rating by key is
+the same as a click on that button, and a click on another button of
+the same problem replaces it.
+
 ## Design
 
 `PRODUCT.md` says who the page is for and what it must do.

@@ -328,12 +328,12 @@ Lines are thin and soft.
 - Three pills in one group: Clean, Struggled, Failed. Each has a dot and
   its word with a gap of 0.5rem.
 - Look: no border. The ground is an 11 percent mix of the rating color
-  into Sheet. The word is in the rating color at weight 600. Hover is a
-  20 percent mix.
+  into Sheet. The word is in the rating color, weight 600. Hover is 20%.
 - Pressed: the pill fills with the rating color. The word and the dot
   turn Sheet. A pressed pill does not change on hover or on a press.
 - Under `forced-colors: active` a rating button has a 1 pixel border and
   a pressed one has a 3 pixel border. The dot keeps its own color.
+- Keys 1, 2, and 3 press the buttons of the entry that holds the focus.
 
 ### Entry
 - One ordered list item for each problem. Parts: number, title link, topic

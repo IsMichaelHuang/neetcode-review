@@ -7,6 +7,7 @@ import {
   statusText,
   statusClass,
 } from "./labels.js"
+import { ratingForKey } from "./keys.js"
 
 const COLS = [
   "No.",
@@ -60,7 +61,7 @@ const rateGroup = (doc, row, on) => {
     b.addEventListener("click", () => on.onRate(row.id, rating))
     return b
   })
-  return h(
+  const group = h(
     doc,
     "div",
     {
@@ -70,6 +71,7 @@ const rateGroup = (doc, row, on) => {
     },
     kids,
   )
+  return { group, buttons: kids }
 }
 
 const solutionBlock = (doc, row) => {
@@ -89,8 +91,20 @@ const solutionBlock = (doc, row) => {
   return [h(doc, "div", { cls: "solution" }, kids)]
 }
 
-const entry = (doc, row, on, codes, index) =>
-  h(doc, "li", { cls: row.kind === "done" ? "entry done" : "entry" }, [
+// A key rates the row that holds the focus. The click runs onRate.
+const rateByKey = (buttons) => (event) => {
+  const rating = ratingForKey(event)
+  if (rating === null) return
+  event.preventDefault()
+  const b = buttons[RATING_KEYS.indexOf(rating)]
+  b.focus()
+  b.click()
+}
+
+const entry = (doc, row, on, codes, index) => {
+  const { group, buttons } = rateGroup(doc, row, on)
+  const cls = row.kind === "done" ? "entry done" : "entry"
+  const li = h(doc, "li", { cls }, [
     h(doc, "span", { cls: "no", text: String(index + 1) }),
     h(doc, "span", { cls: "title" }, [
       outside(
@@ -104,9 +118,16 @@ const entry = (doc, row, on, codes, index) =>
     h(doc, "span", { cls: "level", text: row.difficulty }),
     statusCell(doc, row),
     revealCell(doc, row, on),
-    rateGroup(doc, row, on),
+    group,
     ...solutionBlock(doc, row),
   ])
+  li.addEventListener("keydown", rateByKey(buttons))
+  return li
+}
+
+const HINT =
+  "With the focus on a problem, press 1, 2, or 3 to rate it: " +
+  "Clean, Struggled, or Failed."
 
 export const todaySection = (doc, view, on, codes) => {
   const queue = view.queue
@@ -126,6 +147,7 @@ export const todaySection = (doc, view, on, codes) => {
             { cls: "entries", role: "list" },
             queue.map((r, i) => entry(doc, r, on, codes, i)),
           ),
+          h(doc, "p", { cls: "hint", text: HINT }),
         ]
   const more =
     view.waiting > 0

@@ -3,7 +3,13 @@ import assert from "node:assert/strict"
 import { start } from "../src/main.js"
 import { treeUrl } from "../src/github.js"
 import { fakeDocument, fakeWindow, find, text, fire } from "./dom.js"
-import { fakeFetch, fakeStorage, loadJson } from "./helpers.js"
+import {
+  fakeFetch,
+  fakeNavigator,
+  fakeStorage,
+  loadJson,
+} from "./helpers.js"
+import { EXPORTED_KEY } from "../src/config.js"
 import { saveState } from "../src/store.js"
 import { createApp } from "../src/app.js"
 
@@ -224,4 +230,92 @@ test("a paint that sees a new page scrolls and focuses one time", async () => {
   win.fire("hashchange")
   assert.deepEqual(win.scrolls, [[0, 0]])
   assert.equal(doc.activeElement.id, "settings-h")
+})
+
+const bootNav = async (nav, hash = "#/", storage = fakeStorage()) => {
+  const doc = fakeDocument()
+  const win = fakeWindow(hash)
+  if (nav !== undefined) win.navigator = nav
+  const { fetchFn } = fakeFetch(routes())
+  const app = await start({
+    document: doc,
+    fetchFn,
+    storage,
+    now,
+    confirmFn: () => true,
+    win,
+  })
+  const byId = (id) => find(doc.app, (n) => n.attrs.id === id)[0]
+  const pick = (n) =>
+    find(doc.app, (x) => /^rate-.*-clean$/.test(x.attrs.id ?? ""))[n]
+  return { doc, win, app, byId, pick, storage }
+}
+const tick = () => new Promise((r) => setTimeout(r, 0))
+
+test("a start asks the browser for nothing", async () => {
+  const nav = fakeNavigator()
+  await bootNav(nav)
+  assert.equal(nav.calls, 0)
+})
+
+test("two ratings ask the browser one time", async () => {
+  const nav = fakeNavigator()
+  const { pick } = await bootNav(nav)
+  fire(pick(0), "click")
+  fire(pick(1), "click")
+  assert.equal(nav.calls, 1)
+})
+
+test("a missing navigator, storage, or persist is safe", async () => {
+  for (const nav of [undefined, {}, { storage: {} }]) {
+    const { pick, byId } = await bootNav(nav)
+    fire(pick(0), "click")
+    assert.equal(pick(0).attrs["aria-pressed"], "true")
+    assert.ok(byId("nav-settings"))
+  }
+})
+
+test("a persist that throws or rejects does not stop a rating", async () => {
+  const throws = fakeNavigator(() => {
+    throw new Error("no")
+  })
+  const rejects = fakeNavigator(() => Promise.reject(new Error("no")))
+  for (const nav of [throws, rejects]) {
+    const { pick } = await bootNav(nav)
+    fire(pick(0), "click")
+    await tick()
+    assert.equal(pick(0).attrs["aria-pressed"], "true")
+    assert.equal(nav.calls, 1)
+  }
+})
+
+test("an Export downloads, asks once, and marks the date", async (t) => {
+  const nav = fakeNavigator()
+  const storage = fakeStorage()
+  const ratings = {
+    "two-integer-sum": [{ date: "2026-10-01", rating: "clean" }],
+  }
+  saveState(storage, { version: 1, target: 4, ratings })
+  const { app, byId } = await bootNav(nav, "#/settings", storage)
+  assert.equal(app.view().backupDue, true)
+  t.mock.timers.enable({ apis: ["setTimeout"] })
+  fire(byId("export"), "click")
+  t.mock.timers.tick(1000)
+  assert.equal(nav.calls, 1)
+  assert.equal(storage.getItem(EXPORTED_KEY), "2026-11-20")
+  assert.equal(app.view().backupDue, false)
+})
+
+test("an Export that throws marks nothing and asks nothing", async () => {
+  const nav = fakeNavigator()
+  const storage = fakeStorage()
+  const { doc, byId } = await bootNav(nav, "#/settings", storage)
+  const create = doc.createElement
+  doc.createElement = (tag) => {
+    if (tag === "a") throw new Error("no download")
+    return create(tag)
+  }
+  assert.throws(() => fire(byId("export"), "click"))
+  assert.equal(storage.getItem(EXPORTED_KEY), null)
+  assert.equal(nav.calls, 0)
 })

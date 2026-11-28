@@ -40,6 +40,14 @@ const makeElement = (doc, tag) => ({
   addEventListener(type, fn) {
     ;(this.listeners[type] ??= []).push(fn)
   },
+  click() {
+    for (const fn of this.listeners.click ?? []) fn({ target: this })
+  },
+  remove() {
+    const kids = this.ownerDocument.body.children
+    const i = kids.indexOf(this)
+    if (i >= 0) kids.splice(i, 1)
+  },
 })
 
 const walk = (node, visit) => {

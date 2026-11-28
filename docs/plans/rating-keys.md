@@ -110,9 +110,9 @@ Revert the merge commit. No saved data changes.
 
 1. Regressions. `rateGroup` returns `{ group, buttons }` now. Its only
    caller is `entry`, and it changes in the same commit. A digit key
-   outside a Today entry does what it did before. The branch
-   `feature/quiet-done-title` edits the same `li` line of `entry`. The
-   second of the two to merge needs a one-line rebase.
+   outside a Today entry does what it did before. The quiet done
+   title edits the same `li` line of `entry`. The rebase keeps both:
+   the `done` class and the key listener.
 2. Security. None found. A key maps only to one of the three fixed
    ratings, and it acts only on the row that holds the focus.
 3. Efficiency. None found. Each row has one listener, and the list

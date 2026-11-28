@@ -107,3 +107,16 @@ Revert the merge commit. No saved data changes.
   the focus on the Struggled button.
 
 ## Four questions
+
+1. Regressions. `rateGroup` returns `{ group, buttons }` now. Its only
+   caller is `entry`, and it changes in the same commit. A digit key
+   outside a Today entry does what it did before. The branch
+   `feature/quiet-done-title` edits the same `li` line of `entry`. The
+   second of the two to merge needs a one-line rebase.
+2. Security. None found. A key maps only to one of the three fixed
+   ratings, and it acts only on the row that holds the focus.
+3. Efficiency. None found. Each row has one listener, and the list
+   has at most 10 rows.
+4. More tests. Action: in a browser, press a key with the focus on a
+   title link, and make sure that the focus lands on the pressed
+   button. The fake DOM cannot show a real focus move.

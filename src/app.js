@@ -1,5 +1,5 @@
 // The controller. It joins the data modules and returns plain objects.
-import { MIN_TARGET, MAX_TARGET, NOTICES } from "./config.js"
+import { MIN_TARGET, MAX_TARGET, BACKUP_DAYS, NOTICES } from "./config.js"
 import { parseTree, mergeCatalog } from "./catalog.js"
 import { localDate, formatDay, daysBetween } from "./dates.js"
 import { replay, rate as rateHistory, isWeak } from "./schedule.js"
@@ -8,6 +8,8 @@ import {
   emptyState,
   loadState,
   saveState,
+  loadExported,
+  saveExported,
   importText as parseImport,
   exportText as stringify,
 } from "./store.js"
@@ -23,6 +25,8 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
   // While the last read failed, the saved copy is unknown. Never write.
   let readFailed = false
   let importError = null
+  // The date of the last export, or null. It never goes back in time.
+  let exported = null
   let problems = mergeCatalog(null, known)
   let filters = { topic: "all", status: "all" }
   const solutions = new Map()
@@ -30,6 +34,8 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
 
   // A failed read is always retried, even when a save failed before.
   const refresh = () => {
+    exported = [exported, loadExported(storage)].filter(Boolean).sort().at(-1)
+    exported ??= null
     if (unsaved && !readFailed) return
     const r = loadState(storage)
     readFailed = r.notice === NOTICES.cannotSave
@@ -79,6 +85,21 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
     return filters.status === "all" || row.kind === filters.status
   }
 
+  // True when the last export (or, with none, the first rating) is
+  // more than BACKUP_DAYS old, or in the future.
+  const backupDue = (today) => {
+    const dates = Object.values(state.ratings).flat().map((e) => e.date)
+    if (readFailed || dates.length === 0) return false
+    const since = exported ?? dates.sort()[0]
+    return since > today || daysBetween(since, today) > BACKUP_DAYS
+  }
+
+  const markExported = () => {
+    if (readFailed) return
+    exported = localDate(now())
+    saveExported(storage, exported)
+  }
+
   const view = () => {
     const date = now()
     const today = localDate(date)
@@ -102,6 +123,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
       doneCount: done.length,
       waiting,
       notices: [...new Set(notices.filter(Boolean))],
+      backupDue: backupDue(today),
       importError,
       queue: queue.map((p) => rowFor(p, today)),
       topics: topicSummary(problems, state.ratings),
@@ -115,6 +137,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
     const loaded = loadState(storage)
     state = loaded.state
     readFailed = loaded.notice === NOTICES.cannotSave
+    exported = loadExported(storage)
     loadNotice = readFailed ? null : loaded.notice
     const { tree, stale } = await loadTree(fetchFn, storage, now().getTime())
     const folders = tree === null ? null : parseTree(tree)
@@ -148,6 +171,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
     view,
     refresh,
     reveal,
+    markExported,
     rate(id, rating) {
       if (!problems.some((p) => p.id === id)) return
       const today = localDate(now())
@@ -177,6 +201,7 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
       importError = null
       if (!confirmFn()) return { ok: false, cancelled: true }
       change(() => r.state)
+      markExported()
       return { ok: true }
     },
   }

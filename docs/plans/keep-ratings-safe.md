@@ -103,3 +103,18 @@ Revert the merge commit. No saved ratings change.
   notice, press Export, and see the notice go away.
 
 ## Four questions
+
+1. Regressions. The owner sees the notice on the first load after
+   this change if his oldest rating is more than 14 days old. The
+   page cannot know about an export from before the date key
+   existed. One Export clears it. This is the intended result. The
+   notice list still uses `same()`, so a paint with no change does
+   not replace the notices.
+2. Security. None found. Other pages on the same `github.io` origin
+   can write the date key and hide the notice. They can also change
+   the ratings, so the key adds no new risk. The page reads the key
+   only through `isRealDate`, and it writes only a date it made.
+3. Efficiency. None found. `backupDue` walks all histories once for
+   each paint. The list has about 110 problems, so the cost is small.
+4. More tests. Action: run Export and Import in a real browser (idea
+   3), with the user's OK for the download and the file dialog.

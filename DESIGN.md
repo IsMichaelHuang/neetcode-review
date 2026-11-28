@@ -336,10 +336,10 @@ Lines are thin and soft.
   a pressed one has a 3 pixel border. The dot keeps its own color.
 
 ### Entry
-- One ordered list item for each problem. Parts: number, title as a link,
-  topic code and name, level, status, a Solution button, and the rating
-  group at the right end.
+- One ordered list item for each problem. Parts: number, title link, topic
+  code and name, level, status, Solution button, and the rating group.
 - The number is in the accent color at weight 500.
+- The title of a done entry is in Quiet Ink at weight 400.
 - The status shows urgency by weight. Due today is 400. One to two days
   is 500. Three to six days is 600. Seven or more days is 700.
 - A status of "new" is in Quiet Ink. A done entry shows the dot and

@@ -98,3 +98,18 @@ together, and `styles.css` holds all the rules again.
 - Browser: the layout at the four widths above.
 
 ## Four questions
+
+1. Regressions. None found in the browser. At 1440 pixels the Topics
+   index and the table compute the same values as before the split.
+   At 720 pixels the table is a table again, with no sideways scroll.
+   At 375 and 719 pixels the frame does not scroll and no cell passes
+   its right edge. The explicit roles repeat the native roles from
+   720 pixels, which does no harm. A browser without the `/ ""` form
+   of `content` reads a label such as "Topic:" two times.
+2. Security. None found. The labels come from the `HEADS` constant
+   and reach the page through `setAttribute`. The second stylesheet
+   comes from the same site, so the CSP does not change.
+3. Efficiency. The page loads one more small CSS file. `styles.css`
+   has no room for the rules, so the split is the smaller cost.
+4. More tests. None left. The layout checks at 375, 719, 720, and
+   1440 pixels ran in a browser on the merge of all four branches.

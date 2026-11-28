@@ -34,8 +34,8 @@ export const createApp = ({ fetchFn, storage, now, known }) => {
 
   // A failed read is always retried, even when a save failed before.
   const refresh = () => {
-    exported = [exported, loadExported(storage)].filter(Boolean).sort().at(-1)
-    exported ??= null
+    const stored = loadExported(storage)
+    if (stored && (!exported || stored > exported)) exported = stored
     if (unsaved && !readFailed) return
     const r = loadState(storage)
     readFailed = r.notice === NOTICES.cannotSave

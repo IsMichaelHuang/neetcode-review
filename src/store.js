@@ -118,7 +118,7 @@ export const saveExported = (storage, date) => {
   }
 }
 
-export const saveState =(storage, state) => {
+export const saveState = (storage, state) => {
   const r = validate(state)
   if (!r.ok) return false
   try {

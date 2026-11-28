@@ -90,7 +90,7 @@ const solutionBlock = (doc, row) => {
 }
 
 const entry = (doc, row, on, codes, index) =>
-  h(doc, "li", { cls: "entry" }, [
+  h(doc, "li", { cls: row.kind === "done" ? "entry done" : "entry" }, [
     h(doc, "span", { cls: "no", text: String(index + 1) }),
     h(doc, "span", { cls: "title" }, [
       outside(

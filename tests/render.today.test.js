@@ -294,3 +294,12 @@ test("the Today head has the h2, the date, and the count", () => {
   assert.equal(date.tag, "p")
   assert.equal(date.textContent, "Fri Nov 20")
 })
+
+test("a done row has the class done and an open row does not", () => {
+  const done = row({ id: "d1", kind: "done", lastRating: "clean" })
+  const open = row({ id: "o1", kind: "new" })
+  const doc = draw(view({ queue: [done, open], doneCount: 1 }))
+  const [a, b] = find(doc.app, (n) => n.tag === "ol")[0].children
+  assert.equal(a.className, "entry done")
+  assert.equal(b.className, "entry")
+})

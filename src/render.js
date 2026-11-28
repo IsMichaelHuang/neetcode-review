@@ -5,11 +5,17 @@ import { todaySection } from "./render-today.js"
 import { topicsSection, tableSection } from "./render-lists.js"
 import { settingsSection } from "./render-settings.js"
 import { PAGES } from "./pages.js"
+import { NOTICES } from "./config.js"
 
 const noteList = (doc, view, page) => {
   const notes = view.notices.map((t) =>
     h(doc, "p", { cls: "notice", role: "status", text: t }),
   )
+  if (page === "today" && view.backupDue) {
+    notes.push(
+      h(doc, "p", { cls: "notice", role: "status", text: NOTICES.backup }),
+    )
+  }
   if (page === "settings" && view.importError !== null) {
     notes.push(
       h(doc, "p", { cls: "error", role: "alert", text: view.importError }),
